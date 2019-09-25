@@ -22,8 +22,12 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
 
-public class SetType<E extends Classifier> extends CollectionType<Classifier> implements Set<Classifier> {
+public class SetType extends CollectionType<Classifier> implements Set<Classifier> {
     public final TypeEnum TYPE = TypeEnum.SETTYPE;
+    
+    public SetType(Classifier clazz) {
+        this.clazz = clazz;
+    }
 
     @Override
     public boolean add(Classifier e) {
@@ -111,8 +115,8 @@ public class SetType<E extends Classifier> extends CollectionType<Classifier> im
             return false;
         if (other instanceof AnyType)
             return true;
-        if (other instanceof SetType<?>) {
-            return this.getElement().conformsTo(((SetType<?>) other).getElement());
+        if (other instanceof SetType) {
+            return this.clazz.conformsTo(((SetType) other).clazz);
         }
         return false;
     }

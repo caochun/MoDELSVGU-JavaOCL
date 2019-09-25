@@ -19,10 +19,12 @@ limitations under the License.
 
 package com.vgu.se.jocl.expressions;
 
+import com.vgu.se.jocl.types.CollectionType;
+
 public abstract class OclExp {
 
     private OclExp appliedElement;
-    private CollectionType result;
+    private CollectionType<?> result;
     
     private OperationCallExp parentCall;
     

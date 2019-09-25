@@ -35,7 +35,7 @@ public class TypesTest {
 
     @Test
     public void bagType() {
-        BagType<AnyType> bagType = new BagType<AnyType>();
+        BagType bagType = new BagType(new AnyType());
         assertEquals(bagType.TYPE.getType(), "Bag");
     }
 
@@ -65,7 +65,7 @@ public class TypesTest {
 
     @Test
     public void orderedSetType() {
-        OrderedSetType<IntegerType> orderedSetType = new OrderedSetType<IntegerType>();
+        OrderedSetType orderedSetType = new OrderedSetType(new IntegerType());
         assertEquals(orderedSetType.TYPE.getType(), "OrderedSet");
     }
 
@@ -77,13 +77,13 @@ public class TypesTest {
 
     @Test
     public void sequenceType() {
-        SequenceType<IntegerType> sequenceType = new SequenceType<IntegerType>();
+        SequenceType sequenceType = new SequenceType(new IntegerType());
         assertEquals(sequenceType.TYPE.getType(), "Sequence");
     }
 
     @Test
     public void setType() {
-        SetType<RealType> setType = new SetType<RealType>();
+        SetType setType = new SetType(new RealType());
         assertEquals(setType.TYPE.getType(), "Set");
     }
 

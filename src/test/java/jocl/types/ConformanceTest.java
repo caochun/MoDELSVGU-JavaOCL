@@ -48,7 +48,7 @@ public class ConformanceTest {
         AnyType any = new AnyType();
         assertTrue(any.conformsTo(target));
 
-        BagType<Class> bag = new BagType<Class>();
+        BagType bag = new BagType(new Class());
         assertTrue(bag.conformsTo(target));
 
         Class clazz = new Class();
@@ -63,16 +63,16 @@ public class ConformanceTest {
         MessageType message = new MessageType();
         assertTrue(message.conformsTo(target));
 
-        OrderedSetType<Class> orderedSet = new OrderedSetType<Class>();
+        OrderedSetType orderedSet = new OrderedSetType(new Class());
         assertTrue(orderedSet.conformsTo(target));
 
         RealType real = new RealType();
         assertTrue(real.conformsTo(target));
 
-        SequenceType<Class> sequence = new SequenceType<Class>();
+        SequenceType sequence = new SequenceType(new Class());
         assertTrue(sequence.conformsTo(target));
 
-        SetType<Class> set = new SetType<Class>();
+        SetType set = new SetType(new Class());
         assertTrue(set.conformsTo(target));
 
         StringType string = new StringType();
@@ -98,7 +98,7 @@ public class ConformanceTest {
         AnyType any = new AnyType();
         assertTrue(target.conformsTo(any));
 
-        BagType<Class> bag = new BagType<Class>();
+        BagType bag = new BagType(new Class());
         assertFalse(target.conformsTo(bag));
 
         Class clazz = new Class();
@@ -113,16 +113,16 @@ public class ConformanceTest {
         MessageType message = new MessageType();
         assertFalse(target.conformsTo(message));
 
-        OrderedSetType<Class> orderedSet = new OrderedSetType<Class>();
+        OrderedSetType orderedSet = new OrderedSetType(new Class());
         assertFalse(target.conformsTo(orderedSet));
 
         RealType real = new RealType();
         assertFalse(target.conformsTo(real));
 
-        SequenceType<Class> sequence = new SequenceType<Class>();
+        SequenceType sequence = new SequenceType(new Class());
         assertFalse(target.conformsTo(sequence));
 
-        SetType<Class> set = new SetType<Class>();
+        SetType set = new SetType(new Class());
         assertFalse(target.conformsTo(set));
 
         StringType string = new StringType();
@@ -142,7 +142,7 @@ public class ConformanceTest {
     }
 
     public void test_conforms_to_BagType() {
-        BagType<Class> target = new BagType<Class>();
+        BagType target = new BagType(new Class());
 
         AnyType any = new AnyType();
         assertFalse(any.conformsTo(target));
@@ -180,7 +180,7 @@ public class ConformanceTest {
 
     @Test
     public void BagType_conforms_to_test() {
-        BagType<Class> target = new BagType<Class>();
+        BagType target = new BagType(new Class());
 
         AnyType any = new AnyType();
         assertTrue(target.conformsTo(any));
@@ -218,113 +218,113 @@ public class ConformanceTest {
 
     @Test
     public void test_collection_conforms_to_BagType() {
-        BagType<IntegerType> target = new BagType<IntegerType>();
+        BagType target = new BagType(new IntegerType());
 
-        BagType<IntegerType> bagInteger = new BagType<IntegerType>();
+        BagType bagInteger = new BagType(new IntegerType());
         assertTrue(bagInteger.conformsTo(target));
 
-        OrderedSetType<IntegerType> orderedSetInteger = new OrderedSetType<IntegerType>();
+        OrderedSetType orderedSetInteger = new OrderedSetType(new IntegerType());
         assertFalse(orderedSetInteger.conformsTo(target));
 
-        SequenceType<IntegerType> sequenceInteger = new SequenceType<IntegerType>();
+        SequenceType sequenceInteger = new SequenceType(new IntegerType());
         assertFalse(sequenceInteger.conformsTo(target));
 
-        SetType<IntegerType> setInteger = new SetType<IntegerType>();
+        SetType setInteger = new SetType(new IntegerType());
         assertFalse(setInteger.conformsTo(target));
 
-        BagType<Class> bagClass = new BagType<Class>();
+        BagType bagClass = new BagType(new Class());
         assertFalse(bagClass.conformsTo(target));
 
-        OrderedSetType<Class> orderedSetClass = new OrderedSetType<Class>();
+        OrderedSetType orderedSetClass = new OrderedSetType(new Class());
         assertFalse(orderedSetClass.conformsTo(target));
 
-        SequenceType<Class> sequenceClass = new SequenceType<Class>();
+        SequenceType sequenceClass = new SequenceType(new Class());
         assertFalse(sequenceClass.conformsTo(target));
 
-        SetType<Class> setClass = new SetType<Class>();
+        SetType setClass = new SetType(new Class());
         assertFalse(setClass.conformsTo(target));
 
-        BagType<UnlimitedNaturalType> bagUnlimitedNatural = new BagType<UnlimitedNaturalType>();
-        assertFalse(bagUnlimitedNatural.conformsTo(target));
+        BagType bagUnlimitedNatural = new BagType(new UnlimitedNaturalType());
+        assertTrue(bagUnlimitedNatural.conformsTo(target));
 
-        OrderedSetType<UnlimitedNaturalType> orderedSetUnlimitedNatural = new OrderedSetType<UnlimitedNaturalType>();
+        OrderedSetType orderedSetUnlimitedNatural = new OrderedSetType(new UnlimitedNaturalType());
         assertFalse(orderedSetUnlimitedNatural.conformsTo(target));
 
-        SequenceType<UnlimitedNaturalType> sequenceUnlimitedNatural = new SequenceType<UnlimitedNaturalType>();
+        SequenceType sequenceUnlimitedNatural = new SequenceType(new UnlimitedNaturalType());
         assertFalse(sequenceUnlimitedNatural.conformsTo(target));
 
-        SetType<UnlimitedNaturalType> setUnlimitedNatural = new SetType<UnlimitedNaturalType>();
+        SetType setUnlimitedNatural = new SetType(new UnlimitedNaturalType());
         assertFalse(setUnlimitedNatural.conformsTo(target));
 
-        BagType<RealType> bagReal = new BagType<RealType>();
-        assertTrue(bagReal.conformsTo(target));
+        BagType bagReal = new BagType(new RealType());
+        assertFalse(bagReal.conformsTo(target));
 
-        OrderedSetType<RealType> orderedSetReal = new OrderedSetType<RealType>();
+        OrderedSetType orderedSetReal = new OrderedSetType(new RealType());
         assertFalse(orderedSetReal.conformsTo(target));
 
-        SequenceType<RealType> sequenceReal = new SequenceType<RealType>();
+        SequenceType sequenceReal = new SequenceType(new RealType());
         assertFalse(sequenceReal.conformsTo(target));
 
-        SetType<RealType> setReal = new SetType<RealType>();
+        SetType setReal = new SetType(new RealType());
         assertFalse(setReal.conformsTo(target));
     }
 
     @Test
     public void BagType_conforms_to_test_collection() {
-        BagType<IntegerType> target = new BagType<IntegerType>();
+        BagType target = new BagType(new IntegerType());
 
-        BagType<IntegerType> bagInteger = new BagType<IntegerType>();
+        BagType bagInteger = new BagType(new IntegerType());
         assertTrue(target.conformsTo(bagInteger));
 
-        OrderedSetType<IntegerType> orderedSetInteger = new OrderedSetType<IntegerType>();
+        OrderedSetType orderedSetInteger = new OrderedSetType(new IntegerType());
         assertFalse(target.conformsTo(orderedSetInteger));
 
-        SequenceType<IntegerType> sequenceInteger = new SequenceType<IntegerType>();
+        SequenceType sequenceInteger = new SequenceType(new IntegerType());
         assertFalse(target.conformsTo(sequenceInteger));
 
-        SetType<IntegerType> setInteger = new SetType<IntegerType>();
+        SetType setInteger = new SetType(new IntegerType());
         assertFalse(target.conformsTo(setInteger));
 
-        BagType<Class> bagClass = new BagType<Class>();
+        BagType bagClass = new BagType(new Class());
         assertFalse(target.conformsTo(bagClass));
 
-        OrderedSetType<Class> orderedSetClass = new OrderedSetType<Class>();
+        OrderedSetType orderedSetClass = new OrderedSetType(new Class());
         assertFalse(target.conformsTo(orderedSetClass));
 
-        SequenceType<Class> sequenceClass = new SequenceType<Class>();
+        SequenceType sequenceClass = new SequenceType(new Class());
         assertFalse(target.conformsTo(sequenceClass));
 
-        SetType<Class> setClass = new SetType<Class>();
+        SetType setClass = new SetType(new Class());
         assertFalse(target.conformsTo(setClass));
 
-        BagType<UnlimitedNaturalType> bagUnlimitedNatural = new BagType<UnlimitedNaturalType>();
-        assertTrue(target.conformsTo(bagUnlimitedNatural));
+        BagType bagUnlimitedNatural = new BagType(new UnlimitedNaturalType());
+        assertFalse(target.conformsTo(bagUnlimitedNatural));
 
-        OrderedSetType<UnlimitedNaturalType> orderedSetUnlimitedNatural = new OrderedSetType<UnlimitedNaturalType>();
+        OrderedSetType orderedSetUnlimitedNatural = new OrderedSetType(new UnlimitedNaturalType());
         assertFalse(target.conformsTo(orderedSetUnlimitedNatural));
 
-        SequenceType<UnlimitedNaturalType> sequenceUnlimitedNatural = new SequenceType<UnlimitedNaturalType>();
+        SequenceType sequenceUnlimitedNatural = new SequenceType(new UnlimitedNaturalType());
         assertFalse(target.conformsTo(sequenceUnlimitedNatural));
 
-        SetType<UnlimitedNaturalType> setUnlimitedNatural = new SetType<UnlimitedNaturalType>();
+        SetType setUnlimitedNatural = new SetType(new UnlimitedNaturalType());
         assertFalse(target.conformsTo(setUnlimitedNatural));
 
-        BagType<RealType> bagReal = new BagType<RealType>();
-        assertFalse(target.conformsTo(bagReal));
+        BagType bagReal = new BagType(new RealType());
+        assertTrue(target.conformsTo(bagReal));
 
-        OrderedSetType<RealType> orderedSetReal = new OrderedSetType<RealType>();
+        OrderedSetType orderedSetReal = new OrderedSetType(new RealType());
         assertFalse(target.conformsTo(orderedSetReal));
 
-        SequenceType<RealType> sequenceReal = new SequenceType<RealType>();
+        SequenceType sequenceReal = new SequenceType(new RealType());
         assertFalse(target.conformsTo(sequenceReal));
 
-        SetType<RealType> setReal = new SetType<RealType>();
+        SetType setReal = new SetType(new RealType());
         assertFalse(target.conformsTo(setReal));
     }
 
     @Test
     public void test_conforms_to_OrderedSetType() {
-        OrderedSetType<Class> target = new OrderedSetType<Class>();
+        OrderedSetType target = new OrderedSetType(new Class());
 
         AnyType any = new AnyType();
         assertFalse(any.conformsTo(target));
@@ -362,7 +362,7 @@ public class ConformanceTest {
 
     @Test
     public void OrderedSetType_conforms_to_test() {
-        OrderedSetType<Class> target = new OrderedSetType<Class>();
+        OrderedSetType target = new OrderedSetType(new Class());
 
         AnyType any = new AnyType();
         assertTrue(target.conformsTo(any));
@@ -400,113 +400,113 @@ public class ConformanceTest {
 
     @Test
     public void test_collection_conforms_to_OrderedSetType() {
-        OrderedSetType<IntegerType> target = new OrderedSetType<IntegerType>();
+        OrderedSetType target = new OrderedSetType(new IntegerType());
 
-        BagType<IntegerType> bagInteger = new BagType<IntegerType>();
+        BagType bagInteger = new BagType(new IntegerType());
         assertFalse(bagInteger.conformsTo(target));
 
-        OrderedSetType<IntegerType> orderedSetInteger = new OrderedSetType<IntegerType>();
+        OrderedSetType orderedSetInteger = new OrderedSetType(new IntegerType());
         assertTrue(orderedSetInteger.conformsTo(target));
 
-        SequenceType<IntegerType> sequenceInteger = new SequenceType<IntegerType>();
+        SequenceType sequenceInteger = new SequenceType(new IntegerType());
         assertFalse(sequenceInteger.conformsTo(target));
 
-        SetType<IntegerType> setInteger = new SetType<IntegerType>();
+        SetType setInteger = new SetType(new IntegerType());
         assertFalse(setInteger.conformsTo(target));
 
-        BagType<Class> bagClass = new BagType<Class>();
+        BagType bagClass = new BagType(new Class());
         assertFalse(bagClass.conformsTo(target));
 
-        OrderedSetType<Class> orderedSetClass = new OrderedSetType<Class>();
+        OrderedSetType orderedSetClass = new OrderedSetType(new Class());
         assertFalse(orderedSetClass.conformsTo(target));
 
-        SequenceType<Class> sequenceClass = new SequenceType<Class>();
+        SequenceType sequenceClass = new SequenceType(new Class());
         assertFalse(sequenceClass.conformsTo(target));
 
-        SetType<Class> setClass = new SetType<Class>();
+        SetType setClass = new SetType(new Class());
         assertFalse(setClass.conformsTo(target));
 
-        BagType<UnlimitedNaturalType> bagUnlimitedNatural = new BagType<UnlimitedNaturalType>();
+        BagType bagUnlimitedNatural = new BagType(new UnlimitedNaturalType());
         assertFalse(bagUnlimitedNatural.conformsTo(target));
 
-        OrderedSetType<UnlimitedNaturalType> orderedSetUnlimitedNatural = new OrderedSetType<UnlimitedNaturalType>();
-        assertFalse(orderedSetUnlimitedNatural.conformsTo(target));
+        OrderedSetType orderedSetUnlimitedNatural = new OrderedSetType(new UnlimitedNaturalType());
+        assertTrue(orderedSetUnlimitedNatural.conformsTo(target));
 
-        SequenceType<UnlimitedNaturalType> sequenceUnlimitedNatural = new SequenceType<UnlimitedNaturalType>();
+        SequenceType sequenceUnlimitedNatural = new SequenceType(new UnlimitedNaturalType());
         assertFalse(sequenceUnlimitedNatural.conformsTo(target));
 
-        SetType<UnlimitedNaturalType> setUnlimitedNatural = new SetType<UnlimitedNaturalType>();
+        SetType setUnlimitedNatural = new SetType(new UnlimitedNaturalType());
         assertFalse(setUnlimitedNatural.conformsTo(target));
 
-        BagType<RealType> bagReal = new BagType<RealType>();
+        BagType bagReal = new BagType(new RealType());
         assertFalse(bagReal.conformsTo(target));
 
-        OrderedSetType<RealType> orderedSetReal = new OrderedSetType<RealType>();
-        assertTrue(orderedSetReal.conformsTo(target));
+        OrderedSetType orderedSetReal = new OrderedSetType(new RealType());
+        assertFalse(orderedSetReal.conformsTo(target));
 
-        SequenceType<RealType> sequenceReal = new SequenceType<RealType>();
+        SequenceType sequenceReal = new SequenceType(new RealType());
         assertFalse(sequenceReal.conformsTo(target));
 
-        SetType<RealType> setReal = new SetType<RealType>();
+        SetType setReal = new SetType(new RealType());
         assertFalse(setReal.conformsTo(target));
     }
 
     @Test
     public void OrderedSetType_conforms_to_test_collection() {
-        OrderedSetType<IntegerType> target = new OrderedSetType<IntegerType>();
+        OrderedSetType target = new OrderedSetType(new IntegerType());
 
-        BagType<IntegerType> bagInteger = new BagType<IntegerType>();
+        BagType bagInteger = new BagType(new IntegerType());
         assertFalse(target.conformsTo(bagInteger));
 
-        OrderedSetType<IntegerType> orderedSetInteger = new OrderedSetType<IntegerType>();
+        OrderedSetType orderedSetInteger = new OrderedSetType(new IntegerType());
         assertTrue(target.conformsTo(orderedSetInteger));
 
-        SequenceType<IntegerType> sequenceInteger = new SequenceType<IntegerType>();
+        SequenceType sequenceInteger = new SequenceType(new IntegerType());
         assertFalse(target.conformsTo(sequenceInteger));
 
-        SetType<IntegerType> setInteger = new SetType<IntegerType>();
+        SetType setInteger = new SetType(new IntegerType());
         assertFalse(target.conformsTo(setInteger));
 
-        BagType<Class> bagClass = new BagType<Class>();
+        BagType bagClass = new BagType(new Class());
         assertFalse(target.conformsTo(bagClass));
 
-        OrderedSetType<Class> orderedSetClass = new OrderedSetType<Class>();
+        OrderedSetType orderedSetClass = new OrderedSetType(new Class());
         assertFalse(target.conformsTo(orderedSetClass));
 
-        SequenceType<Class> sequenceClass = new SequenceType<Class>();
+        SequenceType sequenceClass = new SequenceType(new Class());
         assertFalse(target.conformsTo(sequenceClass));
 
-        SetType<Class> setClass = new SetType<Class>();
+        SetType setClass = new SetType(new Class());
         assertFalse(target.conformsTo(setClass));
 
-        BagType<UnlimitedNaturalType> bagUnlimitedNatural = new BagType<UnlimitedNaturalType>();
+        BagType bagUnlimitedNatural = new BagType(new UnlimitedNaturalType());
         assertFalse(target.conformsTo(bagUnlimitedNatural));
 
-        OrderedSetType<UnlimitedNaturalType> orderedSetUnlimitedNatural = new OrderedSetType<UnlimitedNaturalType>();
-        assertTrue(target.conformsTo(orderedSetUnlimitedNatural));
+        OrderedSetType orderedSetUnlimitedNatural = new OrderedSetType(new UnlimitedNaturalType());
+        assertFalse(target.conformsTo(orderedSetUnlimitedNatural));
 
-        SequenceType<UnlimitedNaturalType> sequenceUnlimitedNatural = new SequenceType<UnlimitedNaturalType>();
+        SequenceType sequenceUnlimitedNatural = new SequenceType(new UnlimitedNaturalType());
         assertFalse(target.conformsTo(sequenceUnlimitedNatural));
 
-        SetType<UnlimitedNaturalType> setUnlimitedNatural = new SetType<UnlimitedNaturalType>();
+        SetType setUnlimitedNatural = new SetType(new UnlimitedNaturalType());
         assertFalse(target.conformsTo(setUnlimitedNatural));
 
-        BagType<RealType> bagReal = new BagType<RealType>();
+        BagType bagReal = new BagType(new RealType());
         assertFalse(target.conformsTo(bagReal));
 
-        OrderedSetType<RealType> orderedSetReal = new OrderedSetType<RealType>();
-        assertFalse(target.conformsTo(orderedSetReal));
+        OrderedSetType orderedSetReal = new OrderedSetType(new RealType());
+        assertTrue(target.conformsTo(orderedSetReal));
 
-        SequenceType<RealType> sequenceReal = new SequenceType<RealType>();
+        SequenceType sequenceReal = new SequenceType(new RealType());
         assertFalse(target.conformsTo(sequenceReal));
 
-        SetType<RealType> setReal = new SetType<RealType>();
+        SetType setReal = new SetType(new RealType());
         assertFalse(target.conformsTo(setReal));
     }
 
     @Test
     public void test_conforms_to_SequenceType() {
-        SequenceType<Class> target = new SequenceType<Class>();
+        SequenceType target = new SequenceType(new Class());
 
         AnyType any = new AnyType();
         assertFalse(any.conformsTo(target));
@@ -544,7 +544,7 @@ public class ConformanceTest {
 
     @Test
     public void SequenceType_conforms_to_test() {
-        SequenceType<Class> target = new SequenceType<Class>();
+        SequenceType target = new SequenceType(new Class());
 
         AnyType any = new AnyType();
         assertTrue(target.conformsTo(any));
@@ -582,113 +582,113 @@ public class ConformanceTest {
 
     @Test
     public void test_collection_conforms_to_SequenceType() {
-        SequenceType<IntegerType> target = new SequenceType<IntegerType>();
+        SequenceType target = new SequenceType(new IntegerType());
 
-        BagType<IntegerType> bagInteger = new BagType<IntegerType>();
+        BagType bagInteger = new BagType(new IntegerType());
         assertFalse(bagInteger.conformsTo(target));
 
-        OrderedSetType<IntegerType> orderedSetInteger = new OrderedSetType<IntegerType>();
+        OrderedSetType orderedSetInteger = new OrderedSetType(new IntegerType());
         assertFalse(orderedSetInteger.conformsTo(target));
 
-        SequenceType<IntegerType> sequenceInteger = new SequenceType<IntegerType>();
+        SequenceType sequenceInteger = new SequenceType(new IntegerType());
         assertTrue(sequenceInteger.conformsTo(target));
 
-        SetType<IntegerType> setInteger = new SetType<IntegerType>();
+        SetType setInteger = new SetType(new IntegerType());
         assertFalse(setInteger.conformsTo(target));
 
-        BagType<Class> bagClass = new BagType<Class>();
+        BagType bagClass = new BagType(new Class());
         assertFalse(bagClass.conformsTo(target));
 
-        OrderedSetType<Class> orderedSetClass = new OrderedSetType<Class>();
+        OrderedSetType orderedSetClass = new OrderedSetType(new Class());
         assertFalse(orderedSetClass.conformsTo(target));
 
-        SequenceType<Class> sequenceClass = new SequenceType<Class>();
+        SequenceType sequenceClass = new SequenceType(new Class());
         assertFalse(sequenceClass.conformsTo(target));
 
-        SetType<Class> setClass = new SetType<Class>();
+        SetType setClass = new SetType(new Class());
         assertFalse(setClass.conformsTo(target));
 
-        BagType<UnlimitedNaturalType> bagUnlimitedNatural = new BagType<UnlimitedNaturalType>();
+        BagType bagUnlimitedNatural = new BagType(new UnlimitedNaturalType());
         assertFalse(bagUnlimitedNatural.conformsTo(target));
 
-        OrderedSetType<UnlimitedNaturalType> orderedSetUnlimitedNatural = new OrderedSetType<UnlimitedNaturalType>();
+        OrderedSetType orderedSetUnlimitedNatural = new OrderedSetType(new UnlimitedNaturalType());
         assertFalse(orderedSetUnlimitedNatural.conformsTo(target));
 
-        SequenceType<UnlimitedNaturalType> sequenceUnlimitedNatural = new SequenceType<UnlimitedNaturalType>();
-        assertFalse(sequenceUnlimitedNatural.conformsTo(target));
+        SequenceType sequenceUnlimitedNatural = new SequenceType(new UnlimitedNaturalType());
+        assertTrue(sequenceUnlimitedNatural.conformsTo(target));
 
-        SetType<UnlimitedNaturalType> setUnlimitedNatural = new SetType<UnlimitedNaturalType>();
+        SetType setUnlimitedNatural = new SetType(new UnlimitedNaturalType());
         assertFalse(setUnlimitedNatural.conformsTo(target));
 
-        BagType<RealType> bagReal = new BagType<RealType>();
+        BagType bagReal = new BagType(new RealType());
         assertFalse(bagReal.conformsTo(target));
 
-        OrderedSetType<RealType> orderedSetReal = new OrderedSetType<RealType>();
+        OrderedSetType orderedSetReal = new OrderedSetType(new RealType());
         assertFalse(orderedSetReal.conformsTo(target));
 
-        SequenceType<RealType> sequenceReal = new SequenceType<RealType>();
-        assertTrue(sequenceReal.conformsTo(target));
+        SequenceType sequenceReal = new SequenceType(new RealType());
+        assertFalse(sequenceReal.conformsTo(target));
 
-        SetType<RealType> setReal = new SetType<RealType>();
+        SetType setReal = new SetType(new RealType());
         assertFalse(setReal.conformsTo(target));
     }
 
     @Test
     public void SequenceType_conforms_to_test_collection() {
-        SequenceType<IntegerType> target = new SequenceType<IntegerType>();
+        SequenceType target = new SequenceType(new IntegerType());
 
-        BagType<IntegerType> bagInteger = new BagType<IntegerType>();
+        BagType bagInteger = new BagType(new IntegerType());
         assertFalse(target.conformsTo(bagInteger));
 
-        OrderedSetType<IntegerType> orderedSetInteger = new OrderedSetType<IntegerType>();
+        OrderedSetType orderedSetInteger = new OrderedSetType(new IntegerType());
         assertFalse(target.conformsTo(orderedSetInteger));
 
-        SequenceType<IntegerType> sequenceInteger = new SequenceType<IntegerType>();
+        SequenceType sequenceInteger = new SequenceType(new IntegerType());
         assertTrue(target.conformsTo(sequenceInteger));
 
-        SetType<IntegerType> setInteger = new SetType<IntegerType>();
+        SetType setInteger = new SetType(new IntegerType());
         assertFalse(target.conformsTo(setInteger));
 
-        BagType<Class> bagClass = new BagType<Class>();
+        BagType bagClass = new BagType(new Class());
         assertFalse(target.conformsTo(bagClass));
 
-        OrderedSetType<Class> orderedSetClass = new OrderedSetType<Class>();
+        OrderedSetType orderedSetClass = new OrderedSetType(new Class());
         assertFalse(target.conformsTo(orderedSetClass));
 
-        SequenceType<Class> sequenceClass = new SequenceType<Class>();
+        SequenceType sequenceClass = new SequenceType(new Class());
         assertFalse(target.conformsTo(sequenceClass));
 
-        SetType<Class> setClass = new SetType<Class>();
+        SetType setClass = new SetType(new Class());
         assertFalse(target.conformsTo(setClass));
 
-        BagType<UnlimitedNaturalType> bagUnlimitedNatural = new BagType<UnlimitedNaturalType>();
+        BagType bagUnlimitedNatural = new BagType(new UnlimitedNaturalType());
         assertFalse(target.conformsTo(bagUnlimitedNatural));
 
-        OrderedSetType<UnlimitedNaturalType> orderedSetUnlimitedNatural = new OrderedSetType<UnlimitedNaturalType>();
+        OrderedSetType orderedSetUnlimitedNatural = new OrderedSetType(new UnlimitedNaturalType());
         assertFalse(target.conformsTo(orderedSetUnlimitedNatural));
 
-        SequenceType<UnlimitedNaturalType> sequenceUnlimitedNatural = new SequenceType<UnlimitedNaturalType>();
-        assertTrue(target.conformsTo(sequenceUnlimitedNatural));
+        SequenceType sequenceUnlimitedNatural = new SequenceType(new UnlimitedNaturalType());
+        assertFalse(target.conformsTo(sequenceUnlimitedNatural));
 
-        SetType<UnlimitedNaturalType> setUnlimitedNatural = new SetType<UnlimitedNaturalType>();
+        SetType setUnlimitedNatural = new SetType(new UnlimitedNaturalType());
         assertFalse(target.conformsTo(setUnlimitedNatural));
 
-        BagType<RealType> bagReal = new BagType<RealType>();
+        BagType bagReal = new BagType(new RealType());
         assertFalse(target.conformsTo(bagReal));
 
-        OrderedSetType<RealType> orderedSetReal = new OrderedSetType<RealType>();
+        OrderedSetType orderedSetReal = new OrderedSetType(new RealType());
         assertFalse(target.conformsTo(orderedSetReal));
 
-        SequenceType<RealType> sequenceReal = new SequenceType<RealType>();
-        assertFalse(target.conformsTo(sequenceReal));
+        SequenceType sequenceReal = new SequenceType(new RealType());
+        assertTrue(target.conformsTo(sequenceReal));
 
-        SetType<RealType> setReal = new SetType<RealType>();
+        SetType setReal = new SetType(new RealType());
         assertFalse(target.conformsTo(setReal));
     }
 
     @Test
     public void test_conforms_to_SetType() {
-        SetType<Class> target = new SetType<Class>();
+        SetType target = new SetType(new Class());
 
         AnyType any = new AnyType();
         assertFalse(any.conformsTo(target));
@@ -726,7 +726,7 @@ public class ConformanceTest {
 
     @Test
     public void SetType_conforms_to_test() {
-        SetType<Class> target = new SetType<Class>();
+        SetType target = new SetType(new Class());
 
         AnyType any = new AnyType();
         assertTrue(target.conformsTo(any));
@@ -764,108 +764,108 @@ public class ConformanceTest {
 
     @Test
     public void test_collection_conforms_to_SetType() {
-        SetType<IntegerType> target = new SetType<IntegerType>();
+        SetType target = new SetType(new IntegerType());
 
-        BagType<IntegerType> bagInteger = new BagType<IntegerType>();
+        BagType bagInteger = new BagType(new IntegerType());
         assertFalse(bagInteger.conformsTo(target));
 
-        OrderedSetType<IntegerType> orderedSetInteger = new OrderedSetType<IntegerType>();
+        OrderedSetType orderedSetInteger = new OrderedSetType(new IntegerType());
         assertFalse(orderedSetInteger.conformsTo(target));
 
-        SequenceType<IntegerType> sequenceInteger = new SequenceType<IntegerType>();
+        SequenceType sequenceInteger = new SequenceType(new IntegerType());
         assertFalse(sequenceInteger.conformsTo(target));
 
-        SetType<IntegerType> setInteger = new SetType<IntegerType>();
+        SetType setInteger = new SetType(new IntegerType());
         assertTrue(setInteger.conformsTo(target));
 
-        BagType<Class> bagClass = new BagType<Class>();
+        BagType bagClass = new BagType(new Class());
         assertFalse(bagClass.conformsTo(target));
 
-        OrderedSetType<Class> orderedSetClass = new OrderedSetType<Class>();
+        OrderedSetType orderedSetClass = new OrderedSetType(new Class());
         assertFalse(orderedSetClass.conformsTo(target));
 
-        SequenceType<Class> sequenceClass = new SequenceType<Class>();
+        SequenceType sequenceClass = new SequenceType(new Class());
         assertFalse(sequenceClass.conformsTo(target));
 
-        SetType<Class> setClass = new SetType<Class>();
+        SetType setClass = new SetType(new Class());
         assertFalse(setClass.conformsTo(target));
 
-        BagType<UnlimitedNaturalType> bagUnlimitedNatural = new BagType<UnlimitedNaturalType>();
+        BagType bagUnlimitedNatural = new BagType(new UnlimitedNaturalType());
         assertFalse(bagUnlimitedNatural.conformsTo(target));
 
-        OrderedSetType<UnlimitedNaturalType> orderedSetUnlimitedNatural = new OrderedSetType<UnlimitedNaturalType>();
+        OrderedSetType orderedSetUnlimitedNatural = new OrderedSetType(new UnlimitedNaturalType());
         assertFalse(orderedSetUnlimitedNatural.conformsTo(target));
 
-        SequenceType<UnlimitedNaturalType> sequenceUnlimitedNatural = new SequenceType<UnlimitedNaturalType>();
+        SequenceType sequenceUnlimitedNatural = new SequenceType(new UnlimitedNaturalType());
         assertFalse(sequenceUnlimitedNatural.conformsTo(target));
 
-        SetType<UnlimitedNaturalType> setUnlimitedNatural = new SetType<UnlimitedNaturalType>();
-        assertFalse(setUnlimitedNatural.conformsTo(target));
+        SetType setUnlimitedNatural = new SetType(new UnlimitedNaturalType());
+        assertTrue(setUnlimitedNatural.conformsTo(target));
 
-        BagType<RealType> bagReal = new BagType<RealType>();
+        BagType bagReal = new BagType(new RealType());
         assertFalse(bagReal.conformsTo(target));
 
-        OrderedSetType<RealType> orderedSetReal = new OrderedSetType<RealType>();
+        OrderedSetType orderedSetReal = new OrderedSetType(new RealType());
         assertFalse(orderedSetReal.conformsTo(target));
 
-        SequenceType<RealType> sequenceReal = new SequenceType<RealType>();
+        SequenceType sequenceReal = new SequenceType(new RealType());
         assertFalse(sequenceReal.conformsTo(target));
 
-        SetType<RealType> setReal = new SetType<RealType>();
-        assertTrue(setReal.conformsTo(target));
+        SetType setReal = new SetType(new RealType());
+        assertFalse(setReal.conformsTo(target));
     }
 
     @Test
     public void SetType_conforms_to_test_collection() {
-        SetType<IntegerType> target = new SetType<IntegerType>();
+        SetType target = new SetType(new IntegerType());
 
-        BagType<IntegerType> bagInteger = new BagType<IntegerType>();
+        BagType bagInteger = new BagType(new IntegerType());
         assertFalse(target.conformsTo(bagInteger));
 
-        OrderedSetType<IntegerType> orderedSetInteger = new OrderedSetType<IntegerType>();
+        OrderedSetType orderedSetInteger = new OrderedSetType(new IntegerType());
         assertFalse(target.conformsTo(orderedSetInteger));
 
-        SequenceType<IntegerType> sequenceInteger = new SequenceType<IntegerType>();
+        SequenceType sequenceInteger = new SequenceType(new IntegerType());
         assertFalse(target.conformsTo(sequenceInteger));
 
-        SetType<IntegerType> setInteger = new SetType<IntegerType>();
+        SetType setInteger = new SetType(new IntegerType());
         assertTrue(target.conformsTo(setInteger));
 
-        BagType<Class> bagClass = new BagType<Class>();
+        BagType bagClass = new BagType(new Class());
         assertFalse(target.conformsTo(bagClass));
 
-        OrderedSetType<Class> orderedSetClass = new OrderedSetType<Class>();
+        OrderedSetType orderedSetClass = new OrderedSetType(new Class());
         assertFalse(target.conformsTo(orderedSetClass));
 
-        SequenceType<Class> sequenceClass = new SequenceType<Class>();
+        SequenceType sequenceClass = new SequenceType(new Class());
         assertFalse(target.conformsTo(sequenceClass));
 
-        SetType<Class> setClass = new SetType<Class>();
+        SetType setClass = new SetType(new Class());
         assertFalse(target.conformsTo(setClass));
 
-        BagType<UnlimitedNaturalType> bagUnlimitedNatural = new BagType<UnlimitedNaturalType>();
+        BagType bagUnlimitedNatural = new BagType(new UnlimitedNaturalType());
         assertFalse(target.conformsTo(bagUnlimitedNatural));
 
-        OrderedSetType<UnlimitedNaturalType> orderedSetUnlimitedNatural = new OrderedSetType<UnlimitedNaturalType>();
+        OrderedSetType orderedSetUnlimitedNatural = new OrderedSetType(new UnlimitedNaturalType());
         assertFalse(target.conformsTo(orderedSetUnlimitedNatural));
 
-        SequenceType<UnlimitedNaturalType> sequenceUnlimitedNatural = new SequenceType<UnlimitedNaturalType>();
+        SequenceType sequenceUnlimitedNatural = new SequenceType(new UnlimitedNaturalType());
         assertFalse(target.conformsTo(sequenceUnlimitedNatural));
 
-        SetType<UnlimitedNaturalType> setUnlimitedNatural = new SetType<UnlimitedNaturalType>();
-        assertTrue(target.conformsTo(setUnlimitedNatural));
+        SetType setUnlimitedNatural = new SetType(new UnlimitedNaturalType());
+        assertFalse(target.conformsTo(setUnlimitedNatural));
 
-        BagType<RealType> bagReal = new BagType<RealType>();
+        BagType bagReal = new BagType(new RealType());
         assertFalse(target.conformsTo(bagReal));
 
-        OrderedSetType<RealType> orderedSetReal = new OrderedSetType<RealType>();
+        OrderedSetType orderedSetReal = new OrderedSetType(new RealType());
         assertFalse(target.conformsTo(orderedSetReal));
 
-        SequenceType<RealType> sequenceReal = new SequenceType<RealType>();
+        SequenceType sequenceReal = new SequenceType(new RealType());
         assertFalse(target.conformsTo(sequenceReal));
 
-        SetType<RealType> setReal = new SetType<RealType>();
-        assertFalse(target.conformsTo(setReal));
+        SetType setReal = new SetType(new RealType());
+        assertTrue(target.conformsTo(setReal));
     }
 
     @Test
@@ -875,7 +875,7 @@ public class ConformanceTest {
         AnyType any = new AnyType();
         assertFalse(any.conformsTo(target));
 
-        BagType<Class> bag = new BagType<Class>();
+        BagType bag = new BagType(new Class());
         assertFalse(bag.conformsTo(target));
 
         Class clazz = new Class();
@@ -890,16 +890,16 @@ public class ConformanceTest {
         MessageType message = new MessageType();
         assertFalse(message.conformsTo(target));
 
-        OrderedSetType<Class> orderedSet = new OrderedSetType<Class>();
+        OrderedSetType orderedSet = new OrderedSetType(new Class());
         assertFalse(orderedSet.conformsTo(target));
 
         RealType real = new RealType();
         assertFalse(real.conformsTo(target));
 
-        SequenceType<Class> sequence = new SequenceType<Class>();
+        SequenceType sequence = new SequenceType(new Class());
         assertFalse(sequence.conformsTo(target));
 
-        SetType<Class> set = new SetType<Class>();
+        SetType set = new SetType(new Class());
         assertFalse(set.conformsTo(target));
 
         StringType string = new StringType();
@@ -925,7 +925,7 @@ public class ConformanceTest {
         AnyType any = new AnyType();
         assertTrue(target.conformsTo(any));
 
-        BagType<Class> bag = new BagType<Class>();
+        BagType bag = new BagType(new Class());
         assertFalse(target.conformsTo(bag));
 
         Class clazz = new Class();
@@ -940,16 +940,16 @@ public class ConformanceTest {
         MessageType message = new MessageType();
         assertFalse(target.conformsTo(message));
 
-        OrderedSetType<Class> orderedSet = new OrderedSetType<Class>();
+        OrderedSetType orderedSet = new OrderedSetType(new Class());
         assertFalse(target.conformsTo(orderedSet));
 
         RealType real = new RealType();
         assertFalse(target.conformsTo(real));
 
-        SequenceType<Class> sequence = new SequenceType<Class>();
+        SequenceType sequence = new SequenceType(new Class());
         assertFalse(target.conformsTo(sequence));
 
-        SetType<Class> set = new SetType<Class>();
+        SetType set = new SetType(new Class());
         assertFalse(target.conformsTo(set));
 
         StringType string = new StringType();
@@ -975,7 +975,7 @@ public class ConformanceTest {
         AnyType any = new AnyType();
         assertFalse(any.conformsTo(target));
 
-        BagType<Class> bag = new BagType<Class>();
+        BagType bag = new BagType(new Class());
         assertFalse(bag.conformsTo(target));
 
         Class clazz = new Class();
@@ -990,16 +990,16 @@ public class ConformanceTest {
         MessageType message = new MessageType();
         assertFalse(message.conformsTo(target));
 
-        OrderedSetType<Class> orderedSet = new OrderedSetType<Class>();
+        OrderedSetType orderedSet = new OrderedSetType(new Class());
         assertFalse(orderedSet.conformsTo(target));
 
         RealType real = new RealType();
         assertFalse(real.conformsTo(target));
 
-        SequenceType<Class> sequence = new SequenceType<Class>();
+        SequenceType sequence = new SequenceType(new Class());
         assertFalse(sequence.conformsTo(target));
 
-        SetType<Class> set = new SetType<Class>();
+        SetType set = new SetType(new Class());
         assertFalse(set.conformsTo(target));
 
         StringType string = new StringType();
@@ -1012,7 +1012,7 @@ public class ConformanceTest {
         assertFalse(tuple.conformsTo(target));
 
         UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType();
-        assertFalse(unlimitedNatural.conformsTo(target));
+        assertTrue(unlimitedNatural.conformsTo(target));
 
         VoidType voidType = VoidType.getSoleInstance();
         assertTrue(voidType.conformsTo(target));
@@ -1025,7 +1025,7 @@ public class ConformanceTest {
         AnyType any = new AnyType();
         assertTrue(target.conformsTo(any));
 
-        BagType<Class> bag = new BagType<Class>();
+        BagType bag = new BagType(new Class());
         assertFalse(target.conformsTo(bag));
 
         Class clazz = new Class();
@@ -1040,16 +1040,16 @@ public class ConformanceTest {
         MessageType message = new MessageType();
         assertFalse(target.conformsTo(message));
 
-        OrderedSetType<Class> orderedSet = new OrderedSetType<Class>();
+        OrderedSetType orderedSet = new OrderedSetType(new Class());
         assertFalse(target.conformsTo(orderedSet));
 
         RealType real = new RealType();
-        assertFalse(target.conformsTo(real));
+        assertTrue(target.conformsTo(real));
 
-        SequenceType<Class> sequence = new SequenceType<Class>();
+        SequenceType sequence = new SequenceType(new Class());
         assertFalse(target.conformsTo(sequence));
 
-        SetType<Class> set = new SetType<Class>();
+        SetType set = new SetType(new Class());
         assertFalse(target.conformsTo(set));
 
         StringType string = new StringType();
@@ -1075,7 +1075,7 @@ public class ConformanceTest {
         AnyType any = new AnyType();
         assertFalse(any.conformsTo(target));
 
-        BagType<Class> bag = new BagType<Class>();
+        BagType bag = new BagType(new Class());
         assertFalse(bag.conformsTo(target));
 
         Class clazz = new Class();
@@ -1090,16 +1090,16 @@ public class ConformanceTest {
         MessageType message = new MessageType();
         assertFalse(message.conformsTo(target));
 
-        OrderedSetType<Class> orderedSet = new OrderedSetType<Class>();
+        OrderedSetType orderedSet = new OrderedSetType(new Class());
         assertFalse(orderedSet.conformsTo(target));
 
         RealType real = new RealType();
         assertFalse(real.conformsTo(target));
 
-        SequenceType<Class> sequence = new SequenceType<Class>();
+        SequenceType sequence = new SequenceType(new Class());
         assertFalse(sequence.conformsTo(target));
 
-        SetType<Class> set = new SetType<Class>();
+        SetType set = new SetType(new Class());
         assertFalse(set.conformsTo(target));
 
         StringType string = new StringType();
@@ -1125,7 +1125,7 @@ public class ConformanceTest {
         AnyType any = new AnyType();
         assertTrue(target.conformsTo(any));
 
-        BagType<Class> bag = new BagType<Class>();
+        BagType bag = new BagType(new Class());
         assertTrue(target.conformsTo(bag));
 
         Class clazz = new Class();
@@ -1140,16 +1140,16 @@ public class ConformanceTest {
         MessageType message = new MessageType();
         assertTrue(target.conformsTo(message));
 
-        OrderedSetType<Class> orderedSet = new OrderedSetType<Class>();
+        OrderedSetType orderedSet = new OrderedSetType(new Class());
         assertTrue(target.conformsTo(orderedSet));
 
         RealType real = new RealType();
         assertTrue(target.conformsTo(real));
 
-        SequenceType<Class> sequence = new SequenceType<Class>();
+        SequenceType sequence = new SequenceType(new Class());
         assertTrue(target.conformsTo(sequence));
 
-        SetType<Class> set = new SetType<Class>();
+        SetType set = new SetType(new Class());
         assertTrue(target.conformsTo(set));
 
         StringType string = new StringType();
@@ -1167,4 +1167,709 @@ public class ConformanceTest {
         VoidType voidType = VoidType.getSoleInstance();
         assertFalse(target.conformsTo(voidType));
     }
+
+    @Test
+    public void test_conforms_to_MessageType() {
+        MessageType target = new MessageType();
+
+        AnyType any = new AnyType();
+        assertFalse(any.conformsTo(target));
+
+        BagType bag = new BagType(new Class());
+        assertFalse(bag.conformsTo(target));
+
+        Class clazz = new Class();
+        assertFalse(clazz.conformsTo(target));
+
+        IntegerType integer = new IntegerType();
+        assertFalse(integer.conformsTo(target));
+
+        InvalidType invalid = InvalidType.getSoleInstance();
+        assertTrue(invalid.conformsTo(target));
+
+        MessageType message = new MessageType();
+        assertTrue(message.conformsTo(target));
+
+        OrderedSetType orderedSet = new OrderedSetType(new Class());
+        assertFalse(orderedSet.conformsTo(target));
+
+        RealType real = new RealType();
+        assertFalse(real.conformsTo(target));
+
+        SequenceType sequence = new SequenceType(new Class());
+        assertFalse(sequence.conformsTo(target));
+
+        SetType set = new SetType(new Class());
+        assertFalse(set.conformsTo(target));
+
+        StringType string = new StringType();
+        assertFalse(string.conformsTo(target));
+
+        TemplateParameterType templateParameter = new TemplateParameterType();
+        assertFalse(templateParameter.conformsTo(target));
+
+        TupleType tuple = new TupleType();
+        assertFalse(tuple.conformsTo(target));
+
+        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType();
+        assertFalse(unlimitedNatural.conformsTo(target));
+
+        VoidType voidType = VoidType.getSoleInstance();
+        assertTrue(voidType.conformsTo(target));
+    }
+
+    @Test
+    public void MessageType_conforms_to_test() {
+        MessageType target = new MessageType();
+
+        AnyType any = new AnyType();
+        assertTrue(target.conformsTo(any));
+
+        BagType bag = new BagType(new Class());
+        assertFalse(target.conformsTo(bag));
+
+        Class clazz = new Class();
+        assertFalse(target.conformsTo(clazz));
+
+        IntegerType integer = new IntegerType();
+        assertFalse(target.conformsTo(integer));
+
+        InvalidType invalid = InvalidType.getSoleInstance();
+        assertFalse(target.conformsTo(invalid));
+
+        MessageType message = new MessageType();
+        assertTrue(target.conformsTo(message));
+
+        OrderedSetType orderedSet = new OrderedSetType(new Class());
+        assertFalse(target.conformsTo(orderedSet));
+
+        RealType real = new RealType();
+        assertFalse(target.conformsTo(real));
+
+        SequenceType sequence = new SequenceType(new Class());
+        assertFalse(target.conformsTo(sequence));
+
+        SetType set = new SetType(new Class());
+        assertFalse(target.conformsTo(set));
+
+        StringType string = new StringType();
+        assertFalse(target.conformsTo(string));
+
+        TemplateParameterType templateParameter = new TemplateParameterType();
+        assertFalse(target.conformsTo(templateParameter));
+
+        TupleType tuple = new TupleType();
+        assertFalse(target.conformsTo(tuple));
+
+        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType();
+        assertFalse(target.conformsTo(unlimitedNatural));
+
+        VoidType voidType = VoidType.getSoleInstance();
+        assertFalse(target.conformsTo(voidType));
+    }
+
+    @Test
+    public void test_conforms_to_RealType() {
+        RealType target = new RealType();
+
+        AnyType any = new AnyType();
+        assertFalse(any.conformsTo(target));
+
+        BagType bag = new BagType(new Class());
+        assertFalse(bag.conformsTo(target));
+
+        Class clazz = new Class();
+        assertFalse(clazz.conformsTo(target));
+
+        IntegerType integer = new IntegerType();
+        assertTrue(integer.conformsTo(target));
+
+        InvalidType invalid = InvalidType.getSoleInstance();
+        assertTrue(invalid.conformsTo(target));
+
+        MessageType message = new MessageType();
+        assertFalse(message.conformsTo(target));
+
+        OrderedSetType orderedSet = new OrderedSetType(new Class());
+        assertFalse(orderedSet.conformsTo(target));
+
+        RealType real = new RealType();
+        assertTrue(real.conformsTo(target));
+
+        SequenceType sequence = new SequenceType(new Class());
+        assertFalse(sequence.conformsTo(target));
+
+        SetType set = new SetType(new Class());
+        assertFalse(set.conformsTo(target));
+
+        StringType string = new StringType();
+        assertFalse(string.conformsTo(target));
+
+        TemplateParameterType templateParameter = new TemplateParameterType();
+        assertFalse(templateParameter.conformsTo(target));
+
+        TupleType tuple = new TupleType();
+        assertFalse(tuple.conformsTo(target));
+
+        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType();
+        assertTrue(unlimitedNatural.conformsTo(target));
+
+        VoidType voidType = VoidType.getSoleInstance();
+        assertTrue(voidType.conformsTo(target));
+    }
+
+    @Test
+    public void RealType_conforms_to_test() {
+        RealType target = new RealType();
+
+        AnyType any = new AnyType();
+        assertTrue(target.conformsTo(any));
+
+        BagType bag = new BagType(new Class());
+        assertFalse(target.conformsTo(bag));
+
+        Class clazz = new Class();
+        assertFalse(target.conformsTo(clazz));
+
+        IntegerType integer = new IntegerType();
+        assertFalse(target.conformsTo(integer));
+
+        InvalidType invalid = InvalidType.getSoleInstance();
+        assertFalse(target.conformsTo(invalid));
+
+        MessageType message = new MessageType();
+        assertFalse(target.conformsTo(message));
+
+        OrderedSetType orderedSet = new OrderedSetType(new Class());
+        assertFalse(target.conformsTo(orderedSet));
+
+        RealType real = new RealType();
+        assertTrue(target.conformsTo(real));
+
+        SequenceType sequence = new SequenceType(new Class());
+        assertFalse(target.conformsTo(sequence));
+
+        SetType set = new SetType(new Class());
+        assertFalse(target.conformsTo(set));
+
+        StringType string = new StringType();
+        assertFalse(target.conformsTo(string));
+
+        TemplateParameterType templateParameter = new TemplateParameterType();
+        assertFalse(target.conformsTo(templateParameter));
+
+        TupleType tuple = new TupleType();
+        assertFalse(target.conformsTo(tuple));
+
+        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType();
+        assertFalse(target.conformsTo(unlimitedNatural));
+
+        VoidType voidType = VoidType.getSoleInstance();
+        assertFalse(target.conformsTo(voidType));
+    }
+
+    @Test
+    public void test_conforms_to_StringType() {
+        StringType target = new StringType();
+
+        AnyType any = new AnyType();
+        assertFalse(any.conformsTo(target));
+
+        BagType bag = new BagType(new Class());
+        assertFalse(bag.conformsTo(target));
+
+        Class clazz = new Class();
+        assertFalse(clazz.conformsTo(target));
+
+        IntegerType integer = new IntegerType();
+        assertFalse(integer.conformsTo(target));
+
+        InvalidType invalid = InvalidType.getSoleInstance();
+        assertTrue(invalid.conformsTo(target));
+
+        MessageType message = new MessageType();
+        assertFalse(message.conformsTo(target));
+
+        OrderedSetType orderedSet = new OrderedSetType(new Class());
+        assertFalse(orderedSet.conformsTo(target));
+
+        RealType real = new RealType();
+        assertFalse(real.conformsTo(target));
+
+        SequenceType sequence = new SequenceType(new Class());
+        assertFalse(sequence.conformsTo(target));
+
+        SetType set = new SetType(new Class());
+        assertFalse(set.conformsTo(target));
+
+        StringType string = new StringType();
+        assertTrue(string.conformsTo(target));
+
+        TemplateParameterType templateParameter = new TemplateParameterType();
+        assertFalse(templateParameter.conformsTo(target));
+
+        TupleType tuple = new TupleType();
+        assertFalse(tuple.conformsTo(target));
+
+        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType();
+        assertFalse(unlimitedNatural.conformsTo(target));
+
+        VoidType voidType = VoidType.getSoleInstance();
+        assertTrue(voidType.conformsTo(target));
+    }
+
+    @Test
+    public void StringType_conforms_to_test() {
+        StringType target = new StringType();
+
+        AnyType any = new AnyType();
+        assertTrue(target.conformsTo(any));
+
+        BagType bag = new BagType(new Class());
+        assertFalse(target.conformsTo(bag));
+
+        Class clazz = new Class();
+        assertFalse(target.conformsTo(clazz));
+
+        IntegerType integer = new IntegerType();
+        assertFalse(target.conformsTo(integer));
+
+        InvalidType invalid = InvalidType.getSoleInstance();
+        assertFalse(target.conformsTo(invalid));
+
+        MessageType message = new MessageType();
+        assertFalse(target.conformsTo(message));
+
+        OrderedSetType orderedSet = new OrderedSetType(new Class());
+        assertFalse(target.conformsTo(orderedSet));
+
+        RealType real = new RealType();
+        assertFalse(target.conformsTo(real));
+
+        SequenceType sequence = new SequenceType(new Class());
+        assertFalse(target.conformsTo(sequence));
+
+        SetType set = new SetType(new Class());
+        assertFalse(target.conformsTo(set));
+
+        StringType string = new StringType();
+        assertTrue(target.conformsTo(string));
+
+        TemplateParameterType templateParameter = new TemplateParameterType();
+        assertFalse(target.conformsTo(templateParameter));
+
+        TupleType tuple = new TupleType();
+        assertFalse(target.conformsTo(tuple));
+
+        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType();
+        assertFalse(target.conformsTo(unlimitedNatural));
+
+        VoidType voidType = VoidType.getSoleInstance();
+        assertFalse(target.conformsTo(voidType));
+    }
+    
+    @Test
+    public void test_conforms_to_TemplateParameterType() {
+        TemplateParameterType target = new TemplateParameterType();
+
+        AnyType any = new AnyType();
+        assertFalse(any.conformsTo(target));
+
+        BagType bag = new BagType(new Class());
+        assertFalse(bag.conformsTo(target));
+
+        Class clazz = new Class();
+        assertFalse(clazz.conformsTo(target));
+
+        IntegerType integer = new IntegerType();
+        assertFalse(integer.conformsTo(target));
+
+        InvalidType invalid = InvalidType.getSoleInstance();
+        assertTrue(invalid.conformsTo(target));
+
+        MessageType message = new MessageType();
+        assertFalse(message.conformsTo(target));
+
+        OrderedSetType orderedSet = new OrderedSetType(new Class());
+        assertFalse(orderedSet.conformsTo(target));
+
+        RealType real = new RealType();
+        assertFalse(real.conformsTo(target));
+
+        SequenceType sequence = new SequenceType(new Class());
+        assertFalse(sequence.conformsTo(target));
+
+        SetType set = new SetType(new Class());
+        assertFalse(set.conformsTo(target));
+
+        StringType string = new StringType();
+        assertFalse(string.conformsTo(target));
+
+        TemplateParameterType templateParameter = new TemplateParameterType();
+        assertTrue(templateParameter.conformsTo(target));
+
+        TupleType tuple = new TupleType();
+        assertFalse(tuple.conformsTo(target));
+
+        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType();
+        assertFalse(unlimitedNatural.conformsTo(target));
+
+        VoidType voidType = VoidType.getSoleInstance();
+        assertTrue(voidType.conformsTo(target));
+    }
+
+    @Test
+    public void TemplateParameterType_conforms_to_test() {
+        TemplateParameterType target = new TemplateParameterType();
+
+        AnyType any = new AnyType();
+        assertTrue(target.conformsTo(any));
+
+        BagType bag = new BagType(new Class());
+        assertFalse(target.conformsTo(bag));
+
+        Class clazz = new Class();
+        assertFalse(target.conformsTo(clazz));
+
+        IntegerType integer = new IntegerType();
+        assertFalse(target.conformsTo(integer));
+
+        InvalidType invalid = InvalidType.getSoleInstance();
+        assertFalse(target.conformsTo(invalid));
+
+        MessageType message = new MessageType();
+        assertFalse(target.conformsTo(message));
+
+        OrderedSetType orderedSet = new OrderedSetType(new Class());
+        assertFalse(target.conformsTo(orderedSet));
+
+        RealType real = new RealType();
+        assertFalse(target.conformsTo(real));
+
+        SequenceType sequence = new SequenceType(new Class());
+        assertFalse(target.conformsTo(sequence));
+
+        SetType set = new SetType(new Class());
+        assertFalse(target.conformsTo(set));
+
+        StringType string = new StringType();
+        assertFalse(target.conformsTo(string));
+
+        TemplateParameterType templateParameter = new TemplateParameterType();
+        assertTrue(target.conformsTo(templateParameter));
+
+        TupleType tuple = new TupleType();
+        assertFalse(target.conformsTo(tuple));
+
+        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType();
+        assertFalse(target.conformsTo(unlimitedNatural));
+
+        VoidType voidType = VoidType.getSoleInstance();
+        assertFalse(target.conformsTo(voidType));
+    }
+
+    @Test
+    public void test_conforms_to_TupleType() {
+        TupleType target = new TupleType();
+
+        AnyType any = new AnyType();
+        assertFalse(any.conformsTo(target));
+
+        BagType bag = new BagType(new Class());
+        assertFalse(bag.conformsTo(target));
+
+        Class clazz = new Class();
+        assertFalse(clazz.conformsTo(target));
+
+        IntegerType integer = new IntegerType();
+        assertFalse(integer.conformsTo(target));
+
+        InvalidType invalid = InvalidType.getSoleInstance();
+        assertTrue(invalid.conformsTo(target));
+
+        MessageType message = new MessageType();
+        assertFalse(message.conformsTo(target));
+
+        OrderedSetType orderedSet = new OrderedSetType(new Class());
+        assertFalse(orderedSet.conformsTo(target));
+
+        RealType real = new RealType();
+        assertFalse(real.conformsTo(target));
+
+        SequenceType sequence = new SequenceType(new Class());
+        assertFalse(sequence.conformsTo(target));
+
+        SetType set = new SetType(new Class());
+        assertFalse(set.conformsTo(target));
+
+        StringType string = new StringType();
+        assertFalse(string.conformsTo(target));
+
+        TemplateParameterType templateParameter = new TemplateParameterType();
+        assertFalse(templateParameter.conformsTo(target));
+
+        TupleType tuple = new TupleType();
+        assertTrue(tuple.conformsTo(target));
+
+        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType();
+        assertFalse(unlimitedNatural.conformsTo(target));
+
+        VoidType voidType = VoidType.getSoleInstance();
+        assertTrue(voidType.conformsTo(target));
+    }
+
+    @Test
+    public void TupleType_conforms_to_test() {
+        TupleType target = new TupleType();
+
+        AnyType any = new AnyType();
+        assertTrue(target.conformsTo(any));
+
+        BagType bag = new BagType(new Class());
+        assertFalse(target.conformsTo(bag));
+
+        Class clazz = new Class();
+        assertFalse(target.conformsTo(clazz));
+
+        IntegerType integer = new IntegerType();
+        assertFalse(target.conformsTo(integer));
+
+        InvalidType invalid = InvalidType.getSoleInstance();
+        assertFalse(target.conformsTo(invalid));
+
+        MessageType message = new MessageType();
+        assertFalse(target.conformsTo(message));
+
+        OrderedSetType orderedSet = new OrderedSetType(new Class());
+        assertFalse(target.conformsTo(orderedSet));
+
+        RealType real = new RealType();
+        assertFalse(target.conformsTo(real));
+
+        SequenceType sequence = new SequenceType(new Class());
+        assertFalse(target.conformsTo(sequence));
+
+        SetType set = new SetType(new Class());
+        assertFalse(target.conformsTo(set));
+
+        StringType string = new StringType();
+        assertFalse(target.conformsTo(string));
+
+        TemplateParameterType templateParameter = new TemplateParameterType();
+        assertFalse(target.conformsTo(templateParameter));
+
+        TupleType tuple = new TupleType();
+        assertTrue(target.conformsTo(tuple));
+
+        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType();
+        assertFalse(target.conformsTo(unlimitedNatural));
+
+        VoidType voidType = VoidType.getSoleInstance();
+        assertFalse(target.conformsTo(voidType));
+    }
+
+    @Test
+    public void test_conforms_to_UnlimitedNaturalType() {
+        UnlimitedNaturalType target = new UnlimitedNaturalType();
+
+        AnyType any = new AnyType();
+        assertFalse(any.conformsTo(target));
+
+        BagType bag = new BagType(new Class());
+        assertFalse(bag.conformsTo(target));
+
+        Class clazz = new Class();
+        assertFalse(clazz.conformsTo(target));
+
+        IntegerType integer = new IntegerType();
+        assertFalse(integer.conformsTo(target));
+
+        InvalidType invalid = InvalidType.getSoleInstance();
+        assertTrue(invalid.conformsTo(target));
+
+        MessageType message = new MessageType();
+        assertFalse(message.conformsTo(target));
+
+        OrderedSetType orderedSet = new OrderedSetType(new Class());
+        assertFalse(orderedSet.conformsTo(target));
+
+        RealType real = new RealType();
+        assertFalse(real.conformsTo(target));
+
+        SequenceType sequence = new SequenceType(new Class());
+        assertFalse(sequence.conformsTo(target));
+
+        SetType set = new SetType(new Class());
+        assertFalse(set.conformsTo(target));
+
+        StringType string = new StringType();
+        assertFalse(string.conformsTo(target));
+
+        TemplateParameterType templateParameter = new TemplateParameterType();
+        assertFalse(templateParameter.conformsTo(target));
+
+        TupleType tuple = new TupleType();
+        assertFalse(tuple.conformsTo(target));
+
+        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType();
+        assertTrue(unlimitedNatural.conformsTo(target));
+
+        VoidType voidType = VoidType.getSoleInstance();
+        assertTrue(voidType.conformsTo(target));
+    }
+
+    @Test
+    public void UnlimitedNaturalType_conforms_to_test() {
+        UnlimitedNaturalType target = new UnlimitedNaturalType();
+
+        AnyType any = new AnyType();
+        assertTrue(target.conformsTo(any));
+
+        BagType bag = new BagType(new Class());
+        assertFalse(target.conformsTo(bag));
+
+        Class clazz = new Class();
+        assertFalse(target.conformsTo(clazz));
+
+        IntegerType integer = new IntegerType();
+        assertTrue(target.conformsTo(integer));
+
+        InvalidType invalid = InvalidType.getSoleInstance();
+        assertFalse(target.conformsTo(invalid));
+
+        MessageType message = new MessageType();
+        assertFalse(target.conformsTo(message));
+
+        OrderedSetType orderedSet = new OrderedSetType(new Class());
+        assertFalse(target.conformsTo(orderedSet));
+
+        RealType real = new RealType();
+        assertTrue(target.conformsTo(real));
+
+        SequenceType sequence = new SequenceType(new Class());
+        assertFalse(target.conformsTo(sequence));
+
+        SetType set = new SetType(new Class());
+        assertFalse(target.conformsTo(set));
+
+        StringType string = new StringType();
+        assertFalse(target.conformsTo(string));
+
+        TemplateParameterType templateParameter = new TemplateParameterType();
+        assertFalse(target.conformsTo(templateParameter));
+
+        TupleType tuple = new TupleType();
+        assertFalse(target.conformsTo(tuple));
+
+        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType();
+        assertTrue(target.conformsTo(unlimitedNatural));
+
+        VoidType voidType = VoidType.getSoleInstance();
+        assertFalse(target.conformsTo(voidType));
+    }
+
+
+    @Test
+    public void test_conforms_to_VoidType() {
+        VoidType target = VoidType.getSoleInstance();
+
+        AnyType any = new AnyType();
+        assertFalse(any.conformsTo(target));
+
+        BagType bag = new BagType(new Class());
+        assertFalse(bag.conformsTo(target));
+
+        Class clazz = new Class();
+        assertFalse(clazz.conformsTo(target));
+
+        IntegerType integer = new IntegerType();
+        assertFalse(integer.conformsTo(target));
+
+        InvalidType invalid = InvalidType.getSoleInstance();
+        assertFalse(invalid.conformsTo(target));
+
+        MessageType message = new MessageType();
+        assertFalse(message.conformsTo(target));
+
+        OrderedSetType orderedSet = new OrderedSetType(new Class());
+        assertFalse(orderedSet.conformsTo(target));
+
+        RealType real = new RealType();
+        assertFalse(real.conformsTo(target));
+
+        SequenceType sequence = new SequenceType(new Class());
+        assertFalse(sequence.conformsTo(target));
+
+        SetType set = new SetType(new Class());
+        assertFalse(set.conformsTo(target));
+
+        StringType string = new StringType();
+        assertFalse(string.conformsTo(target));
+
+        TemplateParameterType templateParameter = new TemplateParameterType();
+        assertFalse(templateParameter.conformsTo(target));
+
+        TupleType tuple = new TupleType();
+        assertFalse(tuple.conformsTo(target));
+
+        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType();
+        assertFalse(unlimitedNatural.conformsTo(target));
+
+        VoidType voidType = VoidType.getSoleInstance();
+        assertTrue(voidType.conformsTo(target));
+    }
+
+    @Test
+    public void VoidType_conforms_to_test() {
+        VoidType target = VoidType.getSoleInstance();
+
+        AnyType any = new AnyType();
+        assertTrue(target.conformsTo(any));
+
+        BagType bag = new BagType(new Class());
+        assertTrue(target.conformsTo(bag));
+
+        Class clazz = new Class();
+        assertTrue(target.conformsTo(clazz));
+
+        IntegerType integer = new IntegerType();
+        assertTrue(target.conformsTo(integer));
+
+        InvalidType invalid = InvalidType.getSoleInstance();
+        assertFalse(target.conformsTo(invalid));
+
+        MessageType message = new MessageType();
+        assertTrue(target.conformsTo(message));
+
+        OrderedSetType orderedSet = new OrderedSetType(new Class());
+        assertTrue(target.conformsTo(orderedSet));
+
+        RealType real = new RealType();
+        assertTrue(target.conformsTo(real));
+
+        SequenceType sequence = new SequenceType(new Class());
+        assertTrue(target.conformsTo(sequence));
+
+        SetType set = new SetType(new Class());
+        assertTrue(target.conformsTo(set));
+
+        StringType string = new StringType();
+        assertTrue(target.conformsTo(string));
+
+        TemplateParameterType templateParameter = new TemplateParameterType();
+        assertTrue(target.conformsTo(templateParameter));
+
+        TupleType tuple = new TupleType();
+        assertTrue(target.conformsTo(tuple));
+
+        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType();
+        assertTrue(target.conformsTo(unlimitedNatural));
+
+        VoidType voidType = VoidType.getSoleInstance();
+        assertTrue(target.conformsTo(voidType));
+    }
+
+
+    
+
 }

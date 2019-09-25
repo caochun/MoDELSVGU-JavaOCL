@@ -23,8 +23,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-public class SequenceType<E extends Classifier> extends CollectionType<Classifier> implements List<Classifier> {
+public class SequenceType extends CollectionType<Classifier> implements List<Classifier> {
     public final TypeEnum TYPE = TypeEnum.SEQUENCETYPE;
+    
+    public SequenceType(Classifier clazz) {
+        this.clazz = clazz;
+    }
 
     @Override
     public boolean add(Classifier e) {
@@ -172,8 +176,8 @@ public class SequenceType<E extends Classifier> extends CollectionType<Classifie
             return false;
         if (other instanceof AnyType)
             return true;
-        if (other instanceof SequenceType<?>) {
-            return this.getElement().conformsTo(((SequenceType<?>) other).getElement());
+        if (other instanceof SequenceType) {
+            return this.clazz.conformsTo(((SequenceType) other).clazz);
         }
         return false;
     }
