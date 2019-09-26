@@ -19,7 +19,8 @@ limitations under the License.
 
 package com.vgu.se.jocl.expressions;
 
-public class StringLiteralExp extends PrimitiveLiteralExp {
+import com.vgu.se.jocl.types.StringType;
 
-    private String stringSymbol;
+public class StringLiteralExp extends PrimitiveLiteralExp<StringType> {
+
 }

@@ -19,7 +19,8 @@ limitations under the License.
 
 package com.vgu.se.jocl.expressions;
 
-public class UnlimitedNaturalLiteralExp extends NumericLiteralExp {
+import java.math.BigInteger;
 
+public class UnlimitedNaturalLiteralExp extends NumericLiteralExp<BigInteger> {
     // NOT SUPPORTED 
 }

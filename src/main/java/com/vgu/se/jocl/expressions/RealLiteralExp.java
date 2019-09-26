@@ -19,6 +19,5 @@ limitations under the License.
 
 package com.vgu.se.jocl.expressions;
 
-public class RealLiteralExp extends NumericLiteralExp{
-
+public class RealLiteralExp extends NumericLiteralExp<Double> {
 }
