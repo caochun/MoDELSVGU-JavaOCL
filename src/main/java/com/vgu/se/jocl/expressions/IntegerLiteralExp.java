@@ -19,5 +19,7 @@ limitations under the License.
 
 package com.vgu.se.jocl.expressions;
 
-public class IntegerLiteralExp extends NumericLiteralExp<Integer> {
+import com.vgu.se.jocl.types.IntegerType;
+
+public class IntegerLiteralExp extends NumericLiteralExp<IntegerType> {
 }

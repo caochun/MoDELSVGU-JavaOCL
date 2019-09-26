@@ -19,5 +19,7 @@ limitations under the License.
 
 package com.vgu.se.jocl.expressions;
 
-public class RealLiteralExp extends NumericLiteralExp<Double> {
+import com.vgu.se.jocl.types.RealType;
+
+public class RealLiteralExp extends NumericLiteralExp<RealType> {
 }
