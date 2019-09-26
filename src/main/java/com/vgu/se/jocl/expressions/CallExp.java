@@ -21,5 +21,5 @@ package com.vgu.se.jocl.expressions;
 
 public class CallExp extends OclExp {
 
-    private OclExp source;
+    protected OclExp source;
 }

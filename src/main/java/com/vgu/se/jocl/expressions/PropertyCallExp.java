@@ -31,7 +31,7 @@ public class PropertyCallExp extends NavigationCallExp {
     private String referredAttributeName;
     private Class referredAttributeClass;
 
-    public String getAttributeName() {
+    public String getReferredAttributeName() {
         return referredAttributeName;
     }
 
