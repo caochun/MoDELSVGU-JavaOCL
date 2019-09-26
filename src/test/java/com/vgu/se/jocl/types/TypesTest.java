@@ -16,16 +16,13 @@ limitations under the License.
 @author: ngpbh
 ***************************************************************************/
 
-package jocl.types;
+package com.vgu.se.jocl.types;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.math.BigInteger;
 
 import org.junit.Test;
-
-import com.vgu.se.jocl.types.*;
-import com.vgu.se.jocl.types.Class;
 
 public class TypesTest {
 

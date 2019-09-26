@@ -16,7 +16,7 @@ limitations under the License.
 @author: ngpbh
 ***************************************************************************/
 
-package jocl.types;
+package com.vgu.se.jocl.types;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
