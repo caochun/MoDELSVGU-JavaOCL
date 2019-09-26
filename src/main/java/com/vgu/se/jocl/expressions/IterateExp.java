@@ -19,8 +19,6 @@ limitations under the License.
 
 package com.vgu.se.jocl.expressions;
 
-import com.vgu.se.jocl.types.AnyType;
-import com.vgu.se.jocl.types.BagType;
 import com.vgu.se.jocl.types.Classifier;
 import com.vgu.se.jocl.types.CollectionType;
 

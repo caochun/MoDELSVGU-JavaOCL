@@ -13,19 +13,31 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-@author: thian
+@author: ngpbh
 ***************************************************************************/
 
 
-package com.vgu.se.jocl.expressions;
+package com.vgu.se.jocl.types;
 
-import com.vgu.se.jocl.types.CollectionType;
-
-public abstract class OclExp {
-
-    private OclExp appliedElement;
-    private CollectionType<?> result;
+public class BooleanType extends PrimitiveType<Boolean> {
     
-    private OperationCallExp parentCall;
-    
+    public BooleanType(Boolean e) {
+        super(e);
+    }
+
+    public final TypeEnum TYPE = TypeEnum.BOOLEANTYPE;
+
+    @Override
+    public boolean conformsTo(Classifier other) {
+        if (this == other)
+            return true;
+        if (other == null)
+            return false;
+        if (other instanceof AnyType)
+            return true;
+        if (other.getClass().isAssignableFrom(this.getClass()))
+            return true;
+        return false;
+    }
+
 }

@@ -19,16 +19,11 @@ limitations under the License.
 package com.vgu.se.jocl.types;
 
 public class RealType extends PrimitiveType<Double> {
+    public RealType(Double e) {
+        super(e);
+    }
 
     public final TypeEnum TYPE = TypeEnum.REALTYPE;
-
-    public Double getElement() {
-        return getElement();
-    }
-
-    public void setElement(Double element) {
-        this.setElement(element);
-    }
 
     @Override
     public boolean conformsTo(Classifier other) {

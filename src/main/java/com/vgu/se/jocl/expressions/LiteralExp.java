@@ -19,7 +19,5 @@ limitations under the License.
 
 package com.vgu.se.jocl.expressions;
 
-public class LiteralExp extends OclExp {
-    
-    private [] value;
+public abstract class LiteralExp extends OclExp {
 }

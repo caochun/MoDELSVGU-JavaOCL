@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-@author: thian
+@author: thian, ngpbh
 ***************************************************************************/
 
 
@@ -24,5 +24,15 @@ import java.util.List;
 public class NavigationCallExp extends FeatureCallExp {
 
     private List<OclExp> qualifiers;
-    protected Property navSource;
+//    protected Property navSource;
+    protected Variable variable;
+    
+    public List<OclExp> getQualifiers() {
+        return qualifiers;
+    }
+    
+    public NavigationCallExp(Variable variable, List<OclExp> qualifiers) {
+        this.variable = variable;
+        this.qualifiers = qualifiers;
+    }
 }

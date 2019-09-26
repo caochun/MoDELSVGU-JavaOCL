@@ -22,7 +22,7 @@ public enum TypeEnum {
     ANYTYPE("Any"), BAGTYPE("Bag"), CLASS("Class"), INTEGERTYPE("Integer"), INVALIDTYPE("Invalid"),
     MESSAGETYPE("Message"), ORDEREDSETTYPE("OrderedSet"), REALTYPE("Real"), SEQUENCETYPE("Sequence"), SETTYPE("Set"),
     STRINGTYPE("String"), TEMPLATEPARAMETERTYPE("TemplateParameter"), TUPLETYPE("Tuple"),
-    UNLIMITEDNATURALTYPE("UnlimitedNatural"), VOIDTYPE("Void");
+    UNLIMITEDNATURALTYPE("UnlimitedNatural"), VOIDTYPE("Void"), BOOLEANTYPE("Boolean");
 
     private String type;
 

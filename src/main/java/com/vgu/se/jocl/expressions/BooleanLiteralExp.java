@@ -19,6 +19,10 @@ limitations under the License.
 
 package com.vgu.se.jocl.expressions;
 
-public class BooleanLiteralExp extends PrimitiveLiteralExp {
+import com.vgu.se.jocl.types.BooleanType;
 
+public class BooleanLiteralExp extends PrimitiveLiteralExp<BooleanType> {
+    public BooleanLiteralExp(Boolean value) {
+        this.setLiteral(new BooleanType(value));
+    }
 }

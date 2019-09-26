@@ -13,19 +13,30 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-@author: thian
+@author: ngpbh
 ***************************************************************************/
 
 
 package com.vgu.se.jocl.expressions;
 
-import com.vgu.se.jocl.types.CollectionType;
+import java.util.List;
 
-public abstract class OclExp {
+import com.vgu.se.jocl.types.Class;;
 
-    private OclExp appliedElement;
-    private CollectionType<?> result;
-    
-    private OperationCallExp parentCall;
-    
+public class AssociationClassCallExp extends NavigationCallExp{
+    public AssociationClassCallExp(Variable variable, List<OclExp> qualifiers, String referredAssociationEnd) {
+        super(variable, qualifiers);
+        this.referredAssociationEnd = referredAssociationEnd;
+    }
+
+    private String referredAssociationEnd;
+    private Class referredAssociationClass;
+
+    public String getAssociationEnd() {
+        return referredAssociationEnd;
+    }
+
+    public Class getReferredAssociationClass() {
+        return referredAssociationClass;
+    }
 }
