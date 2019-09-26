@@ -20,15 +20,11 @@ package com.vgu.se.jocl.types;
 
 public class StringType extends PrimitiveType<String> {
 
+    public StringType(String e) {
+        super(e);
+    }
+
     public final TypeEnum TYPE = TypeEnum.STRINGTYPE;
-
-    public String getElement() {
-        return getElement();
-    }
-
-    public void setElement(String element) {
-        this.setElement(element);
-    }
 
     @Override
     public boolean conformsTo(Classifier other) {

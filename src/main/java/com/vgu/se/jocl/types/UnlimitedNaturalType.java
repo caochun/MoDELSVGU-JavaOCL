@@ -22,15 +22,11 @@ import java.math.BigInteger;
 
 public class UnlimitedNaturalType extends PrimitiveType<BigInteger> {
 
+    public UnlimitedNaturalType(BigInteger e) {
+        super(e);
+    }
+
     public final TypeEnum TYPE = TypeEnum.UNLIMITEDNATURALTYPE;
-
-    public BigInteger getElement() {
-        return getElement();
-    }
-
-    public void setElement(BigInteger element) {
-        this.setElement(element);
-    }
 
     @Override
     public boolean conformsTo(Classifier other) {

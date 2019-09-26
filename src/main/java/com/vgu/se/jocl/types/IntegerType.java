@@ -19,15 +19,12 @@ limitations under the License.
 package com.vgu.se.jocl.types;
 
 public class IntegerType extends PrimitiveType<Integer> {
+    
+    public IntegerType(Integer e) {
+        super(e);
+    }
+
     public final TypeEnum TYPE = TypeEnum.INTEGERTYPE;
-
-    public Integer getElement() {
-        return getElement();
-    }
-
-    public void setElement(Integer element) {
-        this.setElement(element);
-    }
 
     @Override
     public boolean conformsTo(Classifier other) {

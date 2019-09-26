@@ -19,7 +19,23 @@ limitations under the License.
 
 package com.vgu.se.jocl.expressions;
 
-public class PropertyCallExp extends NavigationCallExp {
+import java.util.List;
+import com.vgu.se.jocl.types.Class;
 
-    private Property referredProperty;
+public class PropertyCallExp extends NavigationCallExp {
+    public PropertyCallExp(Variable variable, List<OclExp> qualifiers, String referredAttributeName) {
+        super(variable, qualifiers);
+        this.referredAttributeName = referredAttributeName;
+    }
+
+    private String referredAttributeName;
+    private Class referredAttributeClass;
+
+    public String getAttributeName() {
+        return referredAttributeName;
+    }
+
+    public Class getReferredAttributeClass() {
+        return referredAttributeClass;
+    }
 }

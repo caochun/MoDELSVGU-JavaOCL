@@ -22,5 +22,7 @@ package com.vgu.se.jocl.expressions;
 import com.vgu.se.jocl.types.StringType;
 
 public class StringLiteralExp extends PrimitiveLiteralExp<StringType> {
-
+    public StringLiteralExp(String value) {
+        this.setLiteral(new StringType(value));
+    }
 }

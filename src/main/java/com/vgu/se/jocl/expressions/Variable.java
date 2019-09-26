@@ -20,7 +20,14 @@ limitations under the License.
 package com.vgu.se.jocl.expressions;
 
 public class Variable {
-
     private OclExp initExp;
-    
+    private String name;
+
+    public OclExp getInitExp() {
+        return initExp;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

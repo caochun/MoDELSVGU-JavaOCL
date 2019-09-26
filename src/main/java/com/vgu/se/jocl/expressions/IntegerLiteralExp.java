@@ -22,4 +22,7 @@ package com.vgu.se.jocl.expressions;
 import com.vgu.se.jocl.types.IntegerType;
 
 public class IntegerLiteralExp extends NumericLiteralExp<IntegerType> {
+    public IntegerLiteralExp(Integer value) {
+        this.setLiteral(new IntegerType(value));
+    }
 }

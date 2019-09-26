@@ -20,6 +20,8 @@ package jocl.types;
 
 import static org.junit.Assert.*;
 
+import java.math.BigInteger;
+
 import org.junit.Test;
 
 import com.vgu.se.jocl.types.*;
@@ -47,7 +49,7 @@ public class TypesTest {
 
     @Test
     public void integerType() {
-        IntegerType integerType = new IntegerType();
+        IntegerType integerType = new IntegerType(new Integer(1));
         assertEquals(integerType.TYPE.getType(), "Integer");
     }
 
@@ -71,7 +73,7 @@ public class TypesTest {
 
     @Test
     public void realType() {
-        RealType realType = new RealType();
+        RealType realType = new RealType(new Double(1.0));
         assertEquals(realType.TYPE.getType(), "Real");
     }
 
@@ -89,7 +91,7 @@ public class TypesTest {
 
     @Test
     public void stringType() {
-        StringType stringType = new StringType();
+        StringType stringType = new StringType(new String("1.0"));
         assertEquals(stringType.TYPE.getType(), "String");
     }
 
@@ -107,7 +109,7 @@ public class TypesTest {
 
     @Test
     public void unlimitedNaturalType() {
-        UnlimitedNaturalType unlimitedNaturalType = new UnlimitedNaturalType();
+        UnlimitedNaturalType unlimitedNaturalType = new UnlimitedNaturalType(new BigInteger("1"));
         assertEquals(unlimitedNaturalType.TYPE.getType(), "UnlimitedNatural");
     }
 

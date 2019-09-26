@@ -21,6 +21,8 @@ package jocl.types;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.math.BigInteger;
+
 import org.junit.Test;
 
 import com.vgu.se.jocl.types.AnyType;
@@ -54,7 +56,7 @@ public class ConformanceTest {
         Class clazz = new Class();
         assertTrue(clazz.conformsTo(target));
 
-        IntegerType integer = new IntegerType();
+        IntegerType integer = new IntegerType(new Integer(1));
         assertTrue(integer.conformsTo(target));
 
         InvalidType invalid = InvalidType.getSoleInstance();
@@ -66,7 +68,7 @@ public class ConformanceTest {
         OrderedSetType<Class> orderedSet = new OrderedSetType<Class>();
         assertTrue(orderedSet.conformsTo(target));
 
-        RealType real = new RealType();
+        RealType real = new RealType(new Double(1.0));
         assertTrue(real.conformsTo(target));
 
         SequenceType<Class> sequence = new SequenceType<Class>();
@@ -75,7 +77,7 @@ public class ConformanceTest {
         SetType<Class> set = new SetType<Class>();
         assertTrue(set.conformsTo(target));
 
-        StringType string = new StringType();
+        StringType string = new StringType(new String("1.0"));
         assertTrue(string.conformsTo(target));
 
         TemplateParameterType templateParameter = new TemplateParameterType();
@@ -84,7 +86,7 @@ public class ConformanceTest {
         TupleType tuple = new TupleType();
         assertTrue(tuple.conformsTo(target));
 
-        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType();
+        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType(new BigInteger("1"));
         assertTrue(unlimitedNatural.conformsTo(target));
 
         VoidType voidType = VoidType.getSoleInstance();
@@ -104,7 +106,7 @@ public class ConformanceTest {
         Class clazz = new Class();
         assertFalse(target.conformsTo(clazz));
 
-        IntegerType integer = new IntegerType();
+        IntegerType integer = new IntegerType(new Integer(1));
         assertFalse(target.conformsTo(integer));
 
         InvalidType invalid = InvalidType.getSoleInstance();
@@ -116,7 +118,7 @@ public class ConformanceTest {
         OrderedSetType<Class> orderedSet = new OrderedSetType<Class>();
         assertFalse(target.conformsTo(orderedSet));
 
-        RealType real = new RealType();
+        RealType real = new RealType(new Double(1.0));
         assertFalse(target.conformsTo(real));
 
         SequenceType<Class> sequence = new SequenceType<Class>();
@@ -125,7 +127,7 @@ public class ConformanceTest {
         SetType<Class> set = new SetType<Class>();
         assertFalse(target.conformsTo(set));
 
-        StringType string = new StringType();
+        StringType string = new StringType(new String("1.0"));
         assertFalse(target.conformsTo(string));
 
         TemplateParameterType templateParameter = new TemplateParameterType();
@@ -134,7 +136,7 @@ public class ConformanceTest {
         TupleType tuple = new TupleType();
         assertFalse(target.conformsTo(tuple));
 
-        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType();
+        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType(new BigInteger("1"));
         assertFalse(target.conformsTo(unlimitedNatural));
 
         VoidType voidType = VoidType.getSoleInstance();
@@ -150,7 +152,7 @@ public class ConformanceTest {
         Class clazz = new Class();
         assertFalse(clazz.conformsTo(target));
 
-        IntegerType integer = new IntegerType();
+        IntegerType integer = new IntegerType(new Integer(1));
         assertFalse(integer.conformsTo(target));
 
         InvalidType invalid = InvalidType.getSoleInstance();
@@ -159,10 +161,10 @@ public class ConformanceTest {
         MessageType message = new MessageType();
         assertFalse(message.conformsTo(target));
 
-        RealType real = new RealType();
+        RealType real = new RealType(new Double(1.0));
         assertFalse(real.conformsTo(target));
 
-        StringType string = new StringType();
+        StringType string = new StringType(new String("1.0"));
         assertFalse(string.conformsTo(target));
 
         TemplateParameterType templateParameter = new TemplateParameterType();
@@ -171,7 +173,7 @@ public class ConformanceTest {
         TupleType tuple = new TupleType();
         assertFalse(tuple.conformsTo(target));
 
-        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType();
+        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType(new BigInteger("1"));
         assertFalse(unlimitedNatural.conformsTo(target));
 
         VoidType voidType = VoidType.getSoleInstance();
@@ -188,7 +190,7 @@ public class ConformanceTest {
         Class clazz = new Class();
         assertFalse(target.conformsTo(clazz));
 
-        IntegerType integer = new IntegerType();
+        IntegerType integer = new IntegerType(new Integer(1));
         assertFalse(target.conformsTo(integer));
 
         InvalidType invalid = InvalidType.getSoleInstance();
@@ -197,10 +199,10 @@ public class ConformanceTest {
         MessageType message = new MessageType();
         assertFalse(target.conformsTo(message));
 
-        RealType real = new RealType();
+        RealType real = new RealType(new Double(1.0));
         assertFalse(target.conformsTo(real));
 
-        StringType string = new StringType();
+        StringType string = new StringType(new String("1.0"));
         assertFalse(target.conformsTo(string));
 
         TemplateParameterType templateParameter = new TemplateParameterType();
@@ -209,7 +211,7 @@ public class ConformanceTest {
         TupleType tuple = new TupleType();
         assertFalse(target.conformsTo(tuple));
 
-        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType();
+        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType(new BigInteger("1"));
         assertFalse(target.conformsTo(unlimitedNatural));
 
         VoidType voidType = VoidType.getSoleInstance();
@@ -332,7 +334,7 @@ public class ConformanceTest {
         Class clazz = new Class();
         assertFalse(clazz.conformsTo(target));
 
-        IntegerType integer = new IntegerType();
+        IntegerType integer = new IntegerType(new Integer(1));
         assertFalse(integer.conformsTo(target));
 
         InvalidType invalid = InvalidType.getSoleInstance();
@@ -341,10 +343,10 @@ public class ConformanceTest {
         MessageType message = new MessageType();
         assertFalse(message.conformsTo(target));
 
-        RealType real = new RealType();
+        RealType real = new RealType(new Double(1.0));
         assertFalse(real.conformsTo(target));
 
-        StringType string = new StringType();
+        StringType string = new StringType(new String("1.0"));
         assertFalse(string.conformsTo(target));
 
         TemplateParameterType templateParameter = new TemplateParameterType();
@@ -353,7 +355,7 @@ public class ConformanceTest {
         TupleType tuple = new TupleType();
         assertFalse(tuple.conformsTo(target));
 
-        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType();
+        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType(new BigInteger("1"));
         assertFalse(unlimitedNatural.conformsTo(target));
 
         VoidType voidType = VoidType.getSoleInstance();
@@ -370,7 +372,7 @@ public class ConformanceTest {
         Class clazz = new Class();
         assertFalse(target.conformsTo(clazz));
 
-        IntegerType integer = new IntegerType();
+        IntegerType integer = new IntegerType(new Integer(1));
         assertFalse(target.conformsTo(integer));
 
         InvalidType invalid = InvalidType.getSoleInstance();
@@ -379,10 +381,10 @@ public class ConformanceTest {
         MessageType message = new MessageType();
         assertFalse(target.conformsTo(message));
 
-        RealType real = new RealType();
+        RealType real = new RealType(new Double(1.0));
         assertFalse(target.conformsTo(real));
 
-        StringType string = new StringType();
+        StringType string = new StringType(new String("1.0"));
         assertFalse(target.conformsTo(string));
 
         TemplateParameterType templateParameter = new TemplateParameterType();
@@ -391,7 +393,7 @@ public class ConformanceTest {
         TupleType tuple = new TupleType();
         assertFalse(target.conformsTo(tuple));
 
-        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType();
+        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType(new BigInteger("1"));
         assertFalse(target.conformsTo(unlimitedNatural));
 
         VoidType voidType = VoidType.getSoleInstance();
@@ -514,7 +516,7 @@ public class ConformanceTest {
         Class clazz = new Class();
         assertFalse(clazz.conformsTo(target));
 
-        IntegerType integer = new IntegerType();
+        IntegerType integer = new IntegerType(new Integer(1));
         assertFalse(integer.conformsTo(target));
 
         InvalidType invalid = InvalidType.getSoleInstance();
@@ -523,10 +525,10 @@ public class ConformanceTest {
         MessageType message = new MessageType();
         assertFalse(message.conformsTo(target));
 
-        RealType real = new RealType();
+        RealType real = new RealType(new Double(1.0));
         assertFalse(real.conformsTo(target));
 
-        StringType string = new StringType();
+        StringType string = new StringType(new String("1.0"));
         assertFalse(string.conformsTo(target));
 
         TemplateParameterType templateParameter = new TemplateParameterType();
@@ -535,7 +537,7 @@ public class ConformanceTest {
         TupleType tuple = new TupleType();
         assertFalse(tuple.conformsTo(target));
 
-        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType();
+        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType(new BigInteger("1"));
         assertFalse(unlimitedNatural.conformsTo(target));
 
         VoidType voidType = VoidType.getSoleInstance();
@@ -552,7 +554,7 @@ public class ConformanceTest {
         Class clazz = new Class();
         assertFalse(target.conformsTo(clazz));
 
-        IntegerType integer = new IntegerType();
+        IntegerType integer = new IntegerType(new Integer(1));
         assertFalse(target.conformsTo(integer));
 
         InvalidType invalid = InvalidType.getSoleInstance();
@@ -561,10 +563,10 @@ public class ConformanceTest {
         MessageType message = new MessageType();
         assertFalse(target.conformsTo(message));
 
-        RealType real = new RealType();
+        RealType real = new RealType(new Double(1.0));
         assertFalse(target.conformsTo(real));
 
-        StringType string = new StringType();
+        StringType string = new StringType(new String("1.0"));
         assertFalse(target.conformsTo(string));
 
         TemplateParameterType templateParameter = new TemplateParameterType();
@@ -573,7 +575,7 @@ public class ConformanceTest {
         TupleType tuple = new TupleType();
         assertFalse(target.conformsTo(tuple));
 
-        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType();
+        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType(new BigInteger("1"));
         assertFalse(target.conformsTo(unlimitedNatural));
 
         VoidType voidType = VoidType.getSoleInstance();
@@ -696,7 +698,7 @@ public class ConformanceTest {
         Class clazz = new Class();
         assertFalse(clazz.conformsTo(target));
 
-        IntegerType integer = new IntegerType();
+        IntegerType integer = new IntegerType(new Integer(1));
         assertFalse(integer.conformsTo(target));
 
         InvalidType invalid = InvalidType.getSoleInstance();
@@ -705,10 +707,10 @@ public class ConformanceTest {
         MessageType message = new MessageType();
         assertFalse(message.conformsTo(target));
 
-        RealType real = new RealType();
+        RealType real = new RealType(new Double(1.0));
         assertFalse(real.conformsTo(target));
 
-        StringType string = new StringType();
+        StringType string = new StringType(new String("1.0"));
         assertFalse(string.conformsTo(target));
 
         TemplateParameterType templateParameter = new TemplateParameterType();
@@ -717,7 +719,7 @@ public class ConformanceTest {
         TupleType tuple = new TupleType();
         assertFalse(tuple.conformsTo(target));
 
-        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType();
+        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType(new BigInteger("1"));
         assertFalse(unlimitedNatural.conformsTo(target));
 
         VoidType voidType = VoidType.getSoleInstance();
@@ -734,7 +736,7 @@ public class ConformanceTest {
         Class clazz = new Class();
         assertFalse(target.conformsTo(clazz));
 
-        IntegerType integer = new IntegerType();
+        IntegerType integer = new IntegerType(new Integer(1));
         assertFalse(target.conformsTo(integer));
 
         InvalidType invalid = InvalidType.getSoleInstance();
@@ -743,10 +745,10 @@ public class ConformanceTest {
         MessageType message = new MessageType();
         assertFalse(target.conformsTo(message));
 
-        RealType real = new RealType();
+        RealType real = new RealType(new Double(1.0));
         assertFalse(target.conformsTo(real));
 
-        StringType string = new StringType();
+        StringType string = new StringType(new String("1.0"));
         assertFalse(target.conformsTo(string));
 
         TemplateParameterType templateParameter = new TemplateParameterType();
@@ -755,7 +757,7 @@ public class ConformanceTest {
         TupleType tuple = new TupleType();
         assertFalse(target.conformsTo(tuple));
 
-        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType();
+        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType(new BigInteger("1"));
         assertFalse(target.conformsTo(unlimitedNatural));
 
         VoidType voidType = VoidType.getSoleInstance();
@@ -881,7 +883,7 @@ public class ConformanceTest {
         Class clazz = new Class();
         assertTrue(clazz.conformsTo(target));
 
-        IntegerType integer = new IntegerType();
+        IntegerType integer = new IntegerType(new Integer(1));
         assertFalse(integer.conformsTo(target));
 
         InvalidType invalid = InvalidType.getSoleInstance();
@@ -893,7 +895,7 @@ public class ConformanceTest {
         OrderedSetType<Class> orderedSet = new OrderedSetType<Class>();
         assertFalse(orderedSet.conformsTo(target));
 
-        RealType real = new RealType();
+        RealType real = new RealType(new Double(1.0));
         assertFalse(real.conformsTo(target));
 
         SequenceType<Class> sequence = new SequenceType<Class>();
@@ -902,7 +904,7 @@ public class ConformanceTest {
         SetType<Class> set = new SetType<Class>();
         assertFalse(set.conformsTo(target));
 
-        StringType string = new StringType();
+        StringType string = new StringType(new String("1.0"));
         assertFalse(string.conformsTo(target));
 
         TemplateParameterType templateParameter = new TemplateParameterType();
@@ -911,7 +913,7 @@ public class ConformanceTest {
         TupleType tuple = new TupleType();
         assertFalse(tuple.conformsTo(target));
 
-        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType();
+        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType(new BigInteger("1"));
         assertFalse(unlimitedNatural.conformsTo(target));
 
         VoidType voidType = VoidType.getSoleInstance();
@@ -931,7 +933,7 @@ public class ConformanceTest {
         Class clazz = new Class();
         assertTrue(target.conformsTo(clazz));
 
-        IntegerType integer = new IntegerType();
+        IntegerType integer = new IntegerType(new Integer(1));
         assertFalse(target.conformsTo(integer));
 
         InvalidType invalid = InvalidType.getSoleInstance();
@@ -943,7 +945,7 @@ public class ConformanceTest {
         OrderedSetType<Class> orderedSet = new OrderedSetType<Class>();
         assertFalse(target.conformsTo(orderedSet));
 
-        RealType real = new RealType();
+        RealType real = new RealType(new Double(1.0));
         assertFalse(target.conformsTo(real));
 
         SequenceType<Class> sequence = new SequenceType<Class>();
@@ -952,7 +954,7 @@ public class ConformanceTest {
         SetType<Class> set = new SetType<Class>();
         assertFalse(target.conformsTo(set));
 
-        StringType string = new StringType();
+        StringType string = new StringType(new String("1.0"));
         assertFalse(target.conformsTo(string));
 
         TemplateParameterType templateParameter = new TemplateParameterType();
@@ -961,7 +963,7 @@ public class ConformanceTest {
         TupleType tuple = new TupleType();
         assertFalse(target.conformsTo(tuple));
 
-        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType();
+        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType(new BigInteger("1"));
         assertFalse(target.conformsTo(unlimitedNatural));
 
         VoidType voidType = VoidType.getSoleInstance();
@@ -970,7 +972,7 @@ public class ConformanceTest {
 
     @Test
     public void test_conforms_to_IntegerType() {
-        IntegerType target = new IntegerType();
+        IntegerType target = new IntegerType(new Integer(1));
 
         AnyType any = new AnyType();
         assertFalse(any.conformsTo(target));
@@ -981,7 +983,7 @@ public class ConformanceTest {
         Class clazz = new Class();
         assertFalse(clazz.conformsTo(target));
 
-        IntegerType integer = new IntegerType();
+        IntegerType integer = new IntegerType(new Integer(1));
         assertTrue(integer.conformsTo(target));
 
         InvalidType invalid = InvalidType.getSoleInstance();
@@ -993,7 +995,7 @@ public class ConformanceTest {
         OrderedSetType<Class> orderedSet = new OrderedSetType<Class>();
         assertFalse(orderedSet.conformsTo(target));
 
-        RealType real = new RealType();
+        RealType real = new RealType(new Double(1.0));
         assertFalse(real.conformsTo(target));
 
         SequenceType<Class> sequence = new SequenceType<Class>();
@@ -1002,7 +1004,7 @@ public class ConformanceTest {
         SetType<Class> set = new SetType<Class>();
         assertFalse(set.conformsTo(target));
 
-        StringType string = new StringType();
+        StringType string = new StringType(new String("1.0"));
         assertFalse(string.conformsTo(target));
 
         TemplateParameterType templateParameter = new TemplateParameterType();
@@ -1011,7 +1013,7 @@ public class ConformanceTest {
         TupleType tuple = new TupleType();
         assertFalse(tuple.conformsTo(target));
 
-        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType();
+        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType(new BigInteger("1"));
         assertFalse(unlimitedNatural.conformsTo(target));
 
         VoidType voidType = VoidType.getSoleInstance();
@@ -1020,7 +1022,7 @@ public class ConformanceTest {
 
     @Test
     public void IntegerType_conforms_to_test() {
-        IntegerType target = new IntegerType();
+        IntegerType target = new IntegerType(new Integer(1));
 
         AnyType any = new AnyType();
         assertTrue(target.conformsTo(any));
@@ -1031,7 +1033,7 @@ public class ConformanceTest {
         Class clazz = new Class();
         assertFalse(target.conformsTo(clazz));
 
-        IntegerType integer = new IntegerType();
+        IntegerType integer = new IntegerType(new Integer(1));
         assertTrue(target.conformsTo(integer));
 
         InvalidType invalid = InvalidType.getSoleInstance();
@@ -1043,7 +1045,7 @@ public class ConformanceTest {
         OrderedSetType<Class> orderedSet = new OrderedSetType<Class>();
         assertFalse(target.conformsTo(orderedSet));
 
-        RealType real = new RealType();
+        RealType real = new RealType(new Double(1.0));
         assertFalse(target.conformsTo(real));
 
         SequenceType<Class> sequence = new SequenceType<Class>();
@@ -1052,7 +1054,7 @@ public class ConformanceTest {
         SetType<Class> set = new SetType<Class>();
         assertFalse(target.conformsTo(set));
 
-        StringType string = new StringType();
+        StringType string = new StringType(new String("1.0"));
         assertFalse(target.conformsTo(string));
 
         TemplateParameterType templateParameter = new TemplateParameterType();
@@ -1061,7 +1063,7 @@ public class ConformanceTest {
         TupleType tuple = new TupleType();
         assertFalse(target.conformsTo(tuple));
 
-        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType();
+        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType(new BigInteger("1"));
         assertFalse(target.conformsTo(unlimitedNatural));
 
         VoidType voidType = VoidType.getSoleInstance();
@@ -1081,7 +1083,7 @@ public class ConformanceTest {
         Class clazz = new Class();
         assertFalse(clazz.conformsTo(target));
 
-        IntegerType integer = new IntegerType();
+        IntegerType integer = new IntegerType(new Integer(1));
         assertFalse(integer.conformsTo(target));
 
         InvalidType invalid = InvalidType.getSoleInstance();
@@ -1093,7 +1095,7 @@ public class ConformanceTest {
         OrderedSetType<Class> orderedSet = new OrderedSetType<Class>();
         assertFalse(orderedSet.conformsTo(target));
 
-        RealType real = new RealType();
+        RealType real = new RealType(new Double(1.0));
         assertFalse(real.conformsTo(target));
 
         SequenceType<Class> sequence = new SequenceType<Class>();
@@ -1102,7 +1104,7 @@ public class ConformanceTest {
         SetType<Class> set = new SetType<Class>();
         assertFalse(set.conformsTo(target));
 
-        StringType string = new StringType();
+        StringType string = new StringType(new String("1.0"));
         assertFalse(string.conformsTo(target));
 
         TemplateParameterType templateParameter = new TemplateParameterType();
@@ -1111,7 +1113,7 @@ public class ConformanceTest {
         TupleType tuple = new TupleType();
         assertFalse(tuple.conformsTo(target));
 
-        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType();
+        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType(new BigInteger("1"));
         assertFalse(unlimitedNatural.conformsTo(target));
 
         VoidType voidType = VoidType.getSoleInstance();
@@ -1131,7 +1133,7 @@ public class ConformanceTest {
         Class clazz = new Class();
         assertTrue(target.conformsTo(clazz));
 
-        IntegerType integer = new IntegerType();
+        IntegerType integer = new IntegerType(new Integer(1));
         assertTrue(target.conformsTo(integer));
 
         InvalidType invalid = InvalidType.getSoleInstance();
@@ -1143,7 +1145,7 @@ public class ConformanceTest {
         OrderedSetType<Class> orderedSet = new OrderedSetType<Class>();
         assertTrue(target.conformsTo(orderedSet));
 
-        RealType real = new RealType();
+        RealType real = new RealType(new Double(1.0));
         assertTrue(target.conformsTo(real));
 
         SequenceType<Class> sequence = new SequenceType<Class>();
@@ -1152,7 +1154,7 @@ public class ConformanceTest {
         SetType<Class> set = new SetType<Class>();
         assertTrue(target.conformsTo(set));
 
-        StringType string = new StringType();
+        StringType string = new StringType(new String("1.0"));
         assertTrue(target.conformsTo(string));
 
         TemplateParameterType templateParameter = new TemplateParameterType();
@@ -1161,7 +1163,7 @@ public class ConformanceTest {
         TupleType tuple = new TupleType();
         assertTrue(target.conformsTo(tuple));
 
-        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType();
+        UnlimitedNaturalType unlimitedNatural = new UnlimitedNaturalType(new BigInteger("1"));
         assertTrue(target.conformsTo(unlimitedNatural));
 
         VoidType voidType = VoidType.getSoleInstance();

@@ -20,14 +20,17 @@ package com.vgu.se.jocl.types;
 
 public abstract class PrimitiveType<E> extends DataType {
 
-    private E element;
+    private E value;
 
-    public E getElement() {
-        return element;
+    public E getValue() {
+        return value;
     }
 
-    public void setElement(E element) {
-        this.element = element;
+    public void setValue(E value) {
+        this.value = value;
     }
 
+    public PrimitiveType (E e) {
+        this.setValue(e);
+    }
 }

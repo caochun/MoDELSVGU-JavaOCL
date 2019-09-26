@@ -22,4 +22,7 @@ package com.vgu.se.jocl.expressions;
 import com.vgu.se.jocl.types.RealType;
 
 public class RealLiteralExp extends NumericLiteralExp<RealType> {
+    public RealLiteralExp(Double value) {
+        this.setLiteral(new RealType(value));
+    }
 }
