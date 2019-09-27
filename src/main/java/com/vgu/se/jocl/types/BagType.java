@@ -23,8 +23,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-public class BagType<E extends Classifier> extends CollectionType<Classifier> implements List<Classifier> {
+public class BagType extends CollectionType<Classifier> implements List<Classifier> {
     public final TypeEnum TYPE = TypeEnum.BAGTYPE;
+    
+    public BagType(Classifier clazz) {
+        this.clazz = clazz;
+    }
 
     @Override
     public boolean conformsTo(Classifier other) {
@@ -34,8 +38,8 @@ public class BagType<E extends Classifier> extends CollectionType<Classifier> im
             return false;
         if (other instanceof AnyType)
             return true;
-        if (other instanceof BagType<?>) {
-            return this.getElement().conformsTo(((BagType<?>) other).getElement());
+        if (other instanceof BagType) {
+            return this.clazz.conformsTo(((BagType) other).clazz);
         }
         return false;
     }

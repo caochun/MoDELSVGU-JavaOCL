@@ -19,7 +19,9 @@ limitations under the License.
 
 package com.vgu.se.jocl.expressions;
 
+import com.vgu.se.jocl.expressions.OclExp;
+
 public class StateExp extends OclExp {
 
-    private [] referredState;
+//    private [] referredState;
 }

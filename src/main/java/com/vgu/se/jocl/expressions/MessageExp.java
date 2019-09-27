@@ -19,21 +19,19 @@ limitations under the License.
 
 package com.vgu.se.jocl.expressions;
 
-import java.util.List;
-
 public class MessageExp extends OclExp {
 
     
-    private OclExp target;
-    private List<OclExp> arguments;
-    private Operation calledOperation;
-    private Signal sentSignal;
+//    private OclExp target;
+//    private List<OclExp> arguments;
+//    private Operation calledOperation;
+//    private Signal sentSignal;
 
-    public OclExp getTarget() {
-        return target;
-    }
-    public List<OclExp> getArguments() {
-        return arguments;
-    }
+//    public OclExp getTarget() {
+//        return target;
+//    }
+//    public List<OclExp> getArguments() {
+//        return arguments;
+//    }
 
 }

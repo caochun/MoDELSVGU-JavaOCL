@@ -22,7 +22,7 @@ package com.vgu.se.jocl.expressions;
 // Look at Predefiend Iterateor Expression 11.7, OCL 2.4
 public class IteratorExp extends LoopExp {
     
-    private OclExp source;
+//    private OclExp source;
 
 
 }

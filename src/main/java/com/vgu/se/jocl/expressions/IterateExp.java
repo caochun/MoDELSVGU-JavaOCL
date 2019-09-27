@@ -19,22 +19,19 @@ limitations under the License.
 
 package com.vgu.se.jocl.expressions;
 
-import com.vgu.se.jocl.types.Classifier;
-import com.vgu.se.jocl.types.CollectionType;
-
 public class IterateExp extends LoopExp {
 
-    private CollectionType<Classifier> source;
-    private OclExp body;
+//    private CollectionType<Classifier> source;
+//    private OclExp body;
 
     // has to be the Type of the result of the evaluation on body;
 
     // v stands for Variable ; v has to have the same type with source;
     // ( source.getClass() ) v;
-    private Variable v; 
-    public void setSource( CollectionType<Classifier> source ) {
-        this.source = source;
-    }
+//    private Variable v; 
+//    public void setSource( CollectionType<Classifier> source ) {
+//        this.source = source;
+//    }
     
    
 }

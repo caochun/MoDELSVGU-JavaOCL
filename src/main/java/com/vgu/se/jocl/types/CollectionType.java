@@ -19,13 +19,5 @@ limitations under the License.
 package com.vgu.se.jocl.types;
 
 public abstract class CollectionType<E extends Classifier> extends DataType {
-    private E element;
-
-    public E getElement() {
-        return element;
-    }
-
-    public void setElement(E element) {
-        this.element = element;
-    }
+    public Classifier clazz;
 }

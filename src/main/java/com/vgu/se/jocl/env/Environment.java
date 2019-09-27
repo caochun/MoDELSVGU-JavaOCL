@@ -19,6 +19,9 @@ limitations under the License.
 
 package com.vgu.se.jocl.env;
 
+import java.io.IOException;
+import java.io.Reader;
+
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -34,6 +37,9 @@ public class Environment {
     }
     public void setPlainUMLContext(String plainUMLContext) throws ParseException {
         this.plainUMLContext = (JSONArray) new JSONParser().parse(plainUMLContext);
+    }
+    public void setPlainUMLContext(Reader reader) throws IOException, ParseException {
+        this.plainUMLContext = (JSONArray) new JSONParser().parse(reader);
     }
     public String getOclExpStr() {
         return oclExpStr;

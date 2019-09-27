@@ -18,9 +18,20 @@ limitations under the License.
 
 package com.vgu.se.jocl.types;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class AnyType.
+ */
 public class AnyType extends Classifier {
+    
     public final TypeEnum TYPE = TypeEnum.ANYTYPE;
 
+    /**
+     * Conforms to.
+     *
+     * @param other the other
+     * @return true, if successful
+     */
     @Override
     public boolean conformsTo(Classifier other) {
         if (this == other)

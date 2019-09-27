@@ -22,9 +22,13 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
 
-public class OrderedSetType<E extends Classifier> extends CollectionType<Classifier> implements Set<Classifier> {
+public class OrderedSetType extends CollectionType<Classifier> implements Set<Classifier> {
     public final TypeEnum TYPE = TypeEnum.ORDEREDSETTYPE;
 
+    public OrderedSetType(Classifier clazz) {
+        this.clazz = clazz;
+    }
+    
     @Override
     public boolean add(Classifier e) {
         // TODO Auto-generated method stub
@@ -111,8 +115,8 @@ public class OrderedSetType<E extends Classifier> extends CollectionType<Classif
             return false;
         if (other instanceof AnyType)
             return true;
-        if (other instanceof OrderedSetType<?>) {
-            return this.getElement().conformsTo(((OrderedSetType<?>) other).getElement());
+        if (other instanceof OrderedSetType) {
+            return this.clazz.conformsTo(((OrderedSetType) other).clazz);
         }
         return false;
     }

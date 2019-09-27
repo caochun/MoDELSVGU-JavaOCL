@@ -21,7 +21,7 @@ package com.vgu.se.jocl.expressions;
 
 public class LoopExp extends CallExp {
 
-    private Collection iterator;
-    private OclExp body;
-    private Collection iterator;
+//    private Collection iterator;
+//    private OclExp body;
+//    private Collection iterator;
 }
