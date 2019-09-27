@@ -18,14 +18,29 @@ limitations under the License.
 
 package com.vgu.se.jocl.types;
 
+/**
+ * The Class StringType represents a string value
+ */
 public class StringType extends PrimitiveType<String> {
 
+    /**
+     * Instantiates a new string value.
+     *
+     * @param e the string value
+     */
     public StringType(String e) {
         super(e);
     }
 
+    /** The type. */
     public final TypeEnum TYPE = TypeEnum.STRINGTYPE;
 
+    /**
+     * StringType conforms only to itself, its super type and AnyType.
+     *
+     * @param other an OCL-typed object
+     * @return true, if it conforms to 
+     */
     @Override
     public boolean conformsTo(Classifier other) {
         if (this == other)

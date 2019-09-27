@@ -18,20 +18,38 @@ limitations under the License.
 
 package com.vgu.se.jocl.types;
 
+/**
+ * The Class VoidType represents a null instance.
+ */
 public class VoidType extends Classifier {
+    
     public final TypeEnum TYPE = TypeEnum.VOIDTYPE;
 
     private static VoidType NULL = null;
 
+    /**
+     * Instantiates a new void type.
+     */
     private VoidType() {
     }
 
+    /**
+     * Gets the sole instance, OclVoid
+     *
+     * @return the sole instance
+     */
     public static VoidType getSoleInstance() {
         if (NULL == null)
             NULL = new VoidType();
         return NULL;
     }
 
+    /**
+     * VoidType conforms to others except InvalidType.
+     *
+     * @param other an OCL-typed object
+     * @return true, if it conforms to
+     */
     @Override
     public boolean conformsTo(Classifier other) {
         if (this == other)

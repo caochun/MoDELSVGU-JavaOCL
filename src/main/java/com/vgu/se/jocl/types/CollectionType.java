@@ -18,6 +18,13 @@ limitations under the License.
 
 package com.vgu.se.jocl.types;
 
+/**
+ * The Class CollectionType describes a list of elements of a particular given type.
+ *
+ * @param <E> the element type
+ */
 public abstract class CollectionType<E extends Classifier> extends DataType {
+    
+    /** The type holder. */
     public Classifier clazz;
 }

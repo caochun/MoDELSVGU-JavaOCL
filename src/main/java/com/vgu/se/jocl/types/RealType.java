@@ -18,13 +18,29 @@ limitations under the License.
 
 package com.vgu.se.jocl.types;
 
+/**
+ * The Class RealType represents a real value.
+ */
 public class RealType extends PrimitiveType<Double> {
+    
+    /**
+     * Instantiates a new real value
+     *
+     * @param e the real value
+     */
     public RealType(Double e) {
         super(e);
     }
 
+    /** The type. */
     public final TypeEnum TYPE = TypeEnum.REALTYPE;
 
+    /**
+     * RealType conforms only to itself, its super type and AnyType.
+     *
+     * @param other an OCL-typed object
+     * @return true, if it conforms to 
+     */
     @Override
     public boolean conformsTo(Classifier other) {
         if (this == other)

@@ -18,19 +18,18 @@ limitations under the License.
 
 package com.vgu.se.jocl.types;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class AnyType.
+ * The class AnyType presents for special OclAny class.
  */
 public class AnyType extends Classifier {
     
     public final TypeEnum TYPE = TypeEnum.ANYTYPE;
 
     /**
-     * Conforms to.
+     * AnyType conforms only to itself.
      *
-     * @param other the other
-     * @return true, if successful
+     * @param other an OCL-typed object
+     * @return true, if it conforms to 
      */
     @Override
     public boolean conformsTo(Classifier other) {

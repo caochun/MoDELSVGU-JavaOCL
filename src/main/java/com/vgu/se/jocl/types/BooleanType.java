@@ -19,14 +19,29 @@ limitations under the License.
 
 package com.vgu.se.jocl.types;
 
+/**
+ * The Class BooleanType represent boolean value.
+ */
 public class BooleanType extends PrimitiveType<Boolean> {
     
+    /**
+     * Instantiates a new boolean.
+     *
+     * @param e the value
+     */
     public BooleanType(Boolean e) {
         super(e);
     }
 
+    /** The type. */
     public final TypeEnum TYPE = TypeEnum.BOOLEANTYPE;
 
+    /**
+     * BooleanType conforms only to itself, its super type and AnyType.
+     *
+     * @param other an OCL-typed object
+     * @return true, if it conforms to 
+     */
     @Override
     public boolean conformsTo(Classifier other) {
         if (this == other)
