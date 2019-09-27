@@ -17,15 +17,23 @@ limitations under the License.
 ***************************************************************************/
 
 
-package com.vgu.se.jocl.expressions;
+package com.vgu.se.jocl.exception;
 
-import com.vgu.se.jocl.types.VoidType;
+public class OclParserException extends RuntimeException {
+    
+    public OclParserException() {
+        super();
+    }
+    
+    public OclParserException(String errorMessage) {
+        super(errorMessage);
+    }
 
-public class NullLiteralExp extends LiteralExp {
+    public OclParserException(Throwable error) {
+        super(error);
+    }
     
-    private VoidType value;
-    
-    public NullLiteralExp() {
-        this.value = null;
-    };
+    public OclParserException(String errorMessage, Throwable error) {
+        super(errorMessage, error);
+    }
 }
