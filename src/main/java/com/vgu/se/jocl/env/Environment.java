@@ -24,11 +24,16 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import com.vgu.se.jocl.expressions.OclExp;
+import com.vgu.se.jocl.parser.ParserMaker;
+import com.vgu.se.jocl.parser.ParserService;
+import com.vgu.se.jocl.parser.interfaces.Parser;
+import com.vgu.se.jocl.parser.simple.SimpleParser;
 
 public class Environment {
     private JSONArray plainUMLContext;
     private String oclExpStr;
     private OclExp oclExp;
+
     public JSONArray getPlainUMLContext() {
         return plainUMLContext;
     }
@@ -48,6 +53,7 @@ public class Environment {
         this.oclExp = oclExp;
     }
     public OclExp parse() {
+        ParserMaker parserMaker = new ParserMaker();
         //TODO: Add parsing function.
         oclExp = null;
         return oclExp;

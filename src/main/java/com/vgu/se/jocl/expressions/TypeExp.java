@@ -21,4 +21,14 @@ package com.vgu.se.jocl.expressions;
 
 public class TypeExp extends OclExp {
 
+    private String referredType;
+
+    public TypeExp(String referredType) {
+        this.referredType = referredType;
+    }
+
+    public String getReferredType() {
+        return referredType;
+    }
+    
 }

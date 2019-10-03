@@ -19,6 +19,13 @@ limitations under the License.
 
 package com.vgu.se.jocl.expressions;
 
-public class NullLiteralExp extends LiteralExp {
+import com.vgu.se.jocl.types.VoidType;
 
+public class NullLiteralExp extends LiteralExp {
+    
+    private VoidType value;
+    
+    public NullLiteralExp() {
+        this.value = null;
+    };
 }

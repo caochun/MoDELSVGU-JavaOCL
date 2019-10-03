@@ -21,4 +21,14 @@ package com.vgu.se.jocl.expressions;
 
 public class Operation {
 
+    private String name;
+
+    public Operation(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+    
 }

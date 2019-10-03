@@ -21,4 +21,15 @@ package com.vgu.se.jocl.expressions;
 
 public class VariableExp extends OclExp {
 
+    private Variable v;
+
+    public VariableExp(Variable v) {
+        this.v = v;
+    }
+
+    public Variable getV() {
+        return v;
+    }
+    
+    
 }

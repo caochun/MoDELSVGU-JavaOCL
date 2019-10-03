@@ -23,6 +23,26 @@ package com.vgu.se.jocl.expressions;
 public class IteratorExp extends LoopExp {
     
     private OclExp source;
+    private String kind;
+    private OclExp body;
+
+    public IteratorExp(OclExp source, String kind, OclExp body) {
+        this.source = source;
+        this.kind = kind;
+        this.body = body;
+    }
+
+    public OclExp getSource() {
+        return source;
+    }
+
+    public String getKind() {
+        return kind;
+    }
+
+    public OclExp getBody() {
+        return body;
+    }
 
 
 }

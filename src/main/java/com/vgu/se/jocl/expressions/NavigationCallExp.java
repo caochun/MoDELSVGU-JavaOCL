@@ -26,13 +26,17 @@ public class NavigationCallExp extends FeatureCallExp {
     private List<OclExp> qualifiers;
 //    protected Property navSource;
     protected Variable variable;
+
+    public NavigationCallExp(List<OclExp> qualifiers) {
+        this.qualifiers = qualifiers;
+    }
+
+    public NavigationCallExp(Variable variable) {
+        this.variable = variable;
+    }
     
     public List<OclExp> getQualifiers() {
         return qualifiers;
     }
     
-    public NavigationCallExp(Variable variable, List<OclExp> qualifiers) {
-        this.variable = variable;
-        this.qualifiers = qualifiers;
-    }
 }
