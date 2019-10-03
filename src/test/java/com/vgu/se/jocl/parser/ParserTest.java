@@ -18,6 +18,10 @@ limitations under the License.
 
 package com.vgu.se.jocl.parser;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,14 +31,16 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import com.vgu.se.jocl.expressions.OclExp;
-import com.vgu.se.jocl.parser.Parser;
+import com.vgu.se.jocl.parser.simple.SimpleParser;
 import com.vgu.se.jocl.utils.UMLContextUtils;
 
 public class ParserTest {
-    
+
     private static JSONArray plainUMLContext;
     private static String oclExpStr;
-    
+
+    private static Map<Integer, Integer> testInt = new HashMap<>();
+
     static {
         String s = "[" + "{\"class\" : \"Car\","
                 + "\"attributes\" : [{\"name\" : \"color\", \"type\" : \"String\"}]"
@@ -46,22 +52,25 @@ public class ParserTest {
 
         try {
             plainUMLContext = (JSONArray) new JSONParser().parse(s);
-            oclExpStr = "Car.allInstances()->forAll(c|c.color='blue')";
+            oclExpStr = "Car.allInstances() -> forAll(c|c.owners->forAll(p|p.name='Hoang'))->size() = 5";
         } catch (ParseException e) {
             e.printStackTrace();
         }
     }
 
     public static void main(String[] args) throws ParseException {
-        
-//        System.out.println( UMLContextUtils.isClass(plainUMLContext, "Car"));
-//        System.out.println(oclExpStr);
-        Pattern p = Pattern.compile("^'[ -~]*'$");
-        
-//        String test = "'-Hoang Nguyen 1_2_3 άλφα'";
-        String test = "'-Hoang Nguyen 1_2_3 '";
-        System.out.println( test + " with pattern : " + p.toString()
-                + " : " + test.matches("^'[ -~]*'$"));
+
+        ArrayList<String> parenthesesArray = new ArrayList<String>();
+
+        SimpleParser parser = new SimpleParser(oclExpStr,
+                plainUMLContext);
+        parser.parse();
+        OclExp ocl = parser.getOclExp();
+        System.out.println(ocl);
+
+//        String s = "     size() = 5   ";
+//        System.out.println("Original : \n" + s 
+//                + "\nTrim : \n" + s.replaceAll("^(\\s)*|(\\s)*$", ""));
     }
 
 }

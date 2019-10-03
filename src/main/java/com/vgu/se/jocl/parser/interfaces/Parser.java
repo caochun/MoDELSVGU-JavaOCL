@@ -17,20 +17,14 @@ limitations under the License.
 ***************************************************************************/
 
 
-package com.vgu.se.jocl.expressions;
+package com.vgu.se.jocl.parser.interfaces;
 
-public class FeatureCallExp extends CallExp {
+import org.json.simple.JSONArray;
+
+import com.vgu.se.jocl.env.Environment;
+import com.vgu.se.jocl.expressions.OclExp;
+
+public interface Parser {
     
-    // Boolean indicating whether the expression accesses the 
-    // precondition-time value of the referred feature.
-    private boolean isPre;
-    
-    public FeatureCallExp() {
-    }
-
-    public FeatureCallExp(OclExp src) {
-        super(src);
-        // TODO Auto-generated constructor stub
-    }
-
+    void parse();
 }

@@ -16,13 +16,41 @@ limitations under the License.
 @author: thian
 ***************************************************************************/
 
-
 package com.vgu.se.jocl.expressions;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class OperationCallExp extends FeatureCallExp {
 
     private List<OclExp> arguments;
+
+    private OclExp left;
     private Operation referredOperation;
+
+    public OperationCallExp(OclExp left, Operation referredOperation) {
+        super(left);
+        this.referredOperation = referredOperation;
+    }
+
+    public OperationCallExp(OclExp left, Operation referredOperation, 
+            OclExp... arguments) {
+
+        super(left);
+        this.arguments = Arrays.asList(arguments);
+        this.referredOperation = referredOperation;
+    }
+
+    public List<OclExp> getArguments() {
+        return arguments;
+    }
+
+    public OclExp getLeft() {
+        return left;
+    }
+
+    public Operation getReferredOperation() {
+        return referredOperation;
+    }
+
 }
