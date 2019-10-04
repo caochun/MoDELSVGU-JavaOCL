@@ -52,7 +52,7 @@ public class ParserTest {
 
         try {
             plainUMLContext = (JSONArray) new JSONParser().parse(s);
-            oclExpStr = "Car.allInstances() -> collect(c|c.isUndefined())";
+            oclExpStr = "Car.allInstances() -> forAll(c|c.owners -> select(p|p.name='Hoang')->forAll(c|c.color = 'blue')) -> collect(d|d->forAll(d2|d2))";
         } catch (ParseException e) {
             e.printStackTrace();
         }

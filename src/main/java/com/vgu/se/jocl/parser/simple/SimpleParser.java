@@ -20,6 +20,7 @@ package com.vgu.se.jocl.parser.simple;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -69,7 +70,9 @@ public class SimpleParser implements Parser {
                 + "\nStringArray : " + this.stringArray
                 + "\nParenthesisArray : " + this.parenthesisArray);
 
-        return parseOclExp(encOcl, ctx);
+        Stack<String> variableStack = new Stack<String>();
+
+        return parseOclExp(encOcl, ctx, variableStack);
     }
 
     private String encode(String ocl) {
@@ -134,18 +137,20 @@ public class SimpleParser implements Parser {
         return encOcl;
     }
 
-    private OclExp parseOclExp(String ocl, JSONArray ctx) {
+    private OclExp parseOclExp(String ocl, JSONArray ctx,
+            Stack<String> variableStack) {
 
-        OclExp oclExp = parseCallExp(ocl, ctx);
+        OclExp oclExp = parseCallExp(ocl, ctx, variableStack);
 
         if (oclExp != null) {
             return oclExp;
         }
 
-        return parseLiteralExp(ocl, ctx);
+        return parseLiteralExp(ocl, ctx, variableStack);
     }
 
-    private OclExp parseCallExp(String ocl, JSONArray ctx) {
+    private OclExp parseCallExp(String ocl, JSONArray ctx,
+            Stack<String> variableStack) {
 
 //        Implementing the operators patterns from lowest precedence
         Pattern[] patterns = { ParserPatterns.IMPLIES_OP_PATT,
@@ -162,43 +167,48 @@ public class SimpleParser implements Parser {
         for (Pattern p : patterns) {
             m = p.matcher(ocl);
             if (m.find()) {
-                return parseOperationCallExp(m, ocl, ctx);
+                return parseOperationCallExp(m, ocl, ctx,
+                        variableStack);
             }
         }
 
 //        Check the DOT or ARROW pattern
         m = ParserPatterns.DOT_OR_ARROW_OP_PATT.matcher(ocl);
         if (m.find()) {
-            return parseCallExp(m, ocl, ctx);
+            return parseCallExp(m, ocl, ctx, variableStack);
         }
 
         return null;
     }
 
     private OclExp parseOperationCallExp(Matcher m, String ocl,
-            JSONArray ctx) {
+            JSONArray ctx, Stack<String> variableStack) {
 
         String source = trim(m.group(1));
         String operator = trim(m.group(2));
         String body = trim(m.group(3));
 
-        return new OperationCallExp(parseOclExp(source, ctx),
-                new Operation(operator), parseOclExp(body, ctx));
+        return new OperationCallExp(
+                parseOclExp(source, ctx, variableStack),
+                new Operation(operator),
+                parseOclExp(body, ctx, variableStack));
     }
 
-    private OclExp parseCallExp(Matcher m, String ocl, JSONArray ctx) {
+    private OclExp parseCallExp(Matcher m, String ocl, JSONArray ctx,
+            Stack<String> variableStack) {
 
         String operator = m.group(2);
 
         switch (operator) {
         case ".":
-            return parseDotCase(m, ocl, ctx);
+            return parseDotCase(m, ocl, ctx, variableStack);
         default: // "->"
-            return parseArrowCase(m, ocl, ctx);
+            return parseArrowCase(m, ocl, ctx, variableStack);
         }
     }
 
-    private OclExp parseDotCase(Matcher m, String ocl, JSONArray ctx) {
+    private OclExp parseDotCase(Matcher m, String ocl, JSONArray ctx,
+            Stack<String> variableStack) {
 
         String left = trim(m.group(1));
         String right = trim(m.group(3));
@@ -224,19 +234,21 @@ public class SimpleParser implements Parser {
                 argumentExps[i] = parse(arguments[i], ctx);
             }
 
-            return new OperationCallExp(parseOclExp(left, ctx),
+            return new OperationCallExp(
+                    parseOclExp(left, ctx, variableStack),
                     new Operation(rightOperation), argumentExps);
         } else {
             if (left.matches(ParserPatterns.VARIABLE_DECL_STR)) {
                 left = left.replaceFirst(
                         ParserPatterns.VARIABLE_DECL_STR, "$1");
             }
+
             return new PropertyCallExp(new Variable(left), right);
         }
     }
 
-    private OclExp parseArrowCase(Matcher m, String ocl,
-            JSONArray ctx) {
+    private OclExp parseArrowCase(Matcher m, String ocl, JSONArray ctx,
+            Stack<String> variableStack) {
 
         String source = trim(m.group(1));
         String body = trim(replace(m.group(3)));
@@ -246,21 +258,36 @@ public class SimpleParser implements Parser {
         System.out.println("\n\n" + "\nComplete: " + m.group()
                 + "\nSource: " + source + "\nbody: " + body + "\nkind: "
                 + kind + "\n\n");
-        
-        if(IteratorKind.valueOf(kind) == null) {
+
+        if (IteratorKind.valueOf(kind) == null) {
             throw new OclParserException("Invalid iterator kind!");
         }
         String iterator = "iterator";
         String iteratorDeclRx = "^(.*)\\|(.*)$";
 
-        if(body.matches(iteratorDeclRx)) {
+        OclExp srcExp = parseOclExp(source, ctx, variableStack);
+
+        if (body.matches(iteratorDeclRx)) {
             iterator = trim(body.replaceFirst(iteratorDeclRx, "$1"));
+
+            if (variableStack.contains(iterator)) {
+                throw new OclParserException(iterator + " already existed!");
+            }
+
             body = trim(body.replaceFirst(iteratorDeclRx, "$2"));
+
+            variableStack.push(iterator);
+            System.out.println("String : " + body + " --> Stack : "
+                    + variableStack);
         }
-        
-        return new IteratorExp(parseOclExp(source, ctx), kind,
-                new Variable(iterator),
-                "".equals(body) ? null : parseOclExp(body, ctx));
+
+        OclExp bodyExp = "".equals(body) ? null
+                : parseOclExp(body, ctx, variableStack);
+
+        variableStack.pop();
+
+        return new IteratorExp(srcExp, kind, new Variable(iterator),
+                bodyExp);
     }
 
     private String replace(String input) {
@@ -283,7 +310,8 @@ public class SimpleParser implements Parser {
         return output;
     }
 
-    private OclExp parseLiteralExp(String input, JSONArray ctx) {
+    private OclExp parseLiteralExp(String input, JSONArray ctx,
+            Stack<String> variableStack) {
         /**
          * Any character between two single quote '' E.g.: "'Lorem ipsum
          * άλφα 123|, !@#$%^&*('"
@@ -341,10 +369,11 @@ public class SimpleParser implements Parser {
         } else if (input.matches(BOOLEAN_LITERAL_PATT)) {
 
             return new BooleanLiteralExp(Boolean.valueOf(input));
-        } else if(input.length() > 0) {
+        } else if (input.length() > 0) {
+
             return new VariableExp(new Variable(input));
         } else {
-            throw new OclParserException(input + "\n======"
+            throw new OclParserException(input + "\n======\n"
                     + "Invalid OCL Literal Expression!");
         }
 
