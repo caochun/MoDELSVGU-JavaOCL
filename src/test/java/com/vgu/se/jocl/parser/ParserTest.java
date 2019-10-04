@@ -61,16 +61,19 @@ public class ParserTest {
     public static void main(String[] args) throws ParseException {
 
         ArrayList<String> parenthesesArray = new ArrayList<String>();
-
-        SimpleParser parser = new SimpleParser(oclExpStr,
-                plainUMLContext);
-        parser.parse();
-        OclExp ocl = parser.getOclExp();
+        SimpleParser parser = new SimpleParser();
+        OclExp ocl = parser.parse(oclExpStr, plainUMLContext);
         System.out.println(ocl);
 
-//        String s = "     size() = 5   ";
-//        System.out.println("Original : \n" + s 
+//        String s = " 5";
+//        String spacePatt = "^(\\s)*|(\\s)*$";
+//        System.out.println("Matches : " + s.matches("^(\\s)*|(\\s)*$")+ "\nOriginal : \n" + s 
 //                + "\nTrim : \n" + s.replaceAll("^(\\s)*|(\\s)*$", ""));
+//        Matcher m = Pattern.compile(spacePatt).matcher(s);
+//        if (m.find()) {
+//            System.out.println("Original : \n" + s 
+//                    + "\nTrim : \n" + s.replaceAll(spacePatt, ""));
+//        }
     }
 
 }

@@ -47,12 +47,12 @@ import com.vgu.se.jocl.utils.UMLContextUtils;
 
 public class SimpleParser implements Parser {
 
-    private List<String> stringArray;
-    private List<String> parenthesisArray;
+    private List<String> stringArray = new ArrayList<String>();
+    private List<String> parenthesisArray = new ArrayList<String>();
 
     /**
      * This parse an OCL Expression string to OclExp Java Object given a
-
+     * 
      * UML Context file.
      * 
      * @param ctx
@@ -201,6 +201,8 @@ public class SimpleParser implements Parser {
 
         String left = trim(m.group(1));
         String right = trim(m.group(3));
+        String rightOperation = right.replaceFirst("(\\w*)\\(\\d+\\)",
+                "$1");
         String operationPatt = "(\\w*)(\\((\\d+)\\))";
         String opParamPatt = "(\\w*)(\\((\\.*)\\))";
         Matcher mRight = Pattern.compile(operationPatt).matcher(right);
@@ -209,7 +211,8 @@ public class SimpleParser implements Parser {
 //            Used for operation defined in Classifier with paramenters
 
             String[] arguments = this.parenthesisArray
-                    .get(Integer.valueOf(trim(mRight.group(3)))).split(",");
+                    .get(Integer.valueOf(trim(mRight.group(3))))
+                    .split(",");
 
             if (arguments.length == 1 & "".equals(arguments[0])) {
                 arguments = new String[0];
@@ -220,10 +223,8 @@ public class SimpleParser implements Parser {
                 argumentExps[i] = parse(arguments[i], ctx);
             }
 
-            right = replace(right);
-
             return new OperationCallExp(parseOclExp(left, ctx),
-                    new Operation(right), argumentExps);
+                    new Operation(rightOperation), argumentExps);
         } else {
             if (left.matches(ParserPatterns.VARIABLE_DECL_STR)) {
                 left = left.replaceFirst(
@@ -238,7 +239,8 @@ public class SimpleParser implements Parser {
 
         String source = trim(m.group(1));
         String body = trim(replace(m.group(3)));
-        String kind = trim(m.group(3).replaceFirst("(\\w*)\\(\\d+\\)", "$1"));
+        String kind = trim(
+                m.group(3).replaceFirst("(\\w*)\\(\\d+\\)", "$1"));
 
         System.out.println("\n\n" + "\nComplete: " + m.group()
                 + "\nSource: " + source + "\nbody: " + body + "\nkind: "
@@ -338,50 +340,12 @@ public class SimpleParser implements Parser {
     }
 
     private String trim(String input) {
-        return input.replaceAll("^(\\s)*|(\\s)$", "");
+        String spacePatt = "^(\\s)*|(\\s)*$";
+        Matcher m = Pattern.compile(spacePatt).matcher(input);
+        if (m.find()) {
+            return input.replaceAll(spacePatt, "");
+        }
+
+        return input;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
