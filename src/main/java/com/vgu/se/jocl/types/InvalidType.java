@@ -18,6 +18,9 @@ limitations under the License.
 
 package com.vgu.se.jocl.types;
 
+/**
+ * The Class InvalidType represents an invalid instance.
+ */
 public class InvalidType extends Classifier {
     public final TypeEnum TYPE = TypeEnum.INVALIDTYPE;
 
@@ -26,12 +29,23 @@ public class InvalidType extends Classifier {
     private InvalidType() {
     }
 
+    /**
+     * Gets the sole instance, Invalid.
+     *
+     * @return the sole instance
+     */
     public static InvalidType getSoleInstance() {
         if (oclInvalid == null)
             oclInvalid = new InvalidType();
         return oclInvalid;
     }
-
+    
+    /**
+     * InvalidType conforms to others except VoidType.
+     *
+     * @param other an OCL-typed object
+     * @return true, if it conforms to
+     */
     @Override
     public boolean conformsTo(Classifier other) {
         if (this == other)

@@ -22,87 +22,180 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
 
-public class SetType<E extends Classifier> extends CollectionType<Classifier> implements Set<Classifier> {
+/**
+ * The Class SetType. SetType is a collection type that describes a set of elements where each distinct element occurs only once in the set. The
+elements are not ordered.
+ */
+public class SetType extends CollectionType<Classifier> implements Set<Classifier> {
+    
+    /** The type. */
     public final TypeEnum TYPE = TypeEnum.SETTYPE;
+    
+    /**
+     * Instantiates a new sets the type.
+     *
+     * @param clazz the clazz
+     */
+    public SetType(Classifier clazz) {
+        this.clazz = clazz;
+    }
 
+    /**
+     * Adds the.
+     *
+     * @param e the e
+     * @return true, if successful
+     */
     @Override
     public boolean add(Classifier e) {
         // TODO Auto-generated method stub
         return false;
     }
 
+    /**
+     * Adds the all.
+     *
+     * @param c the c
+     * @return true, if successful
+     */
     @Override
     public boolean addAll(Collection<? extends Classifier> c) {
         // TODO Auto-generated method stub
         return false;
     }
 
+    /**
+     * Clear.
+     */
     @Override
     public void clear() {
         // TODO Auto-generated method stub
 
     }
 
+    /**
+     * Contains.
+     *
+     * @param o the o
+     * @return true, if successful
+     */
     @Override
     public boolean contains(Object o) {
         // TODO Auto-generated method stub
         return false;
     }
 
+    /**
+     * Contains all.
+     *
+     * @param c the c
+     * @return true, if successful
+     */
     @Override
     public boolean containsAll(Collection<?> c) {
         // TODO Auto-generated method stub
         return false;
     }
 
+    /**
+     * Checks if is empty.
+     *
+     * @return true, if is empty
+     */
     @Override
     public boolean isEmpty() {
         // TODO Auto-generated method stub
         return false;
     }
 
+    /**
+     * Iterator.
+     *
+     * @return the iterator
+     */
     @Override
     public Iterator<Classifier> iterator() {
         // TODO Auto-generated method stub
         return null;
     }
 
+    /**
+     * Removes the.
+     *
+     * @param o the o
+     * @return true, if successful
+     */
     @Override
     public boolean remove(Object o) {
         // TODO Auto-generated method stub
         return false;
     }
 
+    /**
+     * Removes the all.
+     *
+     * @param c the c
+     * @return true, if successful
+     */
     @Override
     public boolean removeAll(Collection<?> c) {
         // TODO Auto-generated method stub
         return false;
     }
 
+    /**
+     * Retain all.
+     *
+     * @param c the c
+     * @return true, if successful
+     */
     @Override
     public boolean retainAll(Collection<?> c) {
         // TODO Auto-generated method stub
         return false;
     }
 
+    /**
+     * Size.
+     *
+     * @return the int
+     */
     @Override
     public int size() {
         // TODO Auto-generated method stub
         return 0;
     }
 
+    /**
+     * To array.
+     *
+     * @return the object[]
+     */
     @Override
     public Object[] toArray() {
         // TODO Auto-generated method stub
         return null;
     }
 
+    /**
+     * To array.
+     *
+     * @param <T> the generic type
+     * @param a the a
+     * @return the t[]
+     */
     @Override
     public <T> T[] toArray(T[] a) {
         // TODO Auto-generated method stub
         return null;
     }
 
+    /**
+     * Please revise the conformance rules of SetType in OCL 2.4 section 8.2.1.
+     *
+     * @param other an OCL-typed object
+     * @return true, if it conforms to 
+     */
     @Override
     public boolean conformsTo(Classifier other) {
         if (this == other)
@@ -111,8 +204,8 @@ public class SetType<E extends Classifier> extends CollectionType<Classifier> im
             return false;
         if (other instanceof AnyType)
             return true;
-        if (other instanceof SetType<?>) {
-            return this.getElement().conformsTo(((SetType<?>) other).getElement());
+        if (other instanceof SetType) {
+            return this.clazz.conformsTo(((SetType) other).clazz);
         }
         return false;
     }

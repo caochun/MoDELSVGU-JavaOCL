@@ -18,14 +18,29 @@ limitations under the License.
 
 package com.vgu.se.jocl.types;
 
+/**
+ * The Class IntegerType represents integer value.
+ */
 public class IntegerType extends PrimitiveType<Integer> {
     
+    /**
+     * Instantiates a new integer.
+     *
+     * @param e the value
+     */
     public IntegerType(Integer e) {
         super(e);
     }
 
+    /** The type. */
     public final TypeEnum TYPE = TypeEnum.INTEGERTYPE;
 
+    /**
+     * IntegerType conforms only to itself, its super type (including RealType) and AnyType.
+     *
+     * @param other an OCL-typed object
+     * @return true, if it conforms to 
+     */
     @Override
     public boolean conformsTo(Classifier other) {
         if (this == other)

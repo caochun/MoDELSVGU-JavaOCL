@@ -18,11 +18,23 @@ limitations under the License.
 
 package com.vgu.se.jocl.types;
 
+/**
+ * The class Class represents data classes in data context.
+ */
 public class Class extends Classifier {
+    
     public final TypeEnum TYPE = TypeEnum.CLASS;
 
+    /**
+     * The Class object conforms to itself and object of its super type
+     * and possibly its super class in context.
+     *
+     * @param other an OCL-typed object
+     * @return true, if it conforms to
+     */
     @Override
     public boolean conformsTo(Classifier other) {
+        //TODO: Support super class in UML
         if (this == other)
             return true;
         if (other == null)

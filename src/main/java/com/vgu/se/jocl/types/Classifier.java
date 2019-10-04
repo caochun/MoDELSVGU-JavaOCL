@@ -18,6 +18,19 @@ limitations under the License.
 
 package com.vgu.se.jocl.types;
 
+/**
+ * The Class Classifier is the OCL-type root.
+ */
 public abstract class Classifier {
+    
+    /**
+     * An object conforms to {@code other} object when it
+     * can be substituted at each place 
+     * where an instance of {@code other} is expected. 
+     *
+     * @param other an OCL-type object
+     * @return true, if it conforms to
+     * 
+     */
     public abstract boolean conformsTo(Classifier other);
 }
