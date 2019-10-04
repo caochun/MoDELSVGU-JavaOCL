@@ -17,20 +17,23 @@ limitations under the License.
 ***************************************************************************/
 
 
-package com.vgu.se.jocl.expressions;
+package com.vgu.se.jocl.exception;
 
-public class FeatureCallExp extends CallExp {
+public class OclParserException extends RuntimeException {
     
-    // Boolean indicating whether the expression accesses the 
-    // precondition-time value of the referred feature.
-    private boolean isPre;
+    public OclParserException() {
+        super();
+    }
     
-    public FeatureCallExp() {
+    public OclParserException(String errorMessage) {
+        super(errorMessage);
     }
 
-    public FeatureCallExp(OclExp src) {
-        super(src);
-        // TODO Auto-generated constructor stub
+    public OclParserException(Throwable error) {
+        super(error);
     }
-
+    
+    public OclParserException(String errorMessage, Throwable error) {
+        super(errorMessage, error);
+    }
 }

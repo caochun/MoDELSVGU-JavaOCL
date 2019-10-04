@@ -23,13 +23,13 @@ import java.util.List;
 import com.vgu.se.jocl.types.Class;
 
 public class PropertyCallExp extends NavigationCallExp {
-    public PropertyCallExp(Variable variable, List<OclExp> qualifiers, String referredAttributeName) {
-        super(variable, qualifiers);
-        this.referredAttributeName = referredAttributeName;
-    }
-
     private String referredAttributeName;
     private Class referredAttributeClass;
+
+    public PropertyCallExp(Variable variable, String referredAttributeName) {
+        super(variable);
+        this.referredAttributeName = referredAttributeName;
+    }
 
     public String getReferredAttributeName() {
         return referredAttributeName;

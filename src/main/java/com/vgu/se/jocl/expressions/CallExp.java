@@ -22,4 +22,12 @@ package com.vgu.se.jocl.expressions;
 public class CallExp extends OclExp {
 
     protected OclExp source;
+    
+    public CallExp() {
+        
+    }
+
+    public CallExp(OclExp source) {
+        this.source = source;
+    }
 }

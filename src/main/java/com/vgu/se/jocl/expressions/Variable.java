@@ -22,6 +22,10 @@ package com.vgu.se.jocl.expressions;
 public class Variable {
     private OclExp initExp;
     private String name;
+    
+    public Variable(String name) {
+        this.name = name;
+    }
 
     public OclExp getInitExp() {
         return initExp;
