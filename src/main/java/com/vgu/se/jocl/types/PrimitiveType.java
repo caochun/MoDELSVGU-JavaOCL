@@ -18,18 +18,40 @@ limitations under the License.
 
 package com.vgu.se.jocl.types;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class PrimitiveType handles single literal value instance.
+ *
+ * @param <E> the element type
+ */
 public abstract class PrimitiveType<E> extends DataType {
 
+    /** The value. */
     private E value;
 
+    /**
+     * Gets the value.
+     *
+     * @return the value
+     */
     public E getValue() {
         return value;
     }
 
+    /**
+     * Sets the value.
+     *
+     * @param value the new value
+     */
     public void setValue(E value) {
         this.value = value;
     }
 
+    /**
+     * Instantiates a new primitive type.
+     *
+     * @param e the value
+     */
     public PrimitiveType (E e) {
         this.setValue(e);
     }

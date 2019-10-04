@@ -20,14 +20,30 @@ package com.vgu.se.jocl.types;
 
 import java.math.BigInteger;
 
+/**
+ * The Class UnlimitedNaturalType provides a possibility to express big natural value.
+ */
 public class UnlimitedNaturalType extends PrimitiveType<BigInteger> {
 
+    /**
+     * Instantiates a new unlimited natural value
+     *
+     * @param e the value
+     */
     public UnlimitedNaturalType(BigInteger e) {
         super(e);
     }
 
+    /** The type. */
     public final TypeEnum TYPE = TypeEnum.UNLIMITEDNATURALTYPE;
 
+    /**
+     * UnlimitedNaturalType conforms only to itself, its super type 
+     * (including IntegerType and RealType) and AnyType.
+     *
+     * @param other an OCL-typed object
+     * @return true, if it conforms to 
+     */
     @Override
     public boolean conformsTo(Classifier other) {
         if (this == other)

@@ -29,8 +29,4 @@ public class ParserService {
     public ParserService(Parser parserInterface) {
         this.parserInterface = parserInterface;
     }
-
-    public OclExp getOclExp() {
-        return parserInterface.getOclExp();
-    }
 }

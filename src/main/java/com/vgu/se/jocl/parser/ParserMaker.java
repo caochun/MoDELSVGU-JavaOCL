@@ -29,14 +29,10 @@ public class ParserMaker {
     private Parser simpleParser;
     
     public ParserMaker() {
-        // to be implemented for other Parsers
-    }
-
-    public ParserMaker(String oclExpStr, JSONArray ctx) {
-        this.simpleParser = new SimpleParser(oclExpStr, ctx);
+        this.simpleParser = new SimpleParser();
     }
     
-    public void parseSimple() {
-        this.simpleParser.parse();
+    public void parseSimple(String oclExpStr, JSONArray ctx) {
+        this.simpleParser.parse(oclExpStr, ctx);
     }
 }

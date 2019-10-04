@@ -21,7 +21,6 @@ package com.vgu.se.jocl.parser.interfaces;
 
 import org.json.simple.JSONArray;
 
-import com.vgu.se.jocl.env.Environment;
 import com.vgu.se.jocl.expressions.OclExp;
 
 public interface Parser {
