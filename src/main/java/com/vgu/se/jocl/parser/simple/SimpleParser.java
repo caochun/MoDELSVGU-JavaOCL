@@ -47,60 +47,20 @@ import com.vgu.se.jocl.utils.UMLContextUtils;
 
 public class SimpleParser implements Parser {
 
-    private OclExp oclExp;
-    private String oclExpStr;
-    private JSONArray ctx;
-
     private List<String> stringArray;
     private List<String> parenthesisArray;
 
-    // Constructors
-    public SimpleParser() {
-    }
-
-    public SimpleParser(String oclExpStr, JSONArray ctx) {
-        this.oclExpStr = oclExpStr;
-        this.ctx = ctx;
-        this.stringArray = new ArrayList<String>();
-        this.parenthesisArray = new ArrayList<String>();
-    }
-
-    // Getters & Setters
-    public String getOclExpStr() {
-        return oclExpStr;
-    }
-
-    public void setOclExpStr(String oclExpStr) {
-        this.oclExpStr = oclExpStr;
-    }
-
-    public JSONArray getCtx() {
-        return ctx;
-    }
-
-    public void setCtx(JSONArray ctx) {
-        this.ctx = ctx;
-    }
-
-    public OclExp getOclExp() {
-        return this.oclExp;
-    }
-
-    // Overridden Interface methods
-    @Override
-    public void parse() {
-        this.oclExp = parse(this.oclExpStr, this.ctx);
-    }
-
     /**
      * This parse an OCL Expression string to OclExp Java Object given a
+
      * UML Context file.
      * 
      * @param ctx
      * @param oclExpStr
      * @return OclExp
      */
-    private OclExp parse(String ocl, JSONArray ctx) {
+    @Override
+    public OclExp parse(String ocl, JSONArray ctx) {
 
         String encOcl = encode(ocl);
 
