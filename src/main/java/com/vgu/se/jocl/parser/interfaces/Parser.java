@@ -26,5 +26,5 @@ import com.vgu.se.jocl.expressions.OclExp;
 
 public interface Parser {
     
-    void parse();
+    OclExp parse(String oclExpStr, JSONArray ctx);
 }
