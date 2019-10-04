@@ -52,7 +52,7 @@ public class ParserTest {
 
         try {
             plainUMLContext = (JSONArray) new JSONParser().parse(s);
-            oclExpStr = "Car.allInstances() -> forAll(c|c.owners->forAll(p|p.name='Hoang'))->size() = 5";
+            oclExpStr = "Car.allInstances() -> collect(c|c.isUndefined())";
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -65,9 +65,9 @@ public class ParserTest {
         OclExp ocl = parser.parse(oclExpStr, plainUMLContext);
         System.out.println(ocl);
 
-//        String s = " 5";
-//        String spacePatt = "^(\\s)*|(\\s)*$";
-//        System.out.println("Matches : " + s.matches("^(\\s)*|(\\s)*$")+ "\nOriginal : \n" + s 
+//        String s = "c|c";
+//        String spacePatt = "^(.*)\\|(.*)$";
+//        System.out.println("Matches : " + s.matches(spacePatt)+ "\nOriginal : \n" + s 
 //                + "\nTrim : \n" + s.replaceAll("^(\\s)*|(\\s)*$", ""));
 //        Matcher m = Pattern.compile(spacePatt).matcher(s);
 //        if (m.find()) {

@@ -31,6 +31,7 @@ import com.vgu.se.jocl.exception.OclParserException;
 import com.vgu.se.jocl.expressions.BooleanLiteralExp;
 import com.vgu.se.jocl.expressions.IntegerLiteralExp;
 import com.vgu.se.jocl.expressions.IteratorExp;
+import com.vgu.se.jocl.expressions.IteratorKind;
 import com.vgu.se.jocl.expressions.LiteralExp;
 import com.vgu.se.jocl.expressions.NullLiteralExp;
 import com.vgu.se.jocl.expressions.OclExp;
@@ -245,7 +246,20 @@ public class SimpleParser implements Parser {
         System.out.println("\n\n" + "\nComplete: " + m.group()
                 + "\nSource: " + source + "\nbody: " + body + "\nkind: "
                 + kind + "\n\n");
+        
+        if(IteratorKind.valueOf(kind) == null) {
+            throw new OclParserException("Invalid iterator kind!");
+        }
+        String iterator = "iterator";
+        String iteratorDeclRx = "^(.*)\\|(.*)$";
+
+        if(body.matches(iteratorDeclRx)) {
+            iterator = trim(body.replaceFirst(iteratorDeclRx, "$1"));
+            body = trim(body.replaceFirst(iteratorDeclRx, "$2"));
+        }
+        
         return new IteratorExp(parseOclExp(source, ctx), kind,
+                new Variable(iterator),
                 "".equals(body) ? null : parseOclExp(body, ctx));
     }
 
@@ -275,7 +289,7 @@ public class SimpleParser implements Parser {
          * άλφα 123|, !@#$%^&*('"
          * 
          */
-        final String STRING_LITERAL_PATT = "\\s*\\w*\\{?(\\d+)*\\}?";
+        final String STRING_LITERAL_PATT = "\\s*\\w*\\{(\\d+)*\\}";
         /**
          * Start ONLY with a word true OR false WITHOUT quote and
          * case-insensitive (?i) <- inline flag E.g.:"true", "false",
@@ -304,20 +318,14 @@ public class SimpleParser implements Parser {
          */
         final String REAL_LITERAL_PATT = "^-?(\\d+(_\\d+)*.\\d+)(?<!_)$";
 
-        if (input.matches(BOOLEAN_LITERAL_PATT)) {
-
-            return new BooleanLiteralExp(Boolean.valueOf(input));
-
-        } else if (input.matches(NUMERIC_LITERAL_PATT)) {
+        if (input.matches(NUMERIC_LITERAL_PATT)) {
 
             if (input.matches(INTEGER_LITERAL_PATT)) {
 
                 return new IntegerLiteralExp(Integer.valueOf(input));
-
             } else if (input.matches(REAL_LITERAL_PATT)) {
 
                 return new RealLiteralExp(Double.valueOf(input));
-
             }
         } else if (input.matches(STRING_LITERAL_PATT)) {
             if (input.matches("\\{(\\d+)\\}")) {
@@ -330,7 +338,11 @@ public class SimpleParser implements Parser {
             }
 
             return new StringLiteralExp(input);
+        } else if (input.matches(BOOLEAN_LITERAL_PATT)) {
 
+            return new BooleanLiteralExp(Boolean.valueOf(input));
+        } else if(input.length() > 0) {
+            return new VariableExp(new Variable(input));
         } else {
             throw new OclParserException(input + "\n======"
                     + "Invalid OCL Literal Expression!");

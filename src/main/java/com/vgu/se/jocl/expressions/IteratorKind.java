@@ -19,36 +19,35 @@ limitations under the License.
 
 package com.vgu.se.jocl.expressions;
 
-// Look at Predefiend Iterateor Expression 11.7, OCL 2.4
-public class IteratorExp extends LoopExp {
-    
-    private OclExp source;
-    private String kind;
-    private OclExp body;
-    private Variable variable;
-
-    public IteratorExp(OclExp source, String kind, Variable variable, OclExp body) {
-        this.source = source;
-        this.kind = kind;
-        this.variable = variable;
-        this.body = body;
-    }
-
-    public OclExp getSource() {
-        return source;
-    }
-
-    public String getKind() {
-        return kind;
-    }
-
-    public OclExp getBody() {
-        return body;
-    }
-
-    public Variable getVariable() {
-        return variable;
-    }
-
-
+public enum IteratorKind {
+    any, 
+    asBag, 
+    asOrderedSet, 
+    asSequence, 
+    asSet, 
+    at, 
+    collect, 
+    count, 
+    excludes, 
+    excludesAll, 
+    excluding, 
+    exists, 
+    first, 
+    flatten, 
+    forAll,
+    includes, 
+    includesAll, 
+    including, 
+    indexOf, 
+    isEmpty, 
+    isUnique, 
+    last, 
+    notEmpty, 
+    one, 
+    reject, 
+    select, 
+    size, 
+    sortedBy, 
+    sum, 
+    union
 }
