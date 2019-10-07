@@ -284,7 +284,7 @@ public class SimpleParser implements Parser {
         OclExp bodyExp = "".equals(body) ? null
                 : parseOclExp(body, ctx, variableStack);
 
-        variableStack.pop();
+        if(body.matches(iteratorDeclRx)) { variableStack.pop(); }
 
         return new IteratorExp(srcExp, kind, new Variable(iterator),
                 bodyExp);
