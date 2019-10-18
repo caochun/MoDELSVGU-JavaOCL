@@ -19,7 +19,14 @@ limitations under the License.
 
 package com.vgu.se.jocl.expressions;
 
-public class TupleLiteralExp {
+import com.vgu.se.jocl.visit.ParserVisitor;
+
+public class TupleLiteralExp extends LiteralExp {
 
     private TupleLiteralPart part;
+
+    @Override
+    public void accept(ParserVisitor parserVisitor) {
+        parserVisitor.visit(this);
+    }
 }

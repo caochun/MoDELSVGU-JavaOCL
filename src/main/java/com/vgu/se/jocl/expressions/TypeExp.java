@@ -19,16 +19,28 @@ limitations under the License.
 
 package com.vgu.se.jocl.expressions;
 
+import com.vgu.se.jocl.types.Type;
+import com.vgu.se.jocl.visit.ParserVisitor;
+
 public class TypeExp extends OclExp {
 
-    private String referredType;
+    private Type referredType;
 
     public TypeExp(String referredType) {
-        this.referredType = referredType;
+        this.referredType = new Type(referredType);
+    }
+    
+    public TypeExp(Type type) {
+        this.referredType = type;
+    }
+    
+    public Type getType() {
+        return referredType;
     }
 
-    public String getReferredType() {
-        return referredType;
+    @Override
+    public void accept(ParserVisitor parserVisitor) {
+        parserVisitor.visit(this);
     }
     
 }

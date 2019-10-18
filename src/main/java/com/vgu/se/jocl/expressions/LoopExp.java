@@ -19,7 +19,9 @@ limitations under the License.
 
 package com.vgu.se.jocl.expressions;
 
-public class LoopExp extends CallExp {
+public abstract class LoopExp extends CallExp {
 
-    private OclExp body;
+    protected OclExp body;
+    protected OclExp source;
+    protected Variable iterator;
 }

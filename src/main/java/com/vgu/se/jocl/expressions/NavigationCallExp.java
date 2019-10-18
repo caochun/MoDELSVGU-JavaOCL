@@ -21,22 +21,17 @@ package com.vgu.se.jocl.expressions;
 
 import java.util.List;
 
-public class NavigationCallExp extends FeatureCallExp {
+public abstract class NavigationCallExp extends FeatureCallExp {
 
-    private List<OclExp> qualifiers;
-//    protected Property navSource;
-    protected Variable variable;
+    protected List<OclExp> qualifiers;
+    protected OclExp navigationSource;
 
-    public NavigationCallExp(List<OclExp> qualifiers) {
-        this.qualifiers = qualifiers;
-    }
-
-    public NavigationCallExp(Variable variable) {
-        this.variable = variable;
-    }
-    
     public List<OclExp> getQualifiers() {
         return qualifiers;
+    }
+
+    public OclExp getNavigationSource() {
+        return navigationSource;
     }
     
 }

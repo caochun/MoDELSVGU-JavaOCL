@@ -19,18 +19,10 @@ limitations under the License.
 
 package com.vgu.se.jocl.expressions;
 
-public class FeatureCallExp extends CallExp {
+public abstract class FeatureCallExp extends CallExp {
     
     // Boolean indicating whether the expression accesses the 
     // precondition-time value of the referred feature.
     private boolean isPre;
     
-    public FeatureCallExp() {
-    }
-
-    public FeatureCallExp(OclExp src) {
-        super(src);
-        // TODO Auto-generated constructor stub
-    }
-
 }

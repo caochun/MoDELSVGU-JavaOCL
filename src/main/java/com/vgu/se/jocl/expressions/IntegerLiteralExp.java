@@ -20,9 +20,16 @@ limitations under the License.
 package com.vgu.se.jocl.expressions;
 
 import com.vgu.se.jocl.types.IntegerType;
+import com.vgu.se.jocl.visit.ParserVisitor;
 
-public class IntegerLiteralExp extends NumericLiteralExp<IntegerType> {
+public class IntegerLiteralExp extends NumericLiteralExp<Integer> {
+
     public IntegerLiteralExp(Integer value) {
-        this.setLiteral(new IntegerType(value));
+        super.value = value;
+    }
+
+    @Override
+    public void accept(ParserVisitor parserVisitor) {
+        parserVisitor.visit(this);
     }
 }

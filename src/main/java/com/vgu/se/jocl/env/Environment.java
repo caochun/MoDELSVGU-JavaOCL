@@ -26,9 +26,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import com.vgu.se.jocl.expressions.NullLiteralExp;
 import com.vgu.se.jocl.expressions.OclExp;
-import com.vgu.se.jocl.parser.ParserMaker;
-import com.vgu.se.jocl.parser.ParserService;
 import com.vgu.se.jocl.parser.interfaces.Parser;
 import com.vgu.se.jocl.parser.simple.SimpleParser;
 
@@ -59,9 +58,7 @@ public class Environment {
         this.oclExp = oclExp;
     }
     public OclExp parse() {
-        ParserMaker parserMaker = new ParserMaker();
         //TODO: Add parsing function.
-        oclExp = null;
-        return oclExp;
+        return new NullLiteralExp();
     }
 }

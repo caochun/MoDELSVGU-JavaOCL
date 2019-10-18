@@ -25,10 +25,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.json.simple.JSONArray;
-import org.json.simple.parser.JSONParser;
 
-import com.vgu.se.jocl.env.Environment;
 import com.vgu.se.jocl.exception.OclParserException;
+import com.vgu.se.jocl.expressions.AssociationClassCallExp;
 import com.vgu.se.jocl.expressions.BooleanLiteralExp;
 import com.vgu.se.jocl.expressions.IntegerLiteralExp;
 import com.vgu.se.jocl.expressions.IteratorExp;
@@ -45,12 +44,26 @@ import com.vgu.se.jocl.expressions.TypeExp;
 import com.vgu.se.jocl.expressions.Variable;
 import com.vgu.se.jocl.expressions.VariableExp;
 import com.vgu.se.jocl.parser.interfaces.Parser;
+import com.vgu.se.jocl.types.Type;
 import com.vgu.se.jocl.utils.UMLContextUtils;
 
 public class SimpleParser implements Parser {
 
     private List<String> stringArray = new ArrayList<String>();
     private List<String> parenthesisArray = new ArrayList<String>();
+    private Stack<Variable> variableStack = new Stack<Variable>();
+    private String adhocCtx;
+    
+    private void houseCleanup() {
+        this.stringArray.clear();
+        this.parenthesisArray.clear();
+        this.variableStack.clear();
+    }
+
+    @Override
+    public void setAdhocCtx(String adhocCtx) {
+        this.adhocCtx = adhocCtx;
+    }
 
     /**
      * This parse an OCL Expression string to OclExp Java Object given a
@@ -63,25 +76,366 @@ public class SimpleParser implements Parser {
      */
     @Override
     public OclExp parse(String ocl, JSONArray ctx) {
+        houseCleanup();
 
         String encOcl = encode(ocl);
 
-        System.out.println("Original : " + ocl + "\nEncoded : " + encOcl
-                + "\nStringArray : " + this.stringArray
-                + "\nParenthesisArray : " + this.parenthesisArray);
+        return parseOclExp(encOcl, ctx);
+    }
 
-        Stack<String> variableStack = new Stack<String>();
+    private OclExp parseOclExp(String ocl, JSONArray ctx) {
 
-        return parseOclExp(encOcl, ctx, variableStack);
+        OclExp oclExp = parseCallExp(ocl, ctx);
+
+        if (oclExp != null) {
+            oclExp.setOclStr(decode(ocl));
+            return oclExp;
+        }
+
+        OclExp litExp = parseLiteralExp(ocl, ctx);
+        litExp.setOclStr(decode(ocl));
+
+        return litExp;
+    }
+
+    private OclExp parseCallExp(String ocl, JSONArray ctx) {
+
+//        Implementing the operators patterns from lowest precedence
+        Pattern[] patterns = { ParserPatterns.IMPLIES_OP_PATT,
+                ParserPatterns.XOR_OP_PATT, ParserPatterns.OR_OP_PATT,
+                ParserPatterns.AND_OP_PATT,
+                ParserPatterns.EQUALITY_OP_PATT,
+                ParserPatterns.COMPARISON_OP_PATT,
+//                ParserPatterns.ADD_OR_SUBTRACT_OP_PATT,
+//                ParserPatterns.MULTIPLY_OR_DIV_OP_PATT,
+//                ParserPatterns.NOT_OR_NEGATIVE_OP_PATT,
+                ParserPatterns.NOT_OP_PATT };
+
+        Matcher m;
+        for (Pattern p : patterns) {
+            m = p.matcher(ocl);
+            if (m.find()) {
+                return parseOperationCallExp(m, ocl, ctx);
+            }
+        }
+
+//        Check the DOT or ARROW pattern
+        m = ParserPatterns.DOT_OR_ARROW_OP_PATT.matcher(ocl);
+        if (m.find()) {
+            return parseCallExp(m, ocl, ctx);
+        }
+
+        return null;
+    }
+
+    private OclExp parseOperationCallExp(Matcher m, String ocl,
+            JSONArray ctx) {
+
+        String source = trim(m.group(1));
+        String operator = trim(m.group(2));
+        String body = trim(m.group(3));
+
+        OclExp sourceOcl = parseOclExp(source, ctx);
+        OclExp bodyOcl = parseOclExp(body, ctx);
+        Type type = getOperationExpType(operator, sourceOcl, bodyOcl);
+
+        OperationCallExp opCallExp = new OperationCallExp(sourceOcl,
+                new Operation(operator), bodyOcl);
+        opCallExp.setType(type);
+
+        return opCallExp;
+    }
+
+    private OclExp parseCallExp(Matcher m, String ocl, JSONArray ctx) {
+
+        String operator = m.group(2);
+
+        switch (operator) {
+        case ".":
+            return parseDotCase(m, ocl, ctx);
+        default: // "->"
+            return parseArrowCase(m, ocl, ctx);
+        }
+    }
+
+    private OclExp parseDotCase(Matcher m, String ocl, JSONArray ctx) {
+
+        String left = trim(m.group(1));
+        String right = trim(m.group(3));
+        String operation = right.replaceFirst("(\\w*)\\(\\d+\\)", "$1");
+        String operationPatt = "(\\w*)(\\((\\d+)\\))";
+        Matcher mRight = Pattern.compile(operationPatt).matcher(right);
+        Type type = new Type();
+
+        if (mRight.find()) {
+//            Used for operation defined in Classifier with paramenters
+            OclExp leftExp = parseOclExp(left, ctx);
+
+            String[] arguments = this.parenthesisArray
+                    .get(Integer.valueOf(trim(mRight.group(3))))
+                    .split(",");
+
+            if (arguments.length == 1 & "".equals(arguments[0])) {
+                arguments = new String[0];
+            }
+
+            OclExp[] argumentExps = new OclExp[arguments.length];
+            for (int i = 0; i < arguments.length; i++) {
+                argumentExps[i] = parse(arguments[i], ctx);
+            }
+
+            type = getOperationExpType(operation, leftExp,
+                    argumentExps);
+
+            OperationCallExp opCallExp = new OperationCallExp(leftExp,
+                    new Operation(operation), argumentExps);
+            opCallExp.setType(type);
+
+            return opCallExp;
+
+        } else {
+            OclExp variable = parseOclExp(left, ctx);
+            String className = variable.getType().getReferredType();
+
+            if ("Unknown".equals(className)) {
+                throw new OclParserException(
+                        "Cannot parse " + className + " type");
+            }
+            
+            OclExp dotOpCall = null;
+
+            if (UMLContextUtils.isPropertyOfClass(ctx, className,
+                    right)) {
+                dotOpCall = new PropertyCallExp(variable, right);
+                type = new Type(UMLContextUtils.getAttributeType(ctx,
+                        className, right));
+                dotOpCall.setType(type);
+
+            } else if (UMLContextUtils.isAssociationEndOfClass(ctx,
+                    className, right)) {
+                dotOpCall = new AssociationClassCallExp(variable,
+                        right);
+                
+                String assocName = UMLContextUtils.getAssociation(ctx,
+                        className, right);
+
+                ((AssociationClassCallExp) dotOpCall)
+                        .setAssociation(assocName);
+
+                ((AssociationClassCallExp) dotOpCall)
+                        .setOppositeAssociationEnd(UMLContextUtils
+                                .getOppositeAssociationEnd(ctx,
+                                        assocName, right));
+
+                String opposClassName = UMLContextUtils
+                        .getAssociationOppositeClassName(ctx, assocName,
+                                className);
+
+                ((AssociationClassCallExp) dotOpCall)
+                        .setOppositeAssociationEndType(new Type(
+                                "Col(" + opposClassName + ")"));
+
+                type = new Type("Col("
+                        + variable.getType().getReferredType() + ")");
+                dotOpCall.setType(type);
+            }
+
+            return dotOpCall;
+        }
+    }
+
+    private OclExp parseArrowCase(Matcher m, String ocl, JSONArray ctx) {
+
+        String source = trim(m.group(1));
+        String body = trim(replace(m.group(3)));
+        String kind = trim(
+                m.group(3).replaceFirst("(\\w*)\\(\\d+\\)", "$1"));
+
+        if (IteratorKind.valueOf(kind) == null) {
+            throw new OclParserException("Invalid iterator kind!");
+        }
+
+//        System.out.println("\n\n" + "\nComplete: " + m.group()
+//                + "\nSource: " + source + "\nbody: " + body + "\nkind: "
+//                + kind + "\n\n");
+
+        OclExp sourceExp = parseOclExp(source, ctx);
+
+        String iterator = "iterator";
+        String iteratorDeclRx = "^(.*)\\|(.*)$";
+        Variable variable = new Variable(iterator, new Type());
+
+        if (body.matches(iteratorDeclRx)) {
+            iterator = trim(body.replaceFirst(iteratorDeclRx, "$1"));
+
+            String sourceType = sourceExp.getType().getReferredType()
+                    .replaceAll("Col\\((\\w+)\\)", "$1");
+
+            Type varType = new Type(sourceType);
+            variable = new Variable(sourceExp, iterator, varType);
+
+            if (this.variableStack.contains(variable)) {
+                throw new OclParserException(
+                        iterator + " already existed!");
+            }
+
+            body = trim(body.replaceFirst(iteratorDeclRx, "$2"));
+
+            this.variableStack.push(variable);
+//            System.out.println("String : " + body + " --> Stack : "
+//                    + variableStack);
+        }
+
+        OclExp bodyExp = "".equals(body) ? null
+                : parseOclExp(body, ctx);
+
+        if (body.matches(iteratorDeclRx)) {
+            this.variableStack.pop();
+        }
+
+        OclExp iteratorExp = new IteratorExp(sourceExp, kind, variable,
+                bodyExp);
+        Type type = getIteratorExpType(sourceExp, kind, bodyExp);
+        iteratorExp.setType(type);
+
+        return iteratorExp;
+    }
+
+    private OclExp parseLiteralExp(String input, JSONArray ctx) {
+        /**
+         * Any character between two single quote '' E.g.: "'Lorem ipsum
+         * άλφα 123|, !@#$%^&*('"
+         * 
+         */
+        final String STRING_LITERAL_STR = "\\s*\\w*\\{(\\d+)*\\}";
+        /**
+         * Start ONLY with a word true OR false WITHOUT quote and
+         * case-insensitive (?i) <- inline flag E.g.:"true", "false",
+         * "True", "False", "TRUE", "FALSE" Note : there is NO single
+         * quote
+         */
+        final String BOOLEAN_LITERAL_STR = "(?i)(^\\btrue\\b|\\bfalse\\b$)";
+        /**
+         * String contains ONLY digit WITH an optional minus sign (-)
+         * denoting negativity; this patterns allows, too, the decimal
+         * number by adding optional group (.\\d+)?. This also allows
+         * JAVA legal way of writing number using underscore (_) E.g.:
+         * "12334", "-12345", "123_3445", "12_234.4893"
+         */
+        final String NUMERIC_LITERAL_STR = "^-?(\\d+(_\\d+)*(.\\d+)?)(?<!_)$";
+        /**
+         * This is strictly a natural number. If this string is given a
+         * number that is greater than what an Integer can hold, the
+         * parser will throw an Error.
+         */
+        final String INTEGER_LITERAL_STR = "^-?\\d+(_\\d+)*(?<!_)$";
+        /**
+         * This is strictly a real number. If this string is given a
+         * number that is greater than what a Double can hold, the
+         * parser will throw an Error.
+         */
+        final String REAL_LITERAL_STR = "^-?(\\d+(_\\d+)*.\\d+)(?<!_)$";
+
+        if (input.matches(NUMERIC_LITERAL_STR)) {
+
+            if (input.matches(INTEGER_LITERAL_STR)) {
+
+                IntegerLiteralExp intLitExp = new IntegerLiteralExp(
+                        Integer.valueOf(input));
+                intLitExp.setType(new Type("Integer"));
+                return intLitExp;
+            } else if (input.matches(REAL_LITERAL_STR)) {
+
+                RealLiteralExp realLitExp = new RealLiteralExp(
+                        Double.valueOf(input));
+                realLitExp.setType(new Type("Real"));
+                return realLitExp;
+            }
+
+        } else if (input.matches(STRING_LITERAL_STR)) {
+            input = input.replaceFirst(STRING_LITERAL_STR, "$1");
+            input = this.stringArray.get(Integer.valueOf(input));
+
+            StringLiteralExp strLitExp = new StringLiteralExp(input);
+            strLitExp.setType(new Type("String"));
+
+            return strLitExp;
+
+        } else if (input.matches(BOOLEAN_LITERAL_STR)) {
+
+            BooleanLiteralExp boolLitExp = new BooleanLiteralExp(
+                    Boolean.valueOf(input));
+            boolLitExp.setType(new Type("Boolean"));
+
+            return boolLitExp;
+
+        } else if (input.length() > 0) {
+
+            // Check if it's a class
+            if (UMLContextUtils.isClass(ctx, input)) {
+                TypeExp type = new TypeExp(input);
+                type.setType(new Type(input));
+
+                return type;
+            } else if ("self".equals(input)) {
+                if (this.adhocCtx == null) {
+                    return new VariableExp(
+                            new Variable(input, new Type()));
+                }
+
+                return new VariableExp(
+                        new Variable(input, new Type(this.adhocCtx)));
+            } else {
+                for (int i = 0; i < this.variableStack.size(); i++) {
+                    if (this.variableStack.get(i).getName().equals(input)) {
+                        return new VariableExp(this.variableStack.get(i));
+                    }
+                }
+            }
+
+            return new VariableExp(new Variable(input, new Type()));
+
+        } else {
+            throw new OclParserException(input + "\n======\n"
+                    + "Invalid OCL Literal Expression!");
+        }
+
+        return new NullLiteralExp();
     }
 
     private String encode(String ocl) {
 
-        String encOcl = String.copyValueOf(ocl.toCharArray());
-        encOcl = extractString(encOcl);
+        String encOcl = extractString(ocl);
         encOcl = extractParenthesis(encOcl);
 
         return encOcl;
+    }
+
+    private String decode(String encOcl) {
+        String decOcl = String.copyValueOf(encOcl.toCharArray());
+
+        Pattern p = Pattern.compile("((\\w+)\\()(\\d+)(\\)(.*))");
+        Pattern s = Pattern.compile("(.*)(\\{(\\d+)\\})(.*)");
+
+        Matcher mP = p.matcher(decOcl);
+        while (mP.find()) {
+            String content = this.parenthesisArray
+                    .get(Integer.parseInt(mP.group(3)));
+            decOcl = decOcl.replaceFirst(p.pattern(),
+                    "$1" + content + "$4");
+            mP = p.matcher(decOcl);
+        }
+
+        Matcher mS = s.matcher(decOcl);
+        while (mS.find()) {
+            String content = this.stringArray
+                    .get(Integer.parseInt(mS.group(3)));
+            decOcl = decOcl.replaceFirst(s.pattern(),
+                    "$1" + "'" + content + "'" + "$4");
+            mS = s.matcher(decOcl);
+        }
+
+        return decOcl;
     }
 
     private String extractString(String encOcl) {
@@ -137,159 +491,6 @@ public class SimpleParser implements Parser {
         return encOcl;
     }
 
-    private OclExp parseOclExp(String ocl, JSONArray ctx,
-            Stack<String> variableStack) {
-
-        OclExp oclExp = parseCallExp(ocl, ctx, variableStack);
-
-        if (oclExp != null) {
-            return oclExp;
-        }
-
-        return parseLiteralExp(ocl, ctx, variableStack);
-    }
-
-    private OclExp parseCallExp(String ocl, JSONArray ctx,
-            Stack<String> variableStack) {
-
-//        Implementing the operators patterns from lowest precedence
-        Pattern[] patterns = { ParserPatterns.IMPLIES_OP_PATT,
-                ParserPatterns.XOR_OP_PATT, ParserPatterns.OR_OP_PATT,
-                ParserPatterns.AND_OP_PATT,
-                ParserPatterns.EQUALITY_OP_PATT,
-                ParserPatterns.COMPARISON_OP_PATT,
-//                ParserPatterns.ADD_OR_SUBTRACT_OP_PATT,
-//                ParserPatterns.MULTIPLY_OR_DIV_OP_PATT,
-//                ParserPatterns.NOT_OR_NEGATIVE_OP_PATT,
-                ParserPatterns.NOT_OP_PATT };
-
-        Matcher m;
-        for (Pattern p : patterns) {
-            m = p.matcher(ocl);
-            if (m.find()) {
-                return parseOperationCallExp(m, ocl, ctx,
-                        variableStack);
-            }
-        }
-
-//        Check the DOT or ARROW pattern
-        m = ParserPatterns.DOT_OR_ARROW_OP_PATT.matcher(ocl);
-        if (m.find()) {
-            return parseCallExp(m, ocl, ctx, variableStack);
-        }
-
-        return null;
-    }
-
-    private OclExp parseOperationCallExp(Matcher m, String ocl,
-            JSONArray ctx, Stack<String> variableStack) {
-
-        String source = trim(m.group(1));
-        String operator = trim(m.group(2));
-        String body = trim(m.group(3));
-
-        return new OperationCallExp(
-                parseOclExp(source, ctx, variableStack),
-                new Operation(operator),
-                parseOclExp(body, ctx, variableStack));
-    }
-
-    private OclExp parseCallExp(Matcher m, String ocl, JSONArray ctx,
-            Stack<String> variableStack) {
-
-        String operator = m.group(2);
-
-        switch (operator) {
-        case ".":
-            return parseDotCase(m, ocl, ctx, variableStack);
-        default: // "->"
-            return parseArrowCase(m, ocl, ctx, variableStack);
-        }
-    }
-
-    private OclExp parseDotCase(Matcher m, String ocl, JSONArray ctx,
-            Stack<String> variableStack) {
-
-        String left = trim(m.group(1));
-        String right = trim(m.group(3));
-        String rightOperation = right.replaceFirst("(\\w*)\\(\\d+\\)",
-                "$1");
-        String operationPatt = "(\\w*)(\\((\\d+)\\))";
-        String opParamPatt = "(\\w*)(\\((\\.*)\\))";
-        Matcher mRight = Pattern.compile(operationPatt).matcher(right);
-
-        if (mRight.find()) {
-//            Used for operation defined in Classifier with paramenters
-
-            String[] arguments = this.parenthesisArray
-                    .get(Integer.valueOf(trim(mRight.group(3))))
-                    .split(",");
-
-            if (arguments.length == 1 & "".equals(arguments[0])) {
-                arguments = new String[0];
-            }
-
-            OclExp[] argumentExps = new OclExp[arguments.length];
-            for (int i = 0; i < arguments.length; i++) {
-                argumentExps[i] = parse(arguments[i], ctx);
-            }
-
-            return new OperationCallExp(
-                    parseOclExp(left, ctx, variableStack),
-                    new Operation(rightOperation), argumentExps);
-        } else {
-            if (left.matches(ParserPatterns.VARIABLE_DECL_STR)) {
-                left = left.replaceFirst(
-                        ParserPatterns.VARIABLE_DECL_STR, "$1");
-            }
-
-            return new PropertyCallExp(new Variable(left), right);
-        }
-    }
-
-    private OclExp parseArrowCase(Matcher m, String ocl, JSONArray ctx,
-            Stack<String> variableStack) {
-
-        String source = trim(m.group(1));
-        String body = trim(replace(m.group(3)));
-        String kind = trim(
-                m.group(3).replaceFirst("(\\w*)\\(\\d+\\)", "$1"));
-
-        System.out.println("\n\n" + "\nComplete: " + m.group()
-                + "\nSource: " + source + "\nbody: " + body + "\nkind: "
-                + kind + "\n\n");
-
-        if (IteratorKind.valueOf(kind) == null) {
-            throw new OclParserException("Invalid iterator kind!");
-        }
-        String iterator = "iterator";
-        String iteratorDeclRx = "^(.*)\\|(.*)$";
-
-        OclExp srcExp = parseOclExp(source, ctx, variableStack);
-
-        if (body.matches(iteratorDeclRx)) {
-            iterator = trim(body.replaceFirst(iteratorDeclRx, "$1"));
-
-            if (variableStack.contains(iterator)) {
-                throw new OclParserException(iterator + " already existed!");
-            }
-
-            body = trim(body.replaceFirst(iteratorDeclRx, "$2"));
-
-            variableStack.push(iterator);
-            System.out.println("String : " + body + " --> Stack : "
-                    + variableStack);
-        }
-
-        OclExp bodyExp = "".equals(body) ? null
-                : parseOclExp(body, ctx, variableStack);
-
-        if(body.matches(iteratorDeclRx)) { variableStack.pop(); }
-
-        return new IteratorExp(srcExp, kind, new Variable(iterator),
-                bodyExp);
-    }
-
     private String replace(String input) {
 
         String output = String.copyValueOf(input.toCharArray());
@@ -310,77 +511,8 @@ public class SimpleParser implements Parser {
         return output;
     }
 
-    private OclExp parseLiteralExp(String input, JSONArray ctx,
-            Stack<String> variableStack) {
-        /**
-         * Any character between two single quote '' E.g.: "'Lorem ipsum
-         * άλφα 123|, !@#$%^&*('"
-         * 
-         */
-        final String STRING_LITERAL_PATT = "\\s*\\w*\\{(\\d+)*\\}";
-        /**
-         * Start ONLY with a word true OR false WITHOUT quote and
-         * case-insensitive (?i) <- inline flag E.g.:"true", "false",
-         * "True", "False", "TRUE", "FALSE" Note : there is NO single
-         * quote
-         */
-        final String BOOLEAN_LITERAL_PATT = "(?i)(^\\btrue\\b|\\bfalse\\b$)";
-        /**
-         * String contains ONLY digit WITH an optional minus sign (-)
-         * denoting negativity; this patterns allows, too, the decimal
-         * number by adding optional group (.\\d+)?. This also allows
-         * JAVA legal way of writing number using underscore (_) E.g.:
-         * "12334", "-12345", "123_3445", "12_234.4893"
-         */
-        final String NUMERIC_LITERAL_PATT = "^-?(\\d+(_\\d+)*(.\\d+)?)(?<!_)$";
-        /**
-         * This is strictly a natural number. If this string is given a
-         * number that is greater than what an Integer can hold, the
-         * parser will throw an Error.
-         */
-        final String INTEGER_LITERAL_PATT = "^-?\\d+(_\\d+)*(?<!_)$";
-        /**
-         * This is strictly a real number. If this string is given a
-         * number that is greater than what a Double can hold, the
-         * parser will throw an Error.
-         */
-        final String REAL_LITERAL_PATT = "^-?(\\d+(_\\d+)*.\\d+)(?<!_)$";
-
-        if (input.matches(NUMERIC_LITERAL_PATT)) {
-
-            if (input.matches(INTEGER_LITERAL_PATT)) {
-
-                return new IntegerLiteralExp(Integer.valueOf(input));
-            } else if (input.matches(REAL_LITERAL_PATT)) {
-
-                return new RealLiteralExp(Double.valueOf(input));
-            }
-        } else if (input.matches(STRING_LITERAL_PATT)) {
-            if (input.matches("\\{(\\d+)\\}")) {
-                input = input.replaceFirst(STRING_LITERAL_PATT, "$1");
-                input = this.stringArray.get(Integer.valueOf(input));
-            }
-
-            if (UMLContextUtils.isClass(ctx, input)) {
-                return new TypeExp(input);
-            }
-
-            return new StringLiteralExp(input);
-        } else if (input.matches(BOOLEAN_LITERAL_PATT)) {
-
-            return new BooleanLiteralExp(Boolean.valueOf(input));
-        } else if (input.length() > 0) {
-
-            return new VariableExp(new Variable(input));
-        } else {
-            throw new OclParserException(input + "\n======\n"
-                    + "Invalid OCL Literal Expression!");
-        }
-
-        return new NullLiteralExp();
-    }
-
     private String trim(String input) {
+
         String spacePatt = "^(\\s)*|(\\s)*$";
         Matcher m = Pattern.compile(spacePatt).matcher(input);
         if (m.find()) {
@@ -388,5 +520,78 @@ public class SimpleParser implements Parser {
         }
 
         return input;
+    }
+
+    private Type getOperationExpType(String operationName,
+            OclExp leftExp, OclExp... exps) {
+
+        Type opType = new Type();
+        switch (operationName) {
+        case "allInstances":
+            opType = new Type(
+                    "Col(" + leftExp.getType().getReferredType() + ")");
+            return opType;
+        case "not":
+        case "=":
+        case "<>":
+        case "<":
+        case ">":
+        case ">=":
+        case "<=":
+        case "and":
+        case "or":
+            opType = new Type("Boolean");
+            return opType;
+        default:
+            return opType;
+        }
+    }
+
+    private Type getIteratorExpType(OclExp source, String kind,
+            OclExp body) {
+        Type type = new Type("Invalid");
+
+        switch (IteratorKind.valueOf(kind)) {
+        case any:
+        case at:
+        case first:
+        case last:
+        case sum:
+            return new Type(source.getType().getReferredType()
+                    .replaceFirst("^Col\\((\\w+)\\)$", "$1"));
+
+        case asBag:
+        case asOrderedSet:
+        case asSequence:
+        case asSet:
+        case collect:
+        case excluding:
+        case flatten:
+        case including:
+        case reject:
+        case select:
+        case sortedBy:
+        case union:
+            return new Type(source.getType().getReferredType());
+
+        case excludes:
+        case excludesAll:
+        case exists:
+        case forAll:
+        case includes:
+        case includesAll:
+        case isEmpty:
+        case isUnique:
+        case notEmpty:
+            return new Type("Boolean");
+
+        case count:
+        case indexOf:
+        case one:
+        case size:
+            return new Type("Integer");
+        default:
+            return type;
+        }
     }
 }

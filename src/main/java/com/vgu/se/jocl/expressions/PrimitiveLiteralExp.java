@@ -20,13 +20,11 @@ limitations under the License.
 package com.vgu.se.jocl.expressions;
 
 public abstract class PrimitiveLiteralExp<E> extends LiteralExp {
-    private E literal;
+    protected E value;
 
-    public E getLiteral() {
-        return literal;
+    public E getValue() {
+        return value;
     }
-
-    public void setLiteral(E literal) {
-        this.literal = literal;
-    }
+    
 }
+

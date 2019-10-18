@@ -16,21 +16,37 @@ limitations under the License.
 @author: ngpbh
 ***************************************************************************/
 
-
 package com.vgu.se.jocl.expressions;
 
 import java.util.List;
 
-import com.vgu.se.jocl.types.Class;;
+import com.vgu.se.jocl.types.Class;
+import com.vgu.se.jocl.types.Type;
+import com.vgu.se.jocl.utils.UMLContextUtils;
+import com.vgu.se.jocl.visit.ParserVisitor;;
 
-public class AssociationClassCallExp extends NavigationCallExp{
-    public AssociationClassCallExp(Variable variable, List<OclExp> qualifiers, String referredAssociationEnd) {
-        super(variable, qualifiers);
-        this.referredAssociationEnd = referredAssociationEnd;
-    }
+public class AssociationClassCallExp extends NavigationCallExp {
 
     private String referredAssociationEnd;
     private Class referredAssociationClass;
+    private String oppositeAssociationEnd;
+    private Type oppositeAssociationEndType;
+    private String association;
+
+    public AssociationClassCallExp(OclExp source,
+            String referredAssociationEnd) {
+        super.navigationSource = source;
+        this.referredAssociationEnd = referredAssociationEnd;
+    }
+
+    public Type getOppositeAssociationEndType() {
+        return oppositeAssociationEndType;
+    }
+
+    public void setOppositeAssociationEndType(
+            Type oppositeAssociationEndType) {
+        this.oppositeAssociationEndType = oppositeAssociationEndType;
+    }
 
     public String getAssociationEnd() {
         return referredAssociationEnd;
@@ -38,5 +54,41 @@ public class AssociationClassCallExp extends NavigationCallExp{
 
     public Class getReferredAssociationClass() {
         return referredAssociationClass;
+    }
+
+    public String getReferredAssociationEnd() {
+        return referredAssociationEnd;
+    }
+
+    public void setReferredAssociationEnd(
+            String referredAssociationEnd) {
+        this.referredAssociationEnd = referredAssociationEnd;
+    }
+
+    public String getOppositeAssociationEnd() {
+        return oppositeAssociationEnd;
+    }
+
+    public void setOppositeAssociationEnd(
+            String oppositeAssociationEnd) {
+        this.oppositeAssociationEnd = oppositeAssociationEnd;
+    }
+
+    public String getAssociation() {
+        return association;
+    }
+
+    public void setAssociation(String association) {
+        this.association = association;
+    }
+
+    public void setReferredAssociationClass(
+            Class referredAssociationClass) {
+        this.referredAssociationClass = referredAssociationClass;
+    }
+
+    @Override
+    public void accept(ParserVisitor parserVisitor) {
+        parserVisitor.visit(this);
     }
 }

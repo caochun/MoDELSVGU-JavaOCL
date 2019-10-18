@@ -19,10 +19,15 @@ limitations under the License.
 
 package com.vgu.se.jocl.expressions;
 
-import com.vgu.se.jocl.types.BooleanType;
+import com.vgu.se.jocl.visit.ParserVisitor;
 
-public class BooleanLiteralExp extends PrimitiveLiteralExp<BooleanType> {
+public class BooleanLiteralExp extends PrimitiveLiteralExp<Boolean> {
     public BooleanLiteralExp(Boolean value) {
-        this.setLiteral(new BooleanType(value));
+        super.value = value;
+    }
+    
+    @Override
+    public void accept(ParserVisitor visitor) {
+        visitor.visit(this);
     }
 }

@@ -17,16 +17,26 @@ limitations under the License.
 ***************************************************************************/
 
 
-package com.vgu.se.jocl.parser;
+package com.vgu.se.jocl.types;
 
-import com.vgu.se.jocl.expressions.OclExp;
-import com.vgu.se.jocl.parser.interfaces.Parser;
+public class Type {
 
-public class ParserService {
+    private String referredType;
     
-    private final Parser parserInterface;
+    public Type() {
+        this("Unknown");
+    }
 
-    public ParserService(Parser parserInterface) {
-        this.parserInterface = parserInterface;
+    public Type(String referredType) {
+        this.referredType = referredType;
+    }
+
+    public String getReferredType() {
+        return referredType;
+    }
+    
+    @Override
+    public String toString() {
+        return this.referredType;
     }
 }

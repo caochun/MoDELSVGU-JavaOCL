@@ -19,13 +19,45 @@ limitations under the License.
 
 package com.vgu.se.jocl.expressions;
 
+import com.vgu.se.jocl.parser.interfaces.Parser;
 import com.vgu.se.jocl.types.CollectionType;
+import com.vgu.se.jocl.types.Type;
+import com.vgu.se.jocl.visit.ParserVisitable;
+import com.vgu.se.jocl.visit.ParserVisitor;
 
-public abstract class OclExp {
+public abstract class OclExp implements ParserVisitable {
 
-    private OclExp appliedElement;
-    private CollectionType<?> result;
+    protected OclExp appliedElement;
+    protected CollectionType<?> result;
+    protected OperationCallExp parentCall;
+
+    protected String oclStr;
+    protected Type type;
+
+    public String getOclStr() {
+        return oclStr;
+    }
+
+    public void setOclStr(String oclStr) {
+        this.oclStr = oclStr;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
+    @Override
+    public String toString() {
+        return "Ocl String : " + oclStr + "\nType : " + type + "\n";
+    }
     
-    private OperationCallExp parentCall;
+    @Override
+    public void accept(ParserVisitor visitor) {
+        visitor.visit(this);
+    }
     
 }

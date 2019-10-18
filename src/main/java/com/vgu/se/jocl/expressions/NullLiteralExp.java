@@ -20,6 +20,7 @@ limitations under the License.
 package com.vgu.se.jocl.expressions;
 
 import com.vgu.se.jocl.types.VoidType;
+import com.vgu.se.jocl.visit.ParserVisitor;
 
 public class NullLiteralExp extends LiteralExp {
     
@@ -27,5 +28,10 @@ public class NullLiteralExp extends LiteralExp {
     
     public NullLiteralExp() {
         this.value = null;
+    }
+
+    @Override
+    public void accept(ParserVisitor parserVisitor) {
+        parserVisitor.visit(this);
     };
 }

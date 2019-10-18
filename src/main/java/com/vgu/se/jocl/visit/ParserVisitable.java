@@ -17,22 +17,10 @@ limitations under the License.
 ***************************************************************************/
 
 
-package com.vgu.se.jocl.parser;
+package com.vgu.se.jocl.visit;
 
-import org.json.simple.JSONArray;
-
-import com.vgu.se.jocl.parser.interfaces.Parser;
-import com.vgu.se.jocl.parser.simple.SimpleParser;
-
-public class ParserMaker {
-
-    private Parser simpleParser;
+public interface ParserVisitable {
     
-    public ParserMaker() {
-        this.simpleParser = new SimpleParser();
-    }
-    
-    public void parseSimple(String oclExpStr, JSONArray ctx) {
-        this.simpleParser.parse(oclExpStr, ctx);
-    }
+    void accept(ParserVisitor visitor);
+
 }

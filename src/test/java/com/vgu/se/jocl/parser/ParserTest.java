@@ -59,32 +59,43 @@ public class ParserTest {
     }
 
     public static void main(String[] args) throws ParseException {
+        String className = "Car";
+        String assocEnd = "owners";
 
-        ArrayList<String> parenthesesArray = new ArrayList<String>();
-        
-        String[] testCases = getTestCases();
-        
-        for(int i = 0; i < testCases.length; i++) {
-            String testCase = testCases[i];
-            System.out.println("\n=================\n" + testCase + "\n=====================\n");
-            SimpleParser parser = new SimpleParser();
-            OclExp ocl = parser.parse(testCase, plainUMLContext);
-            System.out.println(ocl);
+        for (int i = 0; i < plainUMLContext.size(); i++ ) {
+            JSONObject o = (JSONObject) plainUMLContext.get(i);
+            
+            if (o.containsKey("association")) {
+                JSONArray classes = (JSONArray) o.get("classes");
+                JSONArray ends = (JSONArray) o.get("ends");
+                
+                if (classes.get(0).equals(className) && 
+                        ends.get(1).equals(assocEnd)) {
+                    
+                }
+                
+                if (classes.get(1).equals(className) && 
+                        ends.get(0).equals(assocEnd)) {
+                    
+                }
+            }
+        }
+    }
+
+    private static String trim(String input) {
+
+        String spacePatt = "^(\\s)*|(\\s)*$";
+        Matcher m = Pattern.compile(spacePatt).matcher(input);
+        if (m.find()) {
+            return input.replaceAll(spacePatt, "");
         }
 
-//        String s = "c|c";
-//        String spacePatt = "^(.*)\\|(.*)$";
-//        System.out.println("Matches : " + s.matches(spacePatt)+ "\nOriginal : \n" + s 
-//                + "\nTrim : \n" + s.replaceAll("^(\\s)*|(\\s)*$", ""));
-//        Matcher m = Pattern.compile(spacePatt).matcher(s);
-//        if (m.find()) {
-//            System.out.println("Original : \n" + s 
-//                    + "\nTrim : \n" + s.replaceAll(spacePatt, ""));
-//        }
+        return input;
     }
     
     private static String[] getTestCases() {
         String[] ocls = {
+
 //             "Car.allInstances()",
 //             "Car.allInstances()->asSet()",
 //             "Car.allInstances()->collect(c|c)",
@@ -135,13 +146,15 @@ public class ParserTest {
 //             "true",
 //             "self",
 //             "self = caller",
-//             "self.Person:name",
-//             "self.Person:name = 'Hoang'",
-//             "self.Person:ownedCars",
-//             "self.Person:ownedCars->size()",
+//             "self.name",
+//             "self.name = 'Hoang'",
+//             "self.ownedCars",
+//             "self.ownedCars->size()",
 //             "self.ownedCars->exists(c|c.color = 'black')",
 //             "Car.allInstances()->exists(c|c.owners->exists(p|p = self))",
-             "Car.allInstances()->exists(c|c.owners->exists(p|p.ownedCars->size() < self.ownedCars->size()))",
+//             "Car.allInstances()->exists(c|c.owners->exists(p|p.ownedCars->size() < self.ownedCars->size()))",
+             "Car.allInstances()->exists(c| c.color = 'blue')",
+
         };
         
         return ocls;

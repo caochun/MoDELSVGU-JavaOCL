@@ -22,8 +22,13 @@ package com.vgu.se.jocl.parser.interfaces;
 import org.json.simple.JSONArray;
 
 import com.vgu.se.jocl.expressions.OclExp;
+import com.vgu.se.jocl.parser.simple.SimpleParser;
+import com.vgu.se.jocl.visit.ParserVisitor;
 
 public interface Parser {
     
-    OclExp parse(String oclExpStr, JSONArray ctx);
+    OclExp parse(String ocl, JSONArray ctx);
+
+    void setAdhocCtx(String adhocCtx);
+    
 }

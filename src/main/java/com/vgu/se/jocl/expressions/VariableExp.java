@@ -19,17 +19,29 @@ limitations under the License.
 
 package com.vgu.se.jocl.expressions;
 
+import com.vgu.se.jocl.types.Type;
+import com.vgu.se.jocl.visit.ParserVisitor;
+
 public class VariableExp extends OclExp {
 
-    private Variable v;
+    private Variable variable;
 
-    public VariableExp(Variable v) {
-        this.v = v;
+    public VariableExp(Variable variable) {
+        this.variable = variable;
     }
 
-    public Variable getV() {
-        return v;
+    public Variable getVariable() {
+        return variable;
     }
     
+    @Override
+    public Type getType() {
+        return this.variable.getType();
+    }
+
+    @Override
+    public void accept(ParserVisitor parserVisitor) {
+        parserVisitor.visit(this);
+    }
     
 }

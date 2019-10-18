@@ -19,12 +19,23 @@ limitations under the License.
 
 package com.vgu.se.jocl.expressions;
 
+import com.vgu.se.jocl.types.Type;
+
 public class Variable {
     private OclExp initExp;
     private String name;
+    private Type type;
+    private OclExp source;
     
-    public Variable(String name) {
+    public Variable(String name, Type type) {
         this.name = name;
+        this.type = type;
+    }
+
+    public Variable(OclExp source, String name, Type type) {
+        this.source = source;
+        this.name = name;
+        this.type = type;
     }
 
     public OclExp getInitExp() {
@@ -34,4 +45,60 @@ public class Variable {
     public String getName() {
         return name;
     }
+    
+    public Type getType() {
+        return type;
+    }
+
+    public void setInitExp(OclExp initExp) {
+        this.initExp = initExp;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+    
+    public OclExp getSource() {
+        return source;
+    }
+
+    public void setSource(OclExp source) {
+        this.source = source;
+    }
+
+    @Override
+    public String toString() {
+        return "Variable : " + name + " -- Type : " + type;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result
+                + ((name == null) ? 0 : name.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Variable other = (Variable) obj;
+        if (name == null) {
+            if (other.name != null)
+                return false;
+        } else if (!name.equals(other.name))
+            return false;
+        return true;
+    }
+    
 }

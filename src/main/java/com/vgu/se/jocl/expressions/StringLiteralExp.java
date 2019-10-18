@@ -19,10 +19,16 @@ limitations under the License.
 
 package com.vgu.se.jocl.expressions;
 
-import com.vgu.se.jocl.types.StringType;
+import com.vgu.se.jocl.visit.ParserVisitor;
 
-public class StringLiteralExp extends PrimitiveLiteralExp<StringType> {
+public class StringLiteralExp extends PrimitiveLiteralExp<String> {
+
     public StringLiteralExp(String value) {
-        this.setLiteral(new StringType(value));
+        super.value = value;
+    }
+
+    @Override
+    public void accept(ParserVisitor parserVisitor) {
+        parserVisitor.visit(this);
     }
 }

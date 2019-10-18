@@ -21,36 +21,44 @@ package com.vgu.se.jocl.expressions;
 import java.util.Arrays;
 import java.util.List;
 
+import com.vgu.se.jocl.visit.ParserVisitor;
+
 public class OperationCallExp extends FeatureCallExp {
 
     private List<OclExp> arguments;
-
-    private OclExp left;
     private Operation referredOperation;
 
-    public OperationCallExp(OclExp left, Operation referredOperation) {
-        super(left);
-        this.referredOperation = referredOperation;
-    }
-
-    public OperationCallExp(OclExp left, Operation referredOperation, 
+    public OperationCallExp(OclExp source, Operation referredOperation, 
             OclExp... arguments) {
-
-        super(left);
-        this.arguments = Arrays.asList(arguments);
+        super.source = source;
         this.referredOperation = referredOperation;
+        this.arguments = Arrays.asList(arguments);
     }
 
     public List<OclExp> getArguments() {
         return arguments;
     }
 
-    public OclExp getLeft() {
-        return left;
+    public OclExp getSource () {
+        return super.source;
     }
 
     public Operation getReferredOperation() {
         return referredOperation;
+    }
+    
+    @Override
+    public void accept(ParserVisitor parserVisitor) {
+        parserVisitor.visit(this);
+    }
+    
+    @Override
+    public String toString() {
+        return "referredOperation : " + this.referredOperation.getName()
+                + "\n" 
+                + "type : " + super.getType() + "\n" 
+                + "source : " + super.source + "\n" 
+                + "arguments : " + this.arguments + "\n";
     }
 
 }

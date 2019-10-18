@@ -19,35 +19,39 @@ limitations under the License.
 
 package com.vgu.se.jocl.expressions;
 
+import com.vgu.se.jocl.visit.ParserVisitor;
+
 // Look at Predefiend Iterateor Expression 11.7, OCL 2.4
 public class IteratorExp extends LoopExp {
     
-    private OclExp source;
     private String kind;
-    private OclExp body;
-    private Variable variable;
 
-    public IteratorExp(OclExp source, String kind, Variable variable, OclExp body) {
-        this.source = source;
+    public IteratorExp(OclExp source, String kind, Variable iterator, OclExp body) {
+        super.source = source;
+        super.iterator = iterator;
+        super.body = body;
         this.kind = kind;
-        this.variable = variable;
-        this.body = body;
     }
 
     public OclExp getSource() {
-        return source;
+        return super.source;
     }
 
     public String getKind() {
-        return kind;
+        return this.kind;
     }
 
     public OclExp getBody() {
-        return body;
+        return super.body;
     }
 
-    public Variable getVariable() {
-        return variable;
+    public Variable getIterator() {
+        return super.iterator;
+    }
+
+    @Override
+    public void accept(ParserVisitor parserVisitor) {
+        parserVisitor.visit(this);
     }
 
 
