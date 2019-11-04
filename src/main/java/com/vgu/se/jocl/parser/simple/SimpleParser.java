@@ -19,7 +19,11 @@ limitations under the License.
 package com.vgu.se.jocl.parser.simple;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -52,8 +56,8 @@ public class SimpleParser implements Parser {
     private List<String> stringArray = new ArrayList<String>();
     private List<String> parenthesisArray = new ArrayList<String>();
     private Stack<Variable> variableStack = new Stack<Variable>();
-    private String adhocCtx;
-    
+    private Set<Variable> adhocContextualSet = new HashSet<>();
+
     private void houseCleanup() {
         this.stringArray.clear();
         this.parenthesisArray.clear();
@@ -61,8 +65,9 @@ public class SimpleParser implements Parser {
     }
 
     @Override
-    public void setAdhocCtx(String adhocCtx) {
-        this.adhocCtx = adhocCtx;
+    public void putAdhocContextualSet(Variable v) {
+        this.adhocContextualSet.remove(v);
+        this.adhocContextualSet.add(v);
     }
 
     /**
@@ -201,7 +206,7 @@ public class SimpleParser implements Parser {
                 throw new OclParserException(
                         "Cannot parse " + className + " type");
             }
-            
+
             OclExp dotOpCall = null;
 
             if (UMLContextUtils.isPropertyOfClass(ctx, className,
@@ -215,7 +220,7 @@ public class SimpleParser implements Parser {
                     className, right)) {
                 dotOpCall = new AssociationClassCallExp(variable,
                         right);
-                
+
                 String assocName = UMLContextUtils.getAssociation(ctx,
                         className, right);
 
@@ -235,16 +240,20 @@ public class SimpleParser implements Parser {
                         .setOppositeAssociationEndType(new Type(
                                 "Col(" + opposClassName + ")"));
 
-                type = new Type("Col("
-                        + variable.getType().getReferredType() + ")");
+                type = new Type("Col(" + opposClassName + ")");
                 dotOpCall.setType(type);
+
+            } else {
+                throw new OclParserException(
+                        "Cannot parse " + className);
             }
 
             return dotOpCall;
         }
     }
 
-    private OclExp parseArrowCase(Matcher m, String ocl, JSONArray ctx) {
+    private OclExp parseArrowCase(Matcher m, String ocl,
+            JSONArray ctx) {
 
         String source = trim(m.group(1));
         String body = trim(replace(m.group(3)));
@@ -279,6 +288,11 @@ public class SimpleParser implements Parser {
                         iterator + " already existed!");
             }
 
+            if (this.adhocContextualSet.contains(variable)) {
+                throw new OclParserException(
+                        iterator + " is defined as free variable!");
+            }
+
             body = trim(body.replaceFirst(iteratorDeclRx, "$2"));
 
             this.variableStack.push(variable);
@@ -289,7 +303,7 @@ public class SimpleParser implements Parser {
         OclExp bodyExp = "".equals(body) ? null
                 : parseOclExp(body, ctx);
 
-        if (body.matches(iteratorDeclRx)) {
+        if (!iterator.equals("iterator")) {
             this.variableStack.pop();
         }
 
@@ -377,23 +391,21 @@ public class SimpleParser implements Parser {
                 type.setType(new Type(input));
 
                 return type;
-            } else if ("self".equals(input)) {
-                if (this.adhocCtx == null) {
-                    return new VariableExp(
-                            new Variable(input, new Type()));
-                }
-
-                return new VariableExp(
-                        new Variable(input, new Type(this.adhocCtx)));
             } else {
                 for (int i = 0; i < this.variableStack.size(); i++) {
-                    if (this.variableStack.get(i).getName().equals(input)) {
-                        return new VariableExp(this.variableStack.get(i));
+                    if (this.variableStack.get(i).getName()
+                            .equals(input)) {
+                        return new VariableExp(
+                                this.variableStack.get(i));
+                    }
+                }
+
+                for (Variable v : this.adhocContextualSet) {
+                    if (v.getName().equals(input)) {
+                        return new VariableExp(v);
                     }
                 }
             }
-
-            return new VariableExp(new Variable(input, new Type()));
 
         } else {
             throw new OclParserException(input + "\n======\n"
@@ -564,7 +576,6 @@ public class SimpleParser implements Parser {
         case asOrderedSet:
         case asSequence:
         case asSet:
-        case collect:
         case excluding:
         case flatten:
         case including:
@@ -590,6 +601,9 @@ public class SimpleParser implements Parser {
         case one:
         case size:
             return new Type("Integer");
+        case collect:
+            return new Type(body.getType().getReferredType()
+                    .replaceAll("Col\\((\\w+)\\)", "$1"));
         default:
             return type;
         }
