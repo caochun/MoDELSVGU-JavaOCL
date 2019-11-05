@@ -89,6 +89,10 @@ public class SimpleParser implements Parser {
     }
 
     private OclExp parseOclExp(String ocl, JSONArray ctx) {
+        
+        if (Pattern.matches("\\(\\d+\\)", ocl)) {
+            ocl = decode(ocl).replaceAll("^\\((.*)\\)$", "$1");
+        };
 
         OclExp oclExp = parseCallExp(ocl, ctx);
 
@@ -426,7 +430,7 @@ public class SimpleParser implements Parser {
     private String decode(String encOcl) {
         String decOcl = String.copyValueOf(encOcl.toCharArray());
 
-        Pattern p = Pattern.compile("((\\w+)\\()(\\d+)(\\)(.*))");
+        Pattern p = Pattern.compile("((.*)\\()(\\d+)(\\)(.*))");
         Pattern s = Pattern.compile("(.*)(\\{(\\d+)\\})(.*)");
 
         Matcher mP = p.matcher(decOcl);
