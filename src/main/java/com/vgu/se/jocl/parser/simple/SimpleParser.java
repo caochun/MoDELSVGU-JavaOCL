@@ -58,6 +58,8 @@ public class SimpleParser implements Parser {
     private Stack<Variable> variableStack = new Stack<Variable>();
     private Set<Variable> adhocContextualSet = new HashSet<>();
 
+    private JSONArray ctx;
+
     private void houseCleanup() {
         this.stringArray.clear();
         this.parenthesisArray.clear();
@@ -82,6 +84,7 @@ public class SimpleParser implements Parser {
     @Override
     public OclExp parse(String ocl, JSONArray ctx) {
         houseCleanup();
+        this.ctx = ctx;
 
         String encOcl = encode(ocl);
 
@@ -89,10 +92,11 @@ public class SimpleParser implements Parser {
     }
 
     private OclExp parseOclExp(String ocl, JSONArray ctx) {
-        
+
         if (Pattern.matches("\\(\\d+\\)", ocl)) {
             ocl = decode(ocl).replaceAll("^\\((.*)\\)$", "$1");
-        };
+        }
+        ;
 
         OclExp oclExp = parseCallExp(ocl, ctx);
 
@@ -190,7 +194,8 @@ public class SimpleParser implements Parser {
 
             OclExp[] argumentExps = new OclExp[arguments.length];
             for (int i = 0; i < arguments.length; i++) {
-                argumentExps[i] = parse(arguments[i], ctx);
+//                argumentExps[i] = parse(arguments[i], ctx);
+                argumentExps[i] = parseOclExp(arguments[i], ctx);
             }
 
             type = getOperationExpType(operation, leftExp,
@@ -203,30 +208,30 @@ public class SimpleParser implements Parser {
             return opCallExp;
 
         } else {
-            OclExp variable = parseOclExp(left, ctx);
-            String className = variable.getType().getReferredType();
+            OclExp src = parseOclExp(left, ctx);
+            String srcType = src.getType().getReferredType();
 
-            if ("Unknown".equals(className)) {
+            if ("Unknown".equals(srcType)) {
                 throw new OclParserException(
-                        "Cannot parse " + className + " type");
+                        "Cannot parse " + srcType + " type");
             }
 
             OclExp dotOpCall = null;
 
-            if (UMLContextUtils.isPropertyOfClass(ctx, className,
+            if (UMLContextUtils.isPropertyOfClass(ctx, srcType,
                     right)) {
-                dotOpCall = new PropertyCallExp(variable, right);
+                dotOpCall = new PropertyCallExp(src, right);
                 type = new Type(UMLContextUtils.getAttributeType(ctx,
-                        className, right));
+                        srcType, right));
                 dotOpCall.setType(type);
 
             } else if (UMLContextUtils.isAssociationEndOfClass(ctx,
-                    className, right)) {
-                dotOpCall = new AssociationClassCallExp(variable,
+                    srcType, right)) {
+                dotOpCall = new AssociationClassCallExp(src,
                         right);
 
                 String assocName = UMLContextUtils.getAssociation(ctx,
-                        className, right);
+                        srcType, right);
 
                 ((AssociationClassCallExp) dotOpCall)
                         .setAssociation(assocName);
@@ -238,7 +243,7 @@ public class SimpleParser implements Parser {
 
                 String opposClassName = UMLContextUtils
                         .getAssociationOppositeClassName(ctx, assocName,
-                                className);
+                                srcType);
 
                 ((AssociationClassCallExp) dotOpCall)
                         .setOppositeAssociationEndType(new Type(
@@ -249,7 +254,7 @@ public class SimpleParser implements Parser {
 
             } else {
                 throw new OclParserException(
-                        "Cannot parse " + className);
+                        "Cannot parse " + srcType);
             }
 
             return dotOpCall;
@@ -541,11 +546,12 @@ public class SimpleParser implements Parser {
     private Type getOperationExpType(String operationName,
             OclExp leftExp, OclExp... exps) {
 
+        String leftExpType = leftExp.getType().getReferredType();
+
         Type opType = new Type();
         switch (operationName) {
         case "allInstances":
-            opType = new Type(
-                    "Col(" + leftExp.getType().getReferredType() + ")");
+            opType = new Type("Col(" + leftExpType + ")");
             return opType;
         case "not":
         case "=":
@@ -556,7 +562,20 @@ public class SimpleParser implements Parser {
         case "<=":
         case "and":
         case "or":
+        case "oclIsUndefined":
+        case "oclIsKindOf":
+        case "oclIsTypeOf":
             opType = new Type("Boolean");
+            return opType;
+        case "oclAsType":
+            String argType = exps[0].getType().getReferredType();
+            if (!UMLContextUtils.isSuperClassOf(this.ctx, leftExpType,
+                    argType)) {
+                throw new OclParserException("\n======\n"
+                        + "Cannot perform casting!");
+            }
+
+            opType = new Type(argType);
             return opType;
         default:
             return opType;
