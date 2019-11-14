@@ -94,7 +94,7 @@ public class SimpleParser implements Parser {
     private OclExp parseOclExp(String ocl, JSONArray ctx) {
 
         if (Pattern.matches("\\(\\d+\\)", ocl)) {
-            ocl = decode(ocl).replaceAll("^\\((.*)\\)$", "$1");
+            ocl = revertOclStr(ocl, true).replaceAll("^\\((.*)\\)$", "$1");
         }
         ;
 
@@ -430,6 +430,33 @@ public class SimpleParser implements Parser {
         encOcl = extractParenthesis(encOcl);
 
         return encOcl;
+    }
+
+    private String revertOclStr(String encOcl, boolean stillRun) {
+        String decOcl = String.copyValueOf(encOcl.toCharArray());
+
+        Pattern p = Pattern.compile("((.*)\\()(\\d+)(\\)(.*))");
+        Pattern s = Pattern.compile("(.*)(\\{(\\d+)\\})(.*)");
+
+        Matcher mP = p.matcher(decOcl);
+        if (mP.find()) {
+            String content = this.parenthesisArray
+                    .get(Integer.parseInt(mP.group(3)));
+            decOcl = decOcl.replaceFirst(p.pattern(),
+                    "$1" + content + "$4");
+            mP = p.matcher(decOcl);
+        }
+
+        Matcher mS = s.matcher(decOcl);
+        while (mS.find()) {
+            String content = this.stringArray
+                    .get(Integer.parseInt(mS.group(3)));
+            decOcl = decOcl.replaceFirst(s.pattern(),
+                    "$1" + "'" + content + "'" + "$4");
+            mS = s.matcher(decOcl);
+        }
+
+        return decOcl;
     }
 
     private String decode(String encOcl) {
