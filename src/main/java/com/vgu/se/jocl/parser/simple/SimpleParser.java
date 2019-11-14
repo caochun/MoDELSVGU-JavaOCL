@@ -94,19 +94,19 @@ public class SimpleParser implements Parser {
     private OclExp parseOclExp(String ocl, JSONArray ctx) {
 
         if (Pattern.matches("\\(\\d+\\)", ocl)) {
-            ocl = revertOclStr(ocl, true).replaceAll("^\\((.*)\\)$", "$1");
+            ocl = decode(ocl, true).replaceAll("^\\((.*)\\)$", "$1");
         }
         ;
 
         OclExp oclExp = parseCallExp(ocl, ctx);
 
         if (oclExp != null) {
-            oclExp.setOclStr(decode(ocl));
+            oclExp.setOclStr(decode(ocl, false));
             return oclExp;
         }
 
         OclExp litExp = parseLiteralExp(ocl, ctx);
-        litExp.setOclStr(decode(ocl));
+        litExp.setOclStr(decode(ocl, false));
 
         return litExp;
     }
@@ -432,46 +432,29 @@ public class SimpleParser implements Parser {
         return encOcl;
     }
 
-    private String revertOclStr(String encOcl, boolean stillRun) {
+    private String decode(String encOcl, boolean isStillRunning) {
         String decOcl = String.copyValueOf(encOcl.toCharArray());
 
         Pattern p = Pattern.compile("((.*)\\()(\\d+)(\\)(.*))");
         Pattern s = Pattern.compile("(.*)(\\{(\\d+)\\})(.*)");
 
         Matcher mP = p.matcher(decOcl);
-        if (mP.find()) {
-            String content = this.parenthesisArray
-                    .get(Integer.parseInt(mP.group(3)));
-            decOcl = decOcl.replaceFirst(p.pattern(),
-                    "$1" + content + "$4");
-            mP = p.matcher(decOcl);
-        }
-
-        Matcher mS = s.matcher(decOcl);
-        while (mS.find()) {
-            String content = this.stringArray
-                    .get(Integer.parseInt(mS.group(3)));
-            decOcl = decOcl.replaceFirst(s.pattern(),
-                    "$1" + "'" + content + "'" + "$4");
-            mS = s.matcher(decOcl);
-        }
-
-        return decOcl;
-    }
-
-    private String decode(String encOcl) {
-        String decOcl = String.copyValueOf(encOcl.toCharArray());
-
-        Pattern p = Pattern.compile("((.*)\\()(\\d+)(\\)(.*))");
-        Pattern s = Pattern.compile("(.*)(\\{(\\d+)\\})(.*)");
-
-        Matcher mP = p.matcher(decOcl);
-        while (mP.find()) {
-            String content = this.parenthesisArray
-                    .get(Integer.parseInt(mP.group(3)));
-            decOcl = decOcl.replaceFirst(p.pattern(),
-                    "$1" + content + "$4");
-            mP = p.matcher(decOcl);
+        if (isStillRunning) {
+            if (mP.find()) {
+                String content = this.parenthesisArray
+                        .get(Integer.parseInt(mP.group(3)));
+                decOcl = decOcl.replaceFirst(p.pattern(),
+                        "$1" + content + "$4");
+                mP = p.matcher(decOcl);
+            }
+        } else {
+            while (mP.find()) {
+                String content = this.parenthesisArray
+                        .get(Integer.parseInt(mP.group(3)));
+                decOcl = decOcl.replaceFirst(p.pattern(),
+                        "$1" + content + "$4");
+                mP = p.matcher(decOcl);
+            }
         }
 
         Matcher mS = s.matcher(decOcl);
