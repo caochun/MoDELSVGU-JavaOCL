@@ -44,4 +44,8 @@ public class VariableExp extends OclExp {
         parserVisitor.visit(this);
     }
     
+    @Override
+    public String toString() {
+        return this.variable.toString();
+    }
 }
