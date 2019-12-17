@@ -33,6 +33,7 @@ import org.json.simple.JSONArray;
 import com.vgu.se.jocl.exception.OclParserException;
 import com.vgu.se.jocl.expressions.AssociationClassCallExp;
 import com.vgu.se.jocl.expressions.BooleanLiteralExp;
+import com.vgu.se.jocl.expressions.Expression;
 import com.vgu.se.jocl.expressions.IntegerLiteralExp;
 import com.vgu.se.jocl.expressions.IteratorExp;
 import com.vgu.se.jocl.expressions.IteratorKind;
@@ -47,9 +48,13 @@ import com.vgu.se.jocl.expressions.StringLiteralExp;
 import com.vgu.se.jocl.expressions.TypeExp;
 import com.vgu.se.jocl.expressions.Variable;
 import com.vgu.se.jocl.expressions.VariableExp;
+import com.vgu.se.jocl.expressions.sql.SqlExp;
+import com.vgu.se.jocl.expressions.sql.SqlFunctionExp;
 import com.vgu.se.jocl.parser.interfaces.Parser;
 import com.vgu.se.jocl.types.Type;
 import com.vgu.se.jocl.utils.UMLContextUtils;
+
+import com.vgu.se.jocl.expressions.sql.SqlExp;
 
 public class SimpleParser implements Parser {
 
@@ -96,17 +101,16 @@ public class SimpleParser implements Parser {
         if (Pattern.matches("\\(\\d+\\)", ocl)) {
             ocl = decode(ocl, true).replaceAll("^\\((.*)\\)$", "$1");
         }
-        ;
 
         OclExp oclExp = parseCallExp(ocl, ctx);
 
         if (oclExp != null) {
-            oclExp.setOclStr(decode(ocl, false));
+            oclExp.setOclStr(decode(ocl));
             return oclExp;
         }
 
         OclExp litExp = parseLiteralExp(ocl, ctx);
-        litExp.setOclStr(decode(ocl, false));
+        litExp.setOclStr(decode(ocl));
 
         return litExp;
     }
@@ -147,16 +151,31 @@ public class SimpleParser implements Parser {
         String source = trim(m.group(1));
         String operator = trim(m.group(2));
         String body = trim(m.group(3));
+        
+        Expression sourceExp = getExp(source);
+        Expression bodyExp = getExp(body);
+        
+        Type type = getOperationExpType(operator, sourceExp, bodyExp);
 
-        OclExp sourceOcl = parseOclExp(source, ctx);
-        OclExp bodyOcl = parseOclExp(body, ctx);
-        Type type = getOperationExpType(operator, sourceOcl, bodyOcl);
-
-        OperationCallExp opCallExp = new OperationCallExp(sourceOcl,
-                new Operation(operator), bodyOcl);
+        OperationCallExp opCallExp = new OperationCallExp(sourceExp,
+                new Operation(operator), bodyExp);
         opCallExp.setType(type);
 
         return opCallExp;
+    }
+    
+    private boolean isSqlFunction(String oclString) {
+        return Pattern.matches(ParserPatterns.SQL_FUNCTION, oclString);
+    }
+    
+    private Expression getExp(String exp) {
+        if (isSqlFunction(exp)) {
+            exp = decode(exp).trim();
+            exp = exp.replaceAll("\\@SQL\\((.*)\\)", "$1");
+            return new SqlFunctionExp(exp);
+        }
+        
+        return parseOclExp(exp, ctx);
     }
 
     private OclExp parseCallExp(Matcher m, String ocl, JSONArray ctx) {
@@ -358,6 +377,10 @@ public class SimpleParser implements Parser {
          * parser will throw an Error.
          */
         final String REAL_LITERAL_STR = "^-?(\\d+(_\\d+)*.\\d+)(?<!_)$";
+        
+        /*
+         * temporary for SQL literal
+         * */
 
         if (input.matches(NUMERIC_LITERAL_STR)) {
 
@@ -415,7 +438,6 @@ public class SimpleParser implements Parser {
                     }
                 }
             }
-
         } else {
             throw new OclParserException(input + "\n======\n"
                     + "Invalid OCL Literal Expression!");
@@ -431,15 +453,20 @@ public class SimpleParser implements Parser {
 
         return encOcl;
     }
+    
+    private String decode(String encOcl) {
+        return decode(encOcl, false);
+    }
 
-    private String decode(String encOcl, boolean isStillRunning) {
+    private String decode(String encOcl, boolean shallow) {
+        
         String decOcl = String.copyValueOf(encOcl.toCharArray());
 
         Pattern p = Pattern.compile("((.*)\\()(\\d+)(\\)(.*))");
         Pattern s = Pattern.compile("(.*)(\\{(\\d+)\\})(.*)");
 
         Matcher mP = p.matcher(decOcl);
-        if (isStillRunning) {
+        if (shallow) {
             if (mP.find()) {
                 String content = this.parenthesisArray
                         .get(Integer.parseInt(mP.group(3)));
@@ -554,9 +581,13 @@ public class SimpleParser implements Parser {
     }
 
     private Type getOperationExpType(String operationName,
-            OclExp leftExp, OclExp... exps) {
+            Expression leftExp, Expression... exps) {
+        
+        String leftExpType = "";
 
-        String leftExpType = leftExp.getType().getReferredType();
+        if (leftExp instanceof OclExp) {
+            leftExpType = leftExp.getType().getReferredType();
+        }
 
         Type opType = new Type();
         switch (operationName) {

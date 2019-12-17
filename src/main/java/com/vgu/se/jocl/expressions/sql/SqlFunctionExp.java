@@ -17,10 +17,18 @@ limitations under the License.
 ***************************************************************************/
 
 
-package com.vgu.se.jocl.expressions;
+package com.vgu.se.jocl.expressions.sql;
 
-public abstract class CallExp extends OclExp {
+import com.vgu.se.jocl.expressions.Expression;
 
-    protected Expression source;
+public class SqlFunctionExp extends SqlExp {
+
+    public SqlFunctionExp(String name) {
+        super(name);
+    }
     
+    @Override
+    public String toString() {
+        return super.getName();
+    }
 }

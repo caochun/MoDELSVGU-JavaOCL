@@ -74,7 +74,8 @@ public class ParserPatterns {
     public static final String NOT_OP_STR = "(.*)\\b(not)\\b(\\(?\\w+\\)?.*)";
     public static final String NOT_OR_NEGATIVE_OP_STR = "(.*)(\\bnot\\b|-(?=\\d++(\\.\\d+)?))\\b(.*)";
     public static final String DOT_OR_ARROW_OP_STR = "(.*)(\\.|\\-\\>)(.*)";
-
+//    public static final String SQL_FUNCTION = "@SQL_\\w+\\(?\\w+\\)?";
+    public static final String SQL_FUNCTION = "@SQL\\(\\w+\\)";
 
     // Pattern from String
     public static final Pattern IMPLIES_OP_PATT = Pattern.compile(IMPLIES_OP_STR);

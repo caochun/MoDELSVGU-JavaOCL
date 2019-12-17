@@ -25,21 +25,28 @@ import com.vgu.se.jocl.visit.ParserVisitor;
 
 public class OperationCallExp extends FeatureCallExp {
 
-    private List<OclExp> arguments;
+    private List<Expression> arguments;
     private Operation referredOperation;
 
-    public OperationCallExp(OclExp source, Operation referredOperation, 
-            OclExp... arguments) {
+//    public OperationCallExp(OclExp source, Operation referredOperation, 
+//            OclExp... arguments) {
+//        super.source = source;
+//        this.referredOperation = referredOperation;
+//        this.arguments = Arrays.asList(arguments);
+//    }
+
+    public OperationCallExp(Expression source, Operation referredOperation, 
+            Expression... arguments) {
         super.source = source;
         this.referredOperation = referredOperation;
         this.arguments = Arrays.asList(arguments);
     }
 
-    public List<OclExp> getArguments() {
+    public List<Expression> getArguments() {
         return arguments;
     }
 
-    public OclExp getSource () {
+    public Expression getSource () {
         return super.source;
     }
 

@@ -59,26 +59,12 @@ public class ParserTest {
     }
 
     public static void main(String[] args) throws ParseException {
-        String className = "Car";
-        String assocEnd = "owners";
-
-        for (int i = 0; i < plainUMLContext.size(); i++ ) {
-            JSONObject o = (JSONObject) plainUMLContext.get(i);
-            
-            if (o.containsKey("association")) {
-                JSONArray classes = (JSONArray) o.get("classes");
-                JSONArray ends = (JSONArray) o.get("ends");
-                
-                if (classes.get(0).equals(className) && 
-                        ends.get(1).equals(assocEnd)) {
-                    
-                }
-                
-                if (classes.get(1).equals(className) && 
-                        ends.get(0).equals(assocEnd)) {
-                    
-                }
-            }
+        SimpleParser parser = new SimpleParser();
+        String[] ocls = getTestCases();
+        
+        for (int i = 0; i < ocls.length; i++) {
+            OclExp result = parser.parse(ocls[i], plainUMLContext);
+            System.out.println(result);
         }
     }
 
@@ -98,7 +84,8 @@ public class ParserTest {
 
 //             "Car.allInstances()",
 //             "Car.allInstances()->asSet()",
-//             "Car.allInstances()->collect(c|c)",
+//             "Car.allInstances()->collect(c|c.color < @SQL_CURDATE())",
+             "Car.allInstances()->collect(c|@SQL(format(getdate(),'dd-MM-yy')) < c.color)",
 //             "Car.allInstances()->collect(c|c.color)",
 //             "Car.allInstances()->collect(c|c.color)->asSet()",
 //             "Car.allInstances()->collect(c|c.color)->isEmpty()",
@@ -153,7 +140,7 @@ public class ParserTest {
 //             "self.ownedCars->exists(c|c.color = 'black')",
 //             "Car.allInstances()->exists(c|c.owners->exists(p|p = self))",
 //             "Car.allInstances()->exists(c|c.owners->exists(p|p.ownedCars->size() < self.ownedCars->size()))",
-             "Car.allInstances()->exists(c| c.color = 'blue')",
+//             "Car.allInstances()->exists(c| c.color = 'blue')",
 
         };
         
