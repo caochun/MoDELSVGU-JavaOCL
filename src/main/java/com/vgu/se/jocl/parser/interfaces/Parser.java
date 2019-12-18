@@ -21,6 +21,7 @@ package com.vgu.se.jocl.parser.interfaces;
 
 import org.json.simple.JSONArray;
 
+import com.vgu.se.jocl.expressions.Expression;
 import com.vgu.se.jocl.expressions.OclExp;
 import com.vgu.se.jocl.expressions.Variable;
 import com.vgu.se.jocl.parser.simple.SimpleParser;
@@ -28,7 +29,7 @@ import com.vgu.se.jocl.visit.ParserVisitor;
 
 public interface Parser {
     
-    OclExp parse(String ocl, JSONArray ctx);
+    Expression parse(String ocl, JSONArray ctx);
 
     void putAdhocContextualSet(Variable var);
     

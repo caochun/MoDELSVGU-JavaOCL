@@ -22,23 +22,23 @@ package com.vgu.se.jocl.expressions;
 import com.vgu.se.jocl.types.Type;
 
 public class Variable {
-    private OclExp initExp;
+    private Expression initExp;
     private String name;
     private Type type;
-    private OclExp source;
+    private Expression source;
     
     public Variable(String name, Type type) {
         this.name = name;
         this.type = type;
     }
 
-    public Variable(OclExp source, String name, Type type) {
+    public Variable(Expression source, String name, Type type) {
         this.source = source;
         this.name = name;
         this.type = type;
     }
 
-    public OclExp getInitExp() {
+    public Expression getInitExp() {
         return initExp;
     }
 
@@ -62,7 +62,7 @@ public class Variable {
         this.type = type;
     }
     
-    public OclExp getSource() {
+    public Expression getSource() {
         return source;
     }
 

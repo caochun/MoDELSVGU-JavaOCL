@@ -20,9 +20,12 @@ limitations under the License.
 package com.vgu.se.jocl.expressions;
 
 import com.vgu.se.jocl.types.Type;
+import com.vgu.se.jocl.visit.ParserVisitable;
+import com.vgu.se.jocl.visit.ParserVisitor;
 
-public abstract class Expression {
+public abstract class Expression implements ParserVisitable {
     protected Type type;
+    protected String oclStr;
 
     public Type getType() {
         return type;
@@ -32,4 +35,23 @@ public abstract class Expression {
         this.type = type;
     }
 
+    public String getOclStr() {
+        return oclStr;
+    }
+
+    public void setOclStr(String oclStr) {
+        this.oclStr = oclStr;
+    }
+
+    @Override
+    public void accept(ParserVisitor visitor) {
+        visitor.visit(this);
+    }
+    
+    @Override
+    public String toString() {
+        return "Expression String : " + oclStr + "\n"
+                + "Type : " + type + "\n";
+    }
+    
 }

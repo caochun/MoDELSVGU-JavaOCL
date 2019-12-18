@@ -30,6 +30,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import com.vgu.se.jocl.expressions.Expression;
 import com.vgu.se.jocl.expressions.OclExp;
 import com.vgu.se.jocl.parser.simple.SimpleParser;
 import com.vgu.se.jocl.utils.UMLContextUtils;
@@ -63,7 +64,7 @@ public class ParserTest {
         String[] ocls = getTestCases();
         
         for (int i = 0; i < ocls.length; i++) {
-            OclExp result = parser.parse(ocls[i], plainUMLContext);
+            Expression result = parser.parse(ocls[i], plainUMLContext);
             System.out.println(result);
         }
     }
@@ -85,7 +86,7 @@ public class ParserTest {
 //             "Car.allInstances()",
 //             "Car.allInstances()->asSet()",
 //             "Car.allInstances()->collect(c|c.color < @SQL_CURDATE())",
-             "Car.allInstances()->collect(c|@SQL(format(getdate(),'dd-MM-yy')) < c.color)",
+             "Car.allInstances()->collect(c|c.color < @SQL(CURDATE()) )",
 //             "Car.allInstances()->collect(c|c.color)",
 //             "Car.allInstances()->collect(c|c.color)->asSet()",
 //             "Car.allInstances()->collect(c|c.color)->isEmpty()",

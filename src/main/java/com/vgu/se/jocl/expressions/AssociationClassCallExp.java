@@ -33,7 +33,7 @@ public class AssociationClassCallExp extends NavigationCallExp {
     private Type oppositeAssociationEndType;
     private String association;
 
-    public AssociationClassCallExp(OclExp source,
+    public AssociationClassCallExp(Expression source,
             String referredAssociationEnd) {
         super.navigationSource = source;
         this.referredAssociationEnd = referredAssociationEnd;

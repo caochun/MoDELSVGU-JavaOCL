@@ -21,7 +21,7 @@ package com.vgu.se.jocl.expressions;
 
 public abstract class LoopExp extends CallExp {
 
-    protected OclExp body;
+    protected Expression body;
 //    protected OclExp source;
     protected Variable iterator;
 }

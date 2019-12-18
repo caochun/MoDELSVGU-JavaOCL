@@ -26,7 +26,7 @@ public class IteratorExp extends LoopExp {
     
     private String kind;
 
-    public IteratorExp(OclExp source, String kind, Variable iterator, OclExp body) {
+    public IteratorExp(Expression source, String kind, Variable iterator, Expression body) {
         super.source = source;
         super.iterator = iterator;
         super.body = body;
@@ -41,7 +41,7 @@ public class IteratorExp extends LoopExp {
         return this.kind;
     }
 
-    public OclExp getBody() {
+    public Expression getBody() {
         return super.body;
     }
 

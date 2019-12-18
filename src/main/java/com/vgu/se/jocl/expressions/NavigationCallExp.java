@@ -24,13 +24,13 @@ import java.util.List;
 public abstract class NavigationCallExp extends FeatureCallExp {
 
     protected List<OclExp> qualifiers;
-    protected OclExp navigationSource;
+    protected Expression navigationSource;
 
     public List<OclExp> getQualifiers() {
         return qualifiers;
     }
 
-    public OclExp getNavigationSource() {
+    public Expression getNavigationSource() {
         return navigationSource;
     }
     

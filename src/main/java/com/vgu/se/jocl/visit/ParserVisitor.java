@@ -21,6 +21,7 @@ package com.vgu.se.jocl.visit;
 
 import com.vgu.se.jocl.expressions.AssociationClassCallExp;
 import com.vgu.se.jocl.expressions.BooleanLiteralExp;
+import com.vgu.se.jocl.expressions.Expression;
 import com.vgu.se.jocl.expressions.IntegerLiteralExp;
 import com.vgu.se.jocl.expressions.IteratorExp;
 import com.vgu.se.jocl.expressions.LiteralExp;
@@ -30,10 +31,14 @@ import com.vgu.se.jocl.expressions.PropertyCallExp;
 import com.vgu.se.jocl.expressions.RealLiteralExp;
 import com.vgu.se.jocl.expressions.StringLiteralExp;
 import com.vgu.se.jocl.expressions.VariableExp;
+import com.vgu.se.jocl.expressions.sql.SqlExp;
+import com.vgu.se.jocl.expressions.sql.SqlFunctionExp;
 
 public interface ParserVisitor {
     
+    void visit(Expression exp);
     void visit(OclExp oclExp);
+    void visit(SqlExp sqlExp);
 
     void visit(IteratorExp iteratorExp);
 
@@ -50,5 +55,6 @@ public interface ParserVisitor {
     
     void visit(AssociationClassCallExp associationClassCallExp);
     void visit(VariableExp variableExp);
+    void visit(SqlFunctionExp variableExp);
 
 }

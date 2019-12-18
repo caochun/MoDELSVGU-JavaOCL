@@ -87,7 +87,7 @@ public class SimpleParser implements Parser {
      * @return OclExp
      */
     @Override
-    public OclExp parse(String ocl, JSONArray ctx) {
+    public Expression parse(String ocl, JSONArray ctx) {
         houseCleanup();
         this.ctx = ctx;
 
@@ -96,26 +96,26 @@ public class SimpleParser implements Parser {
         return parseOclExp(encOcl, ctx);
     }
 
-    private OclExp parseOclExp(String ocl, JSONArray ctx) {
+    private Expression parseOclExp(String ocl, JSONArray ctx) {
 
         if (Pattern.matches("\\(\\d+\\)", ocl)) {
             ocl = decode(ocl, true).replaceAll("^\\((.*)\\)$", "$1");
         }
 
-        OclExp oclExp = parseCallExp(ocl, ctx);
+        Expression oclExp = parseCallExp(ocl, ctx);
 
         if (oclExp != null) {
             oclExp.setOclStr(decode(ocl));
             return oclExp;
         }
 
-        OclExp litExp = parseLiteralExp(ocl, ctx);
+        Expression litExp = parseLiteralExp(ocl, ctx);
         litExp.setOclStr(decode(ocl));
 
         return litExp;
     }
 
-    private OclExp parseCallExp(String ocl, JSONArray ctx) {
+    private Expression parseCallExp(String ocl, JSONArray ctx) {
 
 //        Implementing the operators patterns from lowest precedence
         Pattern[] patterns = { ParserPatterns.IMPLIES_OP_PATT,
@@ -178,7 +178,7 @@ public class SimpleParser implements Parser {
         return parseOclExp(exp, ctx);
     }
 
-    private OclExp parseCallExp(Matcher m, String ocl, JSONArray ctx) {
+    private Expression parseCallExp(Matcher m, String ocl, JSONArray ctx) {
 
         String operator = m.group(2);
 
@@ -190,7 +190,7 @@ public class SimpleParser implements Parser {
         }
     }
 
-    private OclExp parseDotCase(Matcher m, String ocl, JSONArray ctx) {
+    private Expression parseDotCase(Matcher m, String ocl, JSONArray ctx) {
 
         String left = trim(m.group(1));
         String right = trim(m.group(3));
@@ -201,7 +201,7 @@ public class SimpleParser implements Parser {
 
         if (mRight.find()) {
 //            Used for operation defined in Classifier with paramenters
-            OclExp leftExp = parseOclExp(left, ctx);
+            Expression leftExp = parseOclExp(left, ctx);
 
             String[] arguments = this.parenthesisArray
                     .get(Integer.valueOf(trim(mRight.group(3))))
@@ -211,7 +211,7 @@ public class SimpleParser implements Parser {
                 arguments = new String[0];
             }
 
-            OclExp[] argumentExps = new OclExp[arguments.length];
+            Expression[] argumentExps = new Expression[arguments.length];
             for (int i = 0; i < arguments.length; i++) {
 //                argumentExps[i] = parse(arguments[i], ctx);
                 argumentExps[i] = parseOclExp(arguments[i], ctx);
@@ -227,7 +227,7 @@ public class SimpleParser implements Parser {
             return opCallExp;
 
         } else {
-            OclExp src = parseOclExp(left, ctx);
+            Expression src = parseOclExp(left, ctx);
             String srcType = src.getType().getReferredType();
 
             if ("Unknown".equals(srcType)) {
@@ -235,7 +235,7 @@ public class SimpleParser implements Parser {
                         "Cannot parse " + srcType + " type");
             }
 
-            OclExp dotOpCall = null;
+            Expression dotOpCall = null;
 
             if (UMLContextUtils.isPropertyOfClass(ctx, srcType,
                     right)) {
@@ -280,7 +280,7 @@ public class SimpleParser implements Parser {
         }
     }
 
-    private OclExp parseArrowCase(Matcher m, String ocl,
+    private Expression parseArrowCase(Matcher m, String ocl,
             JSONArray ctx) {
 
         String source = trim(m.group(1));
@@ -296,7 +296,7 @@ public class SimpleParser implements Parser {
 //                + "\nSource: " + source + "\nbody: " + body + "\nkind: "
 //                + kind + "\n\n");
 
-        OclExp sourceExp = parseOclExp(source, ctx);
+        Expression sourceExp = parseOclExp(source, ctx);
 
         String iterator = "iterator";
         String iteratorDeclRx = "^(.*)\\|(.*)$";
@@ -328,14 +328,14 @@ public class SimpleParser implements Parser {
 //                    + variableStack);
         }
 
-        OclExp bodyExp = "".equals(body) ? null
+        Expression bodyExp = "".equals(body) ? null
                 : parseOclExp(body, ctx);
 
         if (!iterator.equals("iterator")) {
             this.variableStack.pop();
         }
 
-        OclExp iteratorExp = new IteratorExp(sourceExp, kind, variable,
+        Expression iteratorExp = new IteratorExp(sourceExp, kind, variable,
                 bodyExp);
         Type type = getIteratorExpType(sourceExp, kind, bodyExp);
         iteratorExp.setType(type);
@@ -343,7 +343,7 @@ public class SimpleParser implements Parser {
         return iteratorExp;
     }
 
-    private OclExp parseLiteralExp(String input, JSONArray ctx) {
+    private Expression parseLiteralExp(String input, JSONArray ctx) {
         /**
          * Any character between two single quote '' E.g.: "'Lorem ipsum
          * άλφα 123|, !@#$%^&*('"
@@ -381,6 +381,7 @@ public class SimpleParser implements Parser {
         /*
          * temporary for SQL literal
          * */
+        final String SQL_LITERAL_STR = "\\@SQL\\((.*)\\)";
 
         if (input.matches(NUMERIC_LITERAL_STR)) {
 
@@ -414,6 +415,12 @@ public class SimpleParser implements Parser {
             boolLitExp.setType(new Type("Boolean"));
 
             return boolLitExp;
+
+        } else if (Pattern.matches(SQL_LITERAL_STR, input)) {
+                input = decode(input).trim();
+                input = input.replaceAll("\\@SQL\\((.*)\\)", "$1");
+
+                return new SqlFunctionExp(input);
 
         } else if (input.length() > 0) {
 
@@ -623,8 +630,8 @@ public class SimpleParser implements Parser {
         }
     }
 
-    private Type getIteratorExpType(OclExp source, String kind,
-            OclExp body) {
+    private Type getIteratorExpType(Expression source, String kind,
+            Expression body) {
         Type type = new Type("Invalid");
 
         switch (IteratorKind.valueOf(kind)) {

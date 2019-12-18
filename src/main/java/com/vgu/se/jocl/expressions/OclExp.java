@@ -31,20 +31,9 @@ public abstract class OclExp extends Expression implements ParserVisitable {
     protected CollectionType<?> result;
     protected OperationCallExp parentCall;
 
-    protected String oclStr;
-//    protected Type type;
-
-    public String getOclStr() {
-        return oclStr;
-    }
-
-    public void setOclStr(String oclStr) {
-        this.oclStr = oclStr;
-    }
-
     @Override
     public String toString() {
-        return "Ocl String : " + oclStr + "\nType : " + type + "\n";
+        return "Ocl String : " + super.getOclStr() + "\nType : " + type + "\n";
     }
     
     @Override

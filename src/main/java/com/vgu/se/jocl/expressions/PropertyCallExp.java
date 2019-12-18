@@ -24,7 +24,7 @@ import com.vgu.se.jocl.visit.ParserVisitor;
 public class PropertyCallExp extends NavigationCallExp {
     private String referredProperty;
 
-    public PropertyCallExp(OclExp source, String referredAttributeName) {
+    public PropertyCallExp(Expression source, String referredAttributeName) {
         super.navigationSource = source;
         this.referredProperty = referredAttributeName;
     }
