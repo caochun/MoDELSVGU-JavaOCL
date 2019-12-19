@@ -28,6 +28,7 @@ public class AssociationClassCallExp extends NavigationCallExp {
     private Class referredAssociationClass;
     private String oppositeAssociationEnd;
     private Type oppositeAssociationEndType;
+    private Type referredAssociationEndType;
     private String association;
 
     public AssociationClassCallExp(Expression source,
@@ -87,5 +88,14 @@ public class AssociationClassCallExp extends NavigationCallExp {
     @Override
     public void accept(ParserVisitor parserVisitor) {
         parserVisitor.visit(this);
+    }
+
+    public Type getReferredAssociationEndType() {
+        return referredAssociationEndType;
+    }
+
+    public void setReferredAssociationEndType(
+        Type referredAssociationEndType) {
+        this.referredAssociationEndType = referredAssociationEndType;
     }
 }

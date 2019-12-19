@@ -19,10 +19,8 @@ limitations under the License.
 package com.vgu.se.jocl.parser.simple;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 import java.util.regex.Matcher;
@@ -37,8 +35,10 @@ import com.vgu.se.jocl.expressions.Expression;
 import com.vgu.se.jocl.expressions.IntegerLiteralExp;
 import com.vgu.se.jocl.expressions.IteratorExp;
 import com.vgu.se.jocl.expressions.IteratorKind;
-import com.vgu.se.jocl.expressions.LiteralExp;
+import com.vgu.se.jocl.expressions.M2MAssociationClassCallExp;
 import com.vgu.se.jocl.expressions.NullLiteralExp;
+import com.vgu.se.jocl.expressions.O2MAssociationClassCallExp;
+import com.vgu.se.jocl.expressions.O2OAssociationClassCallExp;
 import com.vgu.se.jocl.expressions.OclExp;
 import com.vgu.se.jocl.expressions.Operation;
 import com.vgu.se.jocl.expressions.OperationCallExp;
@@ -48,13 +48,10 @@ import com.vgu.se.jocl.expressions.StringLiteralExp;
 import com.vgu.se.jocl.expressions.TypeExp;
 import com.vgu.se.jocl.expressions.Variable;
 import com.vgu.se.jocl.expressions.VariableExp;
-import com.vgu.se.jocl.expressions.sql.SqlExp;
 import com.vgu.se.jocl.expressions.sql.SqlFunctionExp;
 import com.vgu.se.jocl.parser.interfaces.Parser;
 import com.vgu.se.jocl.types.Type;
 import com.vgu.se.jocl.utils.UMLContextUtils;
-
-import com.vgu.se.jocl.expressions.sql.SqlExp;
 
 public class SimpleParser implements Parser {
 
@@ -246,30 +243,18 @@ public class SimpleParser implements Parser {
 
             } else if (UMLContextUtils.isAssociationEndOfClass(ctx,
                     srcType, right)) {
-                dotOpCall = new AssociationClassCallExp(src,
-                        right);
-
-                String assocName = UMLContextUtils.getAssociation(ctx,
-                        srcType, right);
-
-                ((AssociationClassCallExp) dotOpCall)
-                        .setAssociation(assocName);
-
-                ((AssociationClassCallExp) dotOpCall)
-                        .setOppositeAssociationEnd(UMLContextUtils
-                                .getOppositeAssociationEnd(ctx,
-                                        assocName, right));
-
-                String opposClassName = UMLContextUtils
-                        .getAssociationOppositeClassName(ctx, assocName,
-                                srcType);
-
-                ((AssociationClassCallExp) dotOpCall)
-                        .setOppositeAssociationEndType(new Type(
-                                opposClassName));
-
-                type = new Type("Col(" + opposClassName + ")");
-                dotOpCall.setType(type);
+                if(true /* association is many to many */) {
+                    dotOpCall = parseM2MAssociationCallExp(ctx, right, src,
+                        srcType);
+                }
+                else if( true /* association is many to one */) {
+                    dotOpCall = parseO2MAssociationCallExp(ctx, right, src,
+                    srcType);
+                } else /* association is one to one */ {
+                    dotOpCall = parseO2OAssociationCallExp(ctx, right, src,
+                        srcType);
+                }
+                
 
             } else {
                 throw new OclParserException(
@@ -278,6 +263,116 @@ public class SimpleParser implements Parser {
 
             return dotOpCall;
         }
+    }
+
+    private Expression parseO2OAssociationCallExp(JSONArray ctx, String right,
+        Expression src, String srcType) {
+        Type type;
+        Expression dotOpCall;
+        dotOpCall = new O2OAssociationClassCallExp(src,
+                right);
+
+        String assocName = UMLContextUtils.getAssociation(ctx,
+                srcType, right);
+
+        ((AssociationClassCallExp) dotOpCall)
+                .setAssociation(assocName);
+
+        ((AssociationClassCallExp) dotOpCall)
+                .setOppositeAssociationEnd(UMLContextUtils
+                        .getOppositeAssociationEnd(ctx,
+                                assocName, right));
+
+        String opposClassName = UMLContextUtils
+                .getAssociationOppositeClassName(ctx, assocName,
+                        srcType);
+
+        ((AssociationClassCallExp) dotOpCall)
+                .setOppositeAssociationEndType(new Type(
+                        opposClassName));
+        
+        ((AssociationClassCallExp) dotOpCall)
+        .setReferredAssociationEndType(new Type(
+                srcType));
+
+        type = new Type(opposClassName);
+        dotOpCall.setType(type);
+        return dotOpCall;
+    }
+
+    private Expression parseO2MAssociationCallExp(JSONArray ctx, String right,
+        Expression src, String srcType) {
+        Type type;
+        Expression dotOpCall;
+        dotOpCall = new O2MAssociationClassCallExp(src,
+                right);
+
+        String assocName = UMLContextUtils.getAssociation(ctx,
+                srcType, right);
+
+        ((AssociationClassCallExp) dotOpCall)
+                .setAssociation(assocName);
+
+        ((AssociationClassCallExp) dotOpCall)
+                .setOppositeAssociationEnd(UMLContextUtils
+                        .getOppositeAssociationEnd(ctx,
+                                assocName, right));
+
+        String opposClassName = UMLContextUtils
+                .getAssociationOppositeClassName(ctx, assocName,
+                        srcType);
+
+        ((AssociationClassCallExp) dotOpCall)
+                .setOppositeAssociationEndType(new Type(
+                        opposClassName));
+        
+        ((AssociationClassCallExp) dotOpCall)
+        .setReferredAssociationEndType(new Type(
+                srcType));
+        
+        if( true /* if this is the many end */) {
+            type = new Type("Col(" + opposClassName + ")");
+        } else /* else, this is the one end */ {
+            type = new Type(opposClassName);
+        }
+        
+        dotOpCall.setType(type);
+        return dotOpCall;
+    }
+
+    private Expression parseM2MAssociationCallExp(JSONArray ctx, String right,
+        Expression src, String srcType) {
+        Type type;
+        Expression dotOpCall;
+        dotOpCall = new M2MAssociationClassCallExp(src,
+                right);
+
+        String assocName = UMLContextUtils.getAssociation(ctx,
+                srcType, right);
+
+        ((AssociationClassCallExp) dotOpCall)
+                .setAssociation(assocName);
+
+        ((AssociationClassCallExp) dotOpCall)
+                .setOppositeAssociationEnd(UMLContextUtils
+                        .getOppositeAssociationEnd(ctx,
+                                assocName, right));
+
+        String opposClassName = UMLContextUtils
+                .getAssociationOppositeClassName(ctx, assocName,
+                        srcType);
+
+        ((AssociationClassCallExp) dotOpCall)
+                .setOppositeAssociationEndType(new Type(
+                        opposClassName));
+        
+        ((AssociationClassCallExp) dotOpCall)
+        .setReferredAssociationEndType(new Type(
+                srcType));
+
+        type = new Type("Col(" + opposClassName + ")");
+        dotOpCall.setType(type);
+        return dotOpCall;
     }
 
     private Expression parseArrowCase(Matcher m, String ocl,
