@@ -18,11 +18,8 @@ limitations under the License.
 
 package com.vgu.se.jocl.expressions;
 
-import java.util.List;
-
 import com.vgu.se.jocl.types.Class;
 import com.vgu.se.jocl.types.Type;
-import com.vgu.se.jocl.utils.UMLContextUtils;
 import com.vgu.se.jocl.visit.ParserVisitor;;
 
 public class AssociationClassCallExp extends NavigationCallExp {

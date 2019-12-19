@@ -266,7 +266,7 @@ public class SimpleParser implements Parser {
 
                 ((AssociationClassCallExp) dotOpCall)
                         .setOppositeAssociationEndType(new Type(
-                                "Col(" + opposClassName + ")"));
+                                opposClassName));
 
                 type = new Type("Col(" + opposClassName + ")");
                 dotOpCall.setType(type);
@@ -306,7 +306,7 @@ public class SimpleParser implements Parser {
             iterator = trim(body.replaceFirst(iteratorDeclRx, "$1"));
 
             String sourceType = sourceExp.getType().getReferredType()
-                    .replaceAll("Col\\((\\w+)\\)", "$1");
+                    .replaceFirst("Col\\((\\w+)\\)", "$1");
 
             Type varType = new Type(sourceType);
             variable = new Variable(sourceExp, iterator, varType);
@@ -673,8 +673,7 @@ public class SimpleParser implements Parser {
         case size:
             return new Type("Integer");
         case collect:
-            return new Type(body.getType().getReferredType()
-                    .replaceAll("Col\\((\\w+)\\)", "$1"));
+            return new Type("Col(" + body.getType().getReferredType() + ")");
         default:
             return type;
         }
