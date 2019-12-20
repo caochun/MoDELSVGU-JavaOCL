@@ -18,6 +18,8 @@ limitations under the License.
 
 package com.vgu.se.jocl.parser;
 
+import java.io.File;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,6 +31,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.vgu.dm2schema.dm.DataModel;
 
 import com.vgu.se.jocl.expressions.Expression;
 import com.vgu.se.jocl.expressions.OclExp;
@@ -59,12 +62,16 @@ public class ParserTest {
         }
     }
 
-    public static void main(String[] args) throws ParseException {
+    public static void main(String[] args) throws ParseException, Exception {
         SimpleParser parser = new SimpleParser();
         String[] ocls = getTestCases();
+
+        File dataModelFile = new File("src/test/resources/university_test.json");
+        DataModel dataModel = new DataModel(new JSONParser().parse(
+                new FileReader(dataModelFile.getAbsolutePath())));
         
         for (int i = 0; i < ocls.length; i++) {
-            Expression result = parser.parse(ocls[i], plainUMLContext);
+            Expression result = parser.parse(ocls[i], dataModel);
             System.out.println(result);
         }
     }
@@ -82,12 +89,14 @@ public class ParserTest {
     
     private static String[] getTestCases() {
         String[] ocls = {
+//                "Student.allInstances()->collect(s|s.enrolls)",
+                "University.allInstances()->collect(u|u.programs)",
 
 //             "Car.allInstances()",
 //             "Car.allInstances()->asSet()",
 //             "Car.allInstances()->collect(c|c.color < @SQL_CURDATE())",
-             "Car.allInstances()->collect(c|c.color < @SQL(CURDATE()) )",
-//             "Car.allInstances()->collect(c|c.color)",
+//             "Car.allInstances()->collect(c|c.color < @SQL(CURDATE()) )",
+//             "Car.allInstances()->collect(c|c.owners)",
 //             "Car.allInstances()->collect(c|c.color)->asSet()",
 //             "Car.allInstances()->collect(c|c.color)->isEmpty()",
 //             "Car.allInstances()->collect(c|c.color)->notEmpty()",

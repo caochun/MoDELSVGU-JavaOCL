@@ -26,7 +26,8 @@ import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.json.simple.JSONArray;
+import org.vgu.dm2schema.dm.DataModel;
+import org.vgu.dm2schema.dm.DmUtils;
 
 import com.vgu.se.jocl.exception.OclParserException;
 import com.vgu.se.jocl.expressions.AssociationClassCallExp;
@@ -51,7 +52,6 @@ import com.vgu.se.jocl.expressions.VariableExp;
 import com.vgu.se.jocl.expressions.sql.SqlFunctionExp;
 import com.vgu.se.jocl.parser.interfaces.Parser;
 import com.vgu.se.jocl.types.Type;
-import com.vgu.se.jocl.utils.UMLContextUtils;
 
 public class SimpleParser implements Parser {
 
@@ -60,7 +60,7 @@ public class SimpleParser implements Parser {
     private Stack<Variable> variableStack = new Stack<Variable>();
     private Set<Variable> adhocContextualSet = new HashSet<>();
 
-    private JSONArray ctx;
+    private DataModel dm;
 
     private void houseCleanup() {
         this.stringArray.clear();
@@ -84,35 +84,35 @@ public class SimpleParser implements Parser {
      * @return OclExp
      */
     @Override
-    public Expression parse(String ocl, JSONArray ctx) {
+    public Expression parse(String ocl, DataModel dm) {
         houseCleanup();
-        this.ctx = ctx;
+        this.dm = dm;
 
         String encOcl = encode(ocl);
 
-        return parseOclExp(encOcl, ctx);
+        return parseOclExp(encOcl, dm);
     }
 
-    private Expression parseOclExp(String ocl, JSONArray ctx) {
+    private Expression parseOclExp(String ocl, DataModel dm) {
 
         if (Pattern.matches("\\(\\d+\\)", ocl)) {
             ocl = decode(ocl, true).replaceAll("^\\((.*)\\)$", "$1");
         }
 
-        Expression oclExp = parseCallExp(ocl, ctx);
+        Expression oclExp = parseCallExp(ocl, dm);
 
         if (oclExp != null) {
             oclExp.setOclStr(decode(ocl));
             return oclExp;
         }
 
-        Expression litExp = parseLiteralExp(ocl, ctx);
+        Expression litExp = parseLiteralExp(ocl, dm);
         litExp.setOclStr(decode(ocl));
 
         return litExp;
     }
 
-    private Expression parseCallExp(String ocl, JSONArray ctx) {
+    private Expression parseCallExp(String ocl, DataModel dm) {
 
 //        Implementing the operators patterns from lowest precedence
         Pattern[] patterns = { ParserPatterns.IMPLIES_OP_PATT,
@@ -129,21 +129,21 @@ public class SimpleParser implements Parser {
         for (Pattern p : patterns) {
             m = p.matcher(ocl);
             if (m.find()) {
-                return parseOperationCallExp(m, ocl, ctx);
+                return parseOperationCallExp(m, ocl, dm);
             }
         }
 
 //        Check the DOT or ARROW pattern
         m = ParserPatterns.DOT_OR_ARROW_OP_PATT.matcher(ocl);
         if (m.find()) {
-            return parseCallExp(m, ocl, ctx);
+            return parseCallExp(m, ocl, dm);
         }
 
         return null;
     }
 
     private OclExp parseOperationCallExp(Matcher m, String ocl,
-            JSONArray ctx) {
+            DataModel dm) {
 
         String source = trim(m.group(1));
         String operator = trim(m.group(2));
@@ -172,22 +172,22 @@ public class SimpleParser implements Parser {
             return new SqlFunctionExp(exp);
         }
         
-        return parseOclExp(exp, ctx);
+        return parseOclExp(exp, dm);
     }
 
-    private Expression parseCallExp(Matcher m, String ocl, JSONArray ctx) {
+    private Expression parseCallExp(Matcher m, String ocl, DataModel dm) {
 
         String operator = m.group(2);
 
         switch (operator) {
         case ".":
-            return parseDotCase(m, ocl, ctx);
+            return parseDotCase(m, ocl, dm);
         default: // "->"
-            return parseArrowCase(m, ocl, ctx);
+            return parseArrowCase(m, ocl, dm);
         }
     }
 
-    private Expression parseDotCase(Matcher m, String ocl, JSONArray ctx) {
+    private Expression parseDotCase(Matcher m, String ocl, DataModel dm) {
 
         String left = trim(m.group(1));
         String right = trim(m.group(3));
@@ -198,7 +198,7 @@ public class SimpleParser implements Parser {
 
         if (mRight.find()) {
 //            Used for operation defined in Classifier with paramenters
-            Expression leftExp = parseOclExp(left, ctx);
+            Expression leftExp = parseOclExp(left, dm);
 
             String[] arguments = this.parenthesisArray
                     .get(Integer.valueOf(trim(mRight.group(3))))
@@ -210,8 +210,8 @@ public class SimpleParser implements Parser {
 
             Expression[] argumentExps = new Expression[arguments.length];
             for (int i = 0; i < arguments.length; i++) {
-//                argumentExps[i] = parse(arguments[i], ctx);
-                argumentExps[i] = parseOclExp(arguments[i], ctx);
+//                argumentExps[i] = parse(arguments[i], dm);
+                argumentExps[i] = parseOclExp(arguments[i], dm);
             }
 
             type = getOperationExpType(operation, leftExp,
@@ -224,7 +224,7 @@ public class SimpleParser implements Parser {
             return opCallExp;
 
         } else {
-            Expression src = parseOclExp(left, ctx);
+            Expression src = parseOclExp(left, dm);
             String srcType = src.getType().getReferredType();
 
             if ("Unknown".equals(srcType)) {
@@ -234,24 +234,21 @@ public class SimpleParser implements Parser {
 
             Expression dotOpCall = null;
 
-            if (UMLContextUtils.isPropertyOfClass(ctx, srcType,
-                    right)) {
+            if (DmUtils.isPropertyOfClass(dm, srcType, right)) {
                 dotOpCall = new PropertyCallExp(src, right);
-                type = new Type(UMLContextUtils.getAttributeType(ctx,
-                        srcType, right));
+                type = new Type(DmUtils.getAttributeType(dm, srcType, right));
                 dotOpCall.setType(type);
 
-            } else if (UMLContextUtils.isAssociationEndOfClass(ctx,
-                    srcType, right)) {
-                if(true /* association is many to many */) {
-                    dotOpCall = parseM2MAssociationCallExp(ctx, right, src,
+            } else if (DmUtils.isAssociationEndOfClass(dm, srcType, right)) {
+                if(DmUtils.isAssocM2M(dm, srcType, right)) {
+                    dotOpCall = parseM2MAssociationCallExp(dm, right, src,
                         srcType);
                 }
-                else if( true /* association is many to one */) {
-                    dotOpCall = parseO2MAssociationCallExp(ctx, right, src,
+                else if(DmUtils.isAssocO2M(dm, srcType, right)) {
+                    dotOpCall = parseO2MAssociationCallExp(dm, right, src,
                     srcType);
                 } else /* association is one to one */ {
-                    dotOpCall = parseO2OAssociationCallExp(ctx, right, src,
+                    dotOpCall = parseO2OAssociationCallExp(dm, right, src,
                         srcType);
                 }
                 
@@ -265,62 +262,55 @@ public class SimpleParser implements Parser {
         }
     }
 
-    private Expression parseO2OAssociationCallExp(JSONArray ctx, String right,
+    private Expression parseO2OAssociationCallExp(DataModel dm, String right,
         Expression src, String srcType) {
         Type type;
         Expression dotOpCall;
         dotOpCall = new O2OAssociationClassCallExp(src,
                 right);
 
-        String assocName = UMLContextUtils.getAssociation(ctx,
+        String assocName = DmUtils.getAssociationName(dm, srcType, right);
+
+        ((AssociationClassCallExp) dotOpCall).setAssociation(assocName);
+
+        ((AssociationClassCallExp) dotOpCall).setOppositeAssociationEnd(
+                DmUtils.getOppositeAssociationName(dm, srcType, right));
+
+        String opposClassName = DmUtils.getAssociationOppClassName(dm,
                 srcType, right);
 
         ((AssociationClassCallExp) dotOpCall)
-                .setAssociation(assocName);
+                .setOppositeAssociationEndType(
+                        new Type(opposClassName));
 
         ((AssociationClassCallExp) dotOpCall)
-                .setOppositeAssociationEnd(UMLContextUtils
-                        .getOppositeAssociationEnd(ctx,
-                                assocName, right));
-
-        String opposClassName = UMLContextUtils
-                .getAssociationOppositeClassName(ctx, assocName,
-                        srcType);
-
-        ((AssociationClassCallExp) dotOpCall)
-                .setOppositeAssociationEndType(new Type(
-                        opposClassName));
-        
-        ((AssociationClassCallExp) dotOpCall)
-        .setReferredAssociationEndType(new Type(
-                srcType));
+                .setReferredAssociationEndType(new Type(srcType));
 
         type = new Type(opposClassName);
         dotOpCall.setType(type);
+
         return dotOpCall;
     }
 
-    private Expression parseO2MAssociationCallExp(JSONArray ctx, String right,
+    private Expression parseO2MAssociationCallExp(DataModel dm, String right,
         Expression src, String srcType) {
         Type type;
         Expression dotOpCall;
         dotOpCall = new O2MAssociationClassCallExp(src,
                 right);
 
-        String assocName = UMLContextUtils.getAssociation(ctx,
-                srcType, right);
+        String assocName = DmUtils.getAssociationName(dm, srcType, right);
 
         ((AssociationClassCallExp) dotOpCall)
                 .setAssociation(assocName);
 
         ((AssociationClassCallExp) dotOpCall)
-                .setOppositeAssociationEnd(UMLContextUtils
-                        .getOppositeAssociationEnd(ctx,
-                                assocName, right));
+                .setOppositeAssociationEnd(DmUtils
+                        .getOppositeAssociationName(dm,
+                                srcType, right));
 
-        String opposClassName = UMLContextUtils
-                .getAssociationOppositeClassName(ctx, assocName,
-                        srcType);
+        String opposClassName = DmUtils
+                .getAssociationOppClassName(dm, srcType, right);
 
         ((AssociationClassCallExp) dotOpCall)
                 .setOppositeAssociationEndType(new Type(
@@ -330,9 +320,9 @@ public class SimpleParser implements Parser {
         .setReferredAssociationEndType(new Type(
                 srcType));
         
-        if( true /* if this is the many end */) {
+        if(DmUtils.isEndMultMany(dm, srcType, right)) {
             type = new Type("Col(" + opposClassName + ")");
-        } else /* else, this is the one end */ {
+        } else /* else, this end's mult is one */ {
             type = new Type(opposClassName);
         }
         
@@ -340,27 +330,26 @@ public class SimpleParser implements Parser {
         return dotOpCall;
     }
 
-    private Expression parseM2MAssociationCallExp(JSONArray ctx, String right,
+    private Expression parseM2MAssociationCallExp(DataModel dm, String right,
         Expression src, String srcType) {
         Type type;
         Expression dotOpCall;
         dotOpCall = new M2MAssociationClassCallExp(src,
                 right);
 
-        String assocName = UMLContextUtils.getAssociation(ctx,
+        String assocName = DmUtils.getAssociationName(dm,
                 srcType, right);
 
         ((AssociationClassCallExp) dotOpCall)
                 .setAssociation(assocName);
 
         ((AssociationClassCallExp) dotOpCall)
-                .setOppositeAssociationEnd(UMLContextUtils
-                        .getOppositeAssociationEnd(ctx,
-                                assocName, right));
+                .setOppositeAssociationEnd(DmUtils
+                        .getOppositeAssociationName(dm, srcType, right));
 
-        String opposClassName = UMLContextUtils
-                .getAssociationOppositeClassName(ctx, assocName,
-                        srcType);
+        String opposClassName = DmUtils
+                .getAssociationOppClassName(dm, srcType,
+                        right);
 
         ((AssociationClassCallExp) dotOpCall)
                 .setOppositeAssociationEndType(new Type(
@@ -376,7 +365,7 @@ public class SimpleParser implements Parser {
     }
 
     private Expression parseArrowCase(Matcher m, String ocl,
-            JSONArray ctx) {
+            DataModel dm) {
 
         String source = trim(m.group(1));
         String body = trim(replace(m.group(3)));
@@ -391,7 +380,7 @@ public class SimpleParser implements Parser {
 //                + "\nSource: " + source + "\nbody: " + body + "\nkind: "
 //                + kind + "\n\n");
 
-        Expression sourceExp = parseOclExp(source, ctx);
+        Expression sourceExp = parseOclExp(source, dm);
 
         String iterator = "iterator";
         String iteratorDeclRx = "^(.*)\\|(.*)$";
@@ -424,7 +413,7 @@ public class SimpleParser implements Parser {
         }
 
         Expression bodyExp = "".equals(body) ? null
-                : parseOclExp(body, ctx);
+                : parseOclExp(body, dm);
 
         if (!iterator.equals("iterator")) {
             this.variableStack.pop();
@@ -438,7 +427,7 @@ public class SimpleParser implements Parser {
         return iteratorExp;
     }
 
-    private Expression parseLiteralExp(String input, JSONArray ctx) {
+    private Expression parseLiteralExp(String input, DataModel dm) {
         /**
          * Any character between two single quote '' E.g.: "'Lorem ipsum
          * άλφα 123|, !@#$%^&*('"
@@ -520,7 +509,7 @@ public class SimpleParser implements Parser {
         } else if (input.length() > 0) {
 
             // Check if it's a class
-            if (UMLContextUtils.isClass(ctx, input)) {
+            if (DmUtils.isClass(dm, input)) {
                 TypeExp type = new TypeExp(input);
                 type.setType(new Type(input));
 
@@ -711,15 +700,16 @@ public class SimpleParser implements Parser {
             opType = new Type("Boolean");
             return opType;
         case "oclAsType":
-            String argType = exps[0].getType().getReferredType();
-            if (!UMLContextUtils.isSuperClassOf(this.ctx, leftExpType,
-                    argType)) {
-                throw new OclParserException("\n======\n"
-                        + "Cannot perform casting!");
-            }
-
-            opType = new Type(argType);
-            return opType;
+//            String argType = exps[0].getType().getReferredType();
+//            if (!UMLContextUtils.isSuperClassOf(this.dm, leftExpType,
+//                    argType)) {
+//                throw new OclParserException("\n======\n"
+//                        + "Cannot perform casting!");
+//            }
+//            opType = new Type(argType);
+//            return opType;
+            throw new OclParserException("\n======\n"
+                    + operationName + " not supported!");
         default:
             return opType;
         }
