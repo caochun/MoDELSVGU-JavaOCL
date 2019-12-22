@@ -244,8 +244,8 @@ public class SimpleParser implements Parser {
                     dotOpCall = parseM2MAssociationCallExp(dm, right, src,
                         srcType);
                 }
-                else if(DmUtils.isAssocO2M(dm, srcType, right)) {
-                    dotOpCall = parseO2MAssociationCallExp(dm, right, src,
+                else if(DmUtils.isAssocM2O(dm, srcType, right)) {
+                    dotOpCall = parseM2OAssociationCallExp(dm, right, src,
                     srcType);
                 } else /* association is one to one */ {
                     dotOpCall = parseO2OAssociationCallExp(dm, right, src,
@@ -292,7 +292,7 @@ public class SimpleParser implements Parser {
         return dotOpCall;
     }
 
-    private Expression parseO2MAssociationCallExp(DataModel dm, String right,
+    private Expression parseM2OAssociationCallExp(DataModel dm, String right,
         Expression src, String srcType) {
         Type type;
         Expression dotOpCall;
