@@ -37,39 +37,49 @@ public class AssociationClassCallExp extends NavigationCallExp {
         this.referredAssociationEnd = referredAssociationEnd;
     }
 
-    public Type getOppositeAssociationEndType() {
-        return oppositeAssociationEndType;
-    }
-
-    public void setOppositeAssociationEndType(
-            Type oppositeAssociationEndType) {
-        this.oppositeAssociationEndType = oppositeAssociationEndType;
-    }
-
-    public String getAssociationEnd() {
-        return referredAssociationEnd;
-    }
-
-    public Class getReferredAssociationClass() {
-        return referredAssociationClass;
+    @Override
+    public void accept(ParserVisitor parserVisitor) {
+        parserVisitor.visit(this);
     }
 
     public String getReferredAssociationEnd() {
         return referredAssociationEnd;
     }
 
-    public void setReferredAssociationEnd(
-            String referredAssociationEnd) {
+    public void setReferredAssociationEnd(String referredAssociationEnd) {
         this.referredAssociationEnd = referredAssociationEnd;
+    }
+
+    public Class getReferredAssociationClass() {
+        return referredAssociationClass;
+    }
+
+    public void setReferredAssociationClass(Class referredAssociationClass) {
+        this.referredAssociationClass = referredAssociationClass;
     }
 
     public String getOppositeAssociationEnd() {
         return oppositeAssociationEnd;
     }
 
-    public void setOppositeAssociationEnd(
-            String oppositeAssociationEnd) {
+    public void setOppositeAssociationEnd(String oppositeAssociationEnd) {
         this.oppositeAssociationEnd = oppositeAssociationEnd;
+    }
+
+    public Type getOppositeAssociationEndType() {
+        return oppositeAssociationEndType;
+    }
+
+    public void setOppositeAssociationEndType(Type oppositeAssociationEndType) {
+        this.oppositeAssociationEndType = oppositeAssociationEndType;
+    }
+
+    public Type getReferredAssociationEndType() {
+        return referredAssociationEndType;
+    }
+
+    public void setReferredAssociationEndType(Type referredAssociationEndType) {
+        this.referredAssociationEndType = referredAssociationEndType;
     }
 
     public String getAssociation() {
@@ -79,23 +89,5 @@ public class AssociationClassCallExp extends NavigationCallExp {
     public void setAssociation(String association) {
         this.association = association;
     }
-
-    public void setReferredAssociationClass(
-            Class referredAssociationClass) {
-        this.referredAssociationClass = referredAssociationClass;
-    }
-
-    @Override
-    public void accept(ParserVisitor parserVisitor) {
-        parserVisitor.visit(this);
-    }
-
-    public Type getReferredAssociationEndType() {
-        return referredAssociationEndType;
-    }
-
-    public void setReferredAssociationEndType(
-        Type referredAssociationEndType) {
-        this.referredAssociationEndType = referredAssociationEndType;
-    }
+    
 }

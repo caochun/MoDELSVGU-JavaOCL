@@ -38,7 +38,7 @@ import com.vgu.se.jocl.expressions.IteratorExp;
 import com.vgu.se.jocl.expressions.IteratorKind;
 import com.vgu.se.jocl.expressions.M2MAssociationClassCallExp;
 import com.vgu.se.jocl.expressions.NullLiteralExp;
-import com.vgu.se.jocl.expressions.O2MAssociationClassCallExp;
+import com.vgu.se.jocl.expressions.M2OAssociationClassCallExp;
 import com.vgu.se.jocl.expressions.O2OAssociationClassCallExp;
 import com.vgu.se.jocl.expressions.OclExp;
 import com.vgu.se.jocl.expressions.Operation;
@@ -116,14 +116,13 @@ public class SimpleParser implements Parser {
 
 //        Implementing the operators patterns from lowest precedence
         Pattern[] patterns = { ParserPatterns.IMPLIES_OP_PATT,
-                ParserPatterns.XOR_OP_PATT, ParserPatterns.OR_OP_PATT,
-                ParserPatterns.AND_OP_PATT,
-                ParserPatterns.EQUALITY_OP_PATT,
-                ParserPatterns.COMPARISON_OP_PATT,
+            ParserPatterns.XOR_OP_PATT, ParserPatterns.OR_OP_PATT,
+            ParserPatterns.AND_OP_PATT, ParserPatterns.EQUALITY_OP_PATT,
+            ParserPatterns.COMPARISON_OP_PATT,
 //                ParserPatterns.ADD_OR_SUBTRACT_OP_PATT,
 //                ParserPatterns.MULTIPLY_OR_DIV_OP_PATT,
 //                ParserPatterns.NOT_OR_NEGATIVE_OP_PATT,
-                ParserPatterns.NOT_OP_PATT };
+            ParserPatterns.NOT_OP_PATT };
 
         Matcher m;
         for (Pattern p : patterns) {
@@ -142,36 +141,35 @@ public class SimpleParser implements Parser {
         return null;
     }
 
-    private OclExp parseOperationCallExp(Matcher m, String ocl,
-            DataModel dm) {
+    private OclExp parseOperationCallExp(Matcher m, String ocl, DataModel dm) {
 
         String source = trim(m.group(1));
         String operator = trim(m.group(2));
         String body = trim(m.group(3));
-        
+
         Expression sourceExp = getExp(source);
         Expression bodyExp = getExp(body);
-        
+
         Type type = getOperationExpType(operator, sourceExp, bodyExp);
 
         OperationCallExp opCallExp = new OperationCallExp(sourceExp,
-                new Operation(operator), bodyExp);
+            new Operation(operator), bodyExp);
         opCallExp.setType(type);
 
         return opCallExp;
     }
-    
+
     private boolean isSqlFunction(String oclString) {
         return Pattern.matches(ParserPatterns.SQL_FUNCTION, oclString);
     }
-    
+
     private Expression getExp(String exp) {
         if (isSqlFunction(exp)) {
             exp = decode(exp).trim();
             exp = exp.replaceAll("\\@SQL\\((.*)\\)", "$1");
             return new SqlFunctionExp(exp);
         }
-        
+
         return parseOclExp(exp, dm);
     }
 
@@ -201,8 +199,7 @@ public class SimpleParser implements Parser {
             Expression leftExp = parseOclExp(left, dm);
 
             String[] arguments = this.parenthesisArray
-                    .get(Integer.valueOf(trim(mRight.group(3))))
-                    .split(",");
+                .get(Integer.valueOf(trim(mRight.group(3)))).split(",");
 
             if (arguments.length == 1 & "".equals(arguments[0])) {
                 arguments = new String[0];
@@ -214,11 +211,10 @@ public class SimpleParser implements Parser {
                 argumentExps[i] = parseOclExp(arguments[i], dm);
             }
 
-            type = getOperationExpType(operation, leftExp,
-                    argumentExps);
+            type = getOperationExpType(operation, leftExp, argumentExps);
 
             OperationCallExp opCallExp = new OperationCallExp(leftExp,
-                    new Operation(operation), argumentExps);
+                new Operation(operation), argumentExps);
             opCallExp.setType(type);
 
             return opCallExp;
@@ -229,7 +225,7 @@ public class SimpleParser implements Parser {
 
             if ("Unknown".equals(srcType)) {
                 throw new OclParserException(
-                        "Cannot parse " + srcType + " type");
+                    "Cannot parse " + srcType + " type");
             }
 
             Expression dotOpCall = null;
@@ -240,137 +236,123 @@ public class SimpleParser implements Parser {
                 dotOpCall.setType(type);
 
             } else if (DmUtils.isAssociationEndOfClass(dm, srcType, right)) {
-                if(DmUtils.isAssocM2M(dm, srcType, right)) {
+                if (DmUtils.isAssocM2M(dm, srcType, right)) {
                     dotOpCall = parseM2MAssociationCallExp(dm, right, src,
                         srcType);
-                }
-                else if(DmUtils.isAssocM2O(dm, srcType, right)) {
+                } else if (DmUtils.isAssocM2O(dm, srcType, right)) {
                     dotOpCall = parseM2OAssociationCallExp(dm, right, src,
-                    srcType);
+                        srcType);
                 } else /* association is one to one */ {
                     dotOpCall = parseO2OAssociationCallExp(dm, right, src,
                         srcType);
                 }
-                
 
             } else {
-                throw new OclParserException(
-                        "Cannot parse " + srcType);
+                throw new OclParserException("Cannot parse " + srcType);
             }
 
             return dotOpCall;
         }
     }
 
-    private Expression parseO2OAssociationCallExp(DataModel dm, String right,
-        Expression src, String srcType) {
+    private Expression parseO2OAssociationCallExp(DataModel dm,
+        String referredEnd, Expression src, String srcType) {
         Type type;
         Expression dotOpCall;
-        dotOpCall = new O2OAssociationClassCallExp(src,
-                right);
+        dotOpCall = new O2OAssociationClassCallExp(src, referredEnd);
 
-        String assocName = DmUtils.getAssociationName(dm, srcType, right);
+        String associationTableName = DmUtils.getAssociationName(dm, srcType,
+            referredEnd);
 
-        ((AssociationClassCallExp) dotOpCall).setAssociation(assocName);
+        ((AssociationClassCallExp) dotOpCall)
+            .setAssociation(associationTableName);
 
         ((AssociationClassCallExp) dotOpCall).setOppositeAssociationEnd(
-                DmUtils.getOppositeAssociationName(dm, srcType, right));
+            DmUtils.getAssociationEndSourceClassName(dm, srcType, referredEnd));
 
-        String opposClassName = DmUtils.getAssociationOppClassName(dm,
-                srcType, right);
-
-        ((AssociationClassCallExp) dotOpCall)
-                .setOppositeAssociationEndType(
-                        new Type(opposClassName));
+        String referredClassName = DmUtils.getAssociationEndTargetClassName(dm,
+            srcType, referredEnd);
 
         ((AssociationClassCallExp) dotOpCall)
-                .setReferredAssociationEndType(new Type(srcType));
+            .setReferredAssociationEndType(new Type(referredClassName));
 
-        type = new Type(opposClassName);
+        ((AssociationClassCallExp) dotOpCall)
+            .setOppositeAssociationEndType(new Type(srcType));
+
+        type = new Type(referredClassName);
         dotOpCall.setType(type);
 
         return dotOpCall;
     }
 
-    private Expression parseM2OAssociationCallExp(DataModel dm, String right,
-        Expression src, String srcType) {
+    private Expression parseM2OAssociationCallExp(DataModel dm,
+        String referredEnd, Expression src, String srcType) {
         Type type;
         Expression dotOpCall;
-        dotOpCall = new O2MAssociationClassCallExp(src,
-                right);
+        dotOpCall = new M2OAssociationClassCallExp(src, referredEnd);
 
-        String assocName = DmUtils.getAssociationName(dm, srcType, right);
-
-        ((AssociationClassCallExp) dotOpCall)
-                .setAssociation(assocName);
+        String associationTableName = DmUtils.getAssociationName(dm, srcType,
+            referredEnd);
 
         ((AssociationClassCallExp) dotOpCall)
-                .setOppositeAssociationEnd(DmUtils
-                        .getOppositeAssociationName(dm,
-                                srcType, right));
+            .setAssociation(associationTableName);
 
-        String opposClassName = DmUtils
-                .getAssociationOppClassName(dm, srcType, right);
+        ((AssociationClassCallExp) dotOpCall).setOppositeAssociationEnd(
+            DmUtils.getAssociationEndSourceClassName(dm, srcType, referredEnd));
+
+        String referredClassName = DmUtils.getAssociationEndTargetClassName(dm,
+            srcType, referredEnd);
 
         ((AssociationClassCallExp) dotOpCall)
-                .setOppositeAssociationEndType(new Type(
-                        opposClassName));
-        
+            .setReferredAssociationEndType(new Type(referredClassName));
+
         ((AssociationClassCallExp) dotOpCall)
-        .setReferredAssociationEndType(new Type(
-                srcType));
-        
-        if(DmUtils.isEndMultMany(dm, srcType, right)) {
-            type = new Type("Col(" + opposClassName + ")");
+            .setOppositeAssociationEndType(new Type(srcType));
+
+        if (DmUtils.isEndMultMany(dm, srcType, referredEnd)) {
+            type = new Type("Col(" + referredClassName + ")");
         } else /* else, this end's mult is one */ {
-            type = new Type(opposClassName);
+            type = new Type(referredClassName);
         }
-        
+
         dotOpCall.setType(type);
         return dotOpCall;
     }
 
-    private Expression parseM2MAssociationCallExp(DataModel dm, String right,
-        Expression src, String srcType) {
+    private Expression parseM2MAssociationCallExp(DataModel dm,
+        String referredEnd, Expression src, String srcType) {
         Type type;
         Expression dotOpCall;
-        dotOpCall = new M2MAssociationClassCallExp(src,
-                right);
+        dotOpCall = new M2MAssociationClassCallExp(src, referredEnd);
 
-        String assocName = DmUtils.getAssociationName(dm,
-                srcType, right);
-
-        ((AssociationClassCallExp) dotOpCall)
-                .setAssociation(assocName);
+        String associationTableName = DmUtils.getAssociationName(dm, srcType,
+            referredEnd);
 
         ((AssociationClassCallExp) dotOpCall)
-                .setOppositeAssociationEnd(DmUtils
-                        .getOppositeAssociationName(dm, srcType, right));
+            .setAssociation(associationTableName);
 
-        String opposClassName = DmUtils
-                .getAssociationOppClassName(dm, srcType,
-                        right);
+        ((AssociationClassCallExp) dotOpCall).setOppositeAssociationEnd(
+            DmUtils.getAssociationEndSourceClassName(dm, srcType, referredEnd));
+
+        String referredClassName = DmUtils.getAssociationEndTargetClassName(dm,
+            srcType, referredEnd);
 
         ((AssociationClassCallExp) dotOpCall)
-                .setOppositeAssociationEndType(new Type(
-                        opposClassName));
-        
-        ((AssociationClassCallExp) dotOpCall)
-        .setReferredAssociationEndType(new Type(
-                srcType));
+            .setReferredAssociationEndType(new Type(referredClassName));
 
-        type = new Type("Col(" + opposClassName + ")");
+        ((AssociationClassCallExp) dotOpCall)
+            .setOppositeAssociationEndType(new Type(srcType));
+
+        type = new Type("Col(" + referredClassName + ")");
         dotOpCall.setType(type);
         return dotOpCall;
     }
 
-    private Expression parseArrowCase(Matcher m, String ocl,
-            DataModel dm) {
+    private Expression parseArrowCase(Matcher m, String ocl, DataModel dm) {
 
         String source = trim(m.group(1));
         String body = trim(replace(m.group(3)));
-        String kind = trim(
-                m.group(3).replaceFirst("(\\w*)\\(\\d+\\)", "$1"));
+        String kind = trim(m.group(3).replaceFirst("(\\w*)\\(\\d+\\)", "$1"));
 
         if (IteratorKind.valueOf(kind) == null) {
             throw new OclParserException("Invalid iterator kind!");
@@ -390,19 +372,18 @@ public class SimpleParser implements Parser {
             iterator = trim(body.replaceFirst(iteratorDeclRx, "$1"));
 
             String sourceType = sourceExp.getType().getReferredType()
-                    .replaceFirst("Col\\((\\w+)\\)", "$1");
+                .replaceFirst("Col\\((\\w+)\\)", "$1");
 
             Type varType = new Type(sourceType);
             variable = new Variable(sourceExp, iterator, varType);
 
             if (this.variableStack.contains(variable)) {
-                throw new OclParserException(
-                        iterator + " already existed!");
+                throw new OclParserException(iterator + " already existed!");
             }
 
             if (this.adhocContextualSet.contains(variable)) {
                 throw new OclParserException(
-                        iterator + " is defined as free variable!");
+                    iterator + " is defined as free variable!");
             }
 
             body = trim(body.replaceFirst(iteratorDeclRx, "$2"));
@@ -412,15 +393,14 @@ public class SimpleParser implements Parser {
 //                    + variableStack);
         }
 
-        Expression bodyExp = "".equals(body) ? null
-                : parseOclExp(body, dm);
+        Expression bodyExp = "".equals(body) ? null : parseOclExp(body, dm);
 
         if (!iterator.equals("iterator")) {
             this.variableStack.pop();
         }
 
         Expression iteratorExp = new IteratorExp(sourceExp, kind, variable,
-                bodyExp);
+            bodyExp);
         Type type = getIteratorExpType(sourceExp, kind, bodyExp);
         iteratorExp.setType(type);
 
@@ -436,35 +416,34 @@ public class SimpleParser implements Parser {
         final String STRING_LITERAL_STR = "\\s*\\w*\\{(\\d+)*\\}";
         /**
          * Start ONLY with a word true OR false WITHOUT quote and
-         * case-insensitive (?i) <- inline flag E.g.:"true", "false",
-         * "True", "False", "TRUE", "FALSE" Note : there is NO single
-         * quote
+         * case-insensitive (?i) <- inline flag E.g.:"true", "false", "True",
+         * "False", "TRUE", "FALSE" Note : there is NO single quote
          */
         final String BOOLEAN_LITERAL_STR = "(?i)(^\\btrue\\b|\\bfalse\\b$)";
         /**
-         * String contains ONLY digit WITH an optional minus sign (-)
-         * denoting negativity; this patterns allows, too, the decimal
-         * number by adding optional group (.\\d+)?. This also allows
-         * JAVA legal way of writing number using underscore (_) E.g.:
-         * "12334", "-12345", "123_3445", "12_234.4893"
+         * String contains ONLY digit WITH an optional minus sign (-) denoting
+         * negativity; this patterns allows, too, the decimal number by adding
+         * optional group (.\\d+)?. This also allows JAVA legal way of writing
+         * number using underscore (_) E.g.: "12334", "-12345", "123_3445",
+         * "12_234.4893"
          */
         final String NUMERIC_LITERAL_STR = "^-?(\\d+(_\\d+)*(.\\d+)?)(?<!_)$";
         /**
-         * This is strictly a natural number. If this string is given a
-         * number that is greater than what an Integer can hold, the
-         * parser will throw an Error.
+         * This is strictly a natural number. If this string is given a number
+         * that is greater than what an Integer can hold, the parser will throw
+         * an Error.
          */
         final String INTEGER_LITERAL_STR = "^-?\\d+(_\\d+)*(?<!_)$";
         /**
-         * This is strictly a real number. If this string is given a
-         * number that is greater than what a Double can hold, the
-         * parser will throw an Error.
+         * This is strictly a real number. If this string is given a number that
+         * is greater than what a Double can hold, the parser will throw an
+         * Error.
          */
         final String REAL_LITERAL_STR = "^-?(\\d+(_\\d+)*.\\d+)(?<!_)$";
-        
+
         /*
          * temporary for SQL literal
-         * */
+         */
         final String SQL_LITERAL_STR = "\\@SQL\\((.*)\\)";
 
         if (input.matches(NUMERIC_LITERAL_STR)) {
@@ -472,13 +451,13 @@ public class SimpleParser implements Parser {
             if (input.matches(INTEGER_LITERAL_STR)) {
 
                 IntegerLiteralExp intLitExp = new IntegerLiteralExp(
-                        Integer.valueOf(input));
+                    Integer.valueOf(input));
                 intLitExp.setType(new Type("Integer"));
                 return intLitExp;
             } else if (input.matches(REAL_LITERAL_STR)) {
 
                 RealLiteralExp realLitExp = new RealLiteralExp(
-                        Double.valueOf(input));
+                    Double.valueOf(input));
                 realLitExp.setType(new Type("Real"));
                 return realLitExp;
             }
@@ -495,16 +474,16 @@ public class SimpleParser implements Parser {
         } else if (input.matches(BOOLEAN_LITERAL_STR)) {
 
             BooleanLiteralExp boolLitExp = new BooleanLiteralExp(
-                    Boolean.valueOf(input));
+                Boolean.valueOf(input));
             boolLitExp.setType(new Type("Boolean"));
 
             return boolLitExp;
 
         } else if (Pattern.matches(SQL_LITERAL_STR, input)) {
-                input = decode(input).trim();
-                input = input.replaceAll("\\@SQL\\((.*)\\)", "$1");
+            input = decode(input).trim();
+            input = input.replaceAll("\\@SQL\\((.*)\\)", "$1");
 
-                return new SqlFunctionExp(input);
+            return new SqlFunctionExp(input);
 
         } else if (input.length() > 0) {
 
@@ -516,10 +495,8 @@ public class SimpleParser implements Parser {
                 return type;
             } else {
                 for (int i = 0; i < this.variableStack.size(); i++) {
-                    if (this.variableStack.get(i).getName()
-                            .equals(input)) {
-                        return new VariableExp(
-                                this.variableStack.get(i));
+                    if (this.variableStack.get(i).getName().equals(input)) {
+                        return new VariableExp(this.variableStack.get(i));
                     }
                 }
 
@@ -530,8 +507,8 @@ public class SimpleParser implements Parser {
                 }
             }
         } else {
-            throw new OclParserException(input + "\n======\n"
-                    + "Invalid OCL Literal Expression!");
+            throw new OclParserException(
+                input + "\n======\n" + "Invalid OCL Literal Expression!");
         }
 
         return new NullLiteralExp();
@@ -544,13 +521,13 @@ public class SimpleParser implements Parser {
 
         return encOcl;
     }
-    
+
     private String decode(String encOcl) {
         return decode(encOcl, false);
     }
 
     private String decode(String encOcl, boolean shallow) {
-        
+
         String decOcl = String.copyValueOf(encOcl.toCharArray());
 
         Pattern p = Pattern.compile("((.*)\\()(\\d+)(\\)(.*))");
@@ -560,17 +537,17 @@ public class SimpleParser implements Parser {
         if (shallow) {
             if (mP.find()) {
                 String content = this.parenthesisArray
-                        .get(Integer.parseInt(mP.group(3)));
+                    .get(Integer.parseInt(mP.group(3)));
                 decOcl = decOcl.replaceFirst(p.pattern(),
-                        "$1" + content + "$4");
+                    "$1" + content + "$4");
                 mP = p.matcher(decOcl);
             }
         } else {
             while (mP.find()) {
                 String content = this.parenthesisArray
-                        .get(Integer.parseInt(mP.group(3)));
+                    .get(Integer.parseInt(mP.group(3)));
                 decOcl = decOcl.replaceFirst(p.pattern(),
-                        "$1" + content + "$4");
+                    "$1" + content + "$4");
                 mP = p.matcher(decOcl);
             }
         }
@@ -578,9 +555,9 @@ public class SimpleParser implements Parser {
         Matcher mS = s.matcher(decOcl);
         while (mS.find()) {
             String content = this.stringArray
-                    .get(Integer.parseInt(mS.group(3)));
+                .get(Integer.parseInt(mS.group(3)));
             decOcl = decOcl.replaceFirst(s.pattern(),
-                    "$1" + "'" + content + "'" + "$4");
+                "$1" + "'" + content + "'" + "$4");
             mS = s.matcher(decOcl);
         }
 
@@ -589,8 +566,7 @@ public class SimpleParser implements Parser {
 
     private String extractString(String encOcl) {
 
-        Pattern pattern = Pattern
-                .compile(ParserPatterns.STRING_LITERAL_STR);
+        Pattern pattern = Pattern.compile(ParserPatterns.STRING_LITERAL_STR);
         Matcher m = pattern.matcher(encOcl);
         String openBracket = "{";
         String closeBracket = "}";
@@ -611,7 +587,7 @@ public class SimpleParser implements Parser {
     private String extractParenthesis(String encOcl) {
 
         Pattern pattern = Pattern
-                .compile(ParserPatterns.PARENTHESIS_LITERAL_STR);
+            .compile(ParserPatterns.PARENTHESIS_LITERAL_STR);
         Matcher m = pattern.matcher(encOcl);
         String openBracket = "[";
         String closeBracket = "]";
@@ -648,7 +624,7 @@ public class SimpleParser implements Parser {
 
         if (m.find()) {
             String content = this.parenthesisArray
-                    .get(Integer.valueOf(m.group(3)));
+                .get(Integer.valueOf(m.group(3)));
 
             if ("".equals(content)) {
                 return content;
@@ -671,9 +647,9 @@ public class SimpleParser implements Parser {
         return input;
     }
 
-    private Type getOperationExpType(String operationName,
-            Expression leftExp, Expression... exps) {
-        
+    private Type getOperationExpType(String operationName, Expression leftExp,
+        Expression... exps) {
+
         String leftExpType = "";
 
         if (leftExp instanceof OclExp) {
@@ -708,15 +684,15 @@ public class SimpleParser implements Parser {
 //            }
 //            opType = new Type(argType);
 //            return opType;
-            throw new OclParserException("\n======\n"
-                    + operationName + " not supported!");
+            throw new OclParserException(
+                "\n======\n" + operationName + " not supported!");
         default:
             return opType;
         }
     }
 
     private Type getIteratorExpType(Expression source, String kind,
-            Expression body) {
+        Expression body) {
         Type type = new Type("Invalid");
 
         switch (IteratorKind.valueOf(kind)) {
@@ -726,7 +702,7 @@ public class SimpleParser implements Parser {
         case last:
         case sum:
             return new Type(source.getType().getReferredType()
-                    .replaceFirst("^Col\\((\\w+)\\)$", "$1"));
+                .replaceFirst("^Col\\((\\w+)\\)$", "$1"));
 
         case asBag:
         case asOrderedSet:

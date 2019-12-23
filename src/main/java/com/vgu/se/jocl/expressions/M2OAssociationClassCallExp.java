@@ -18,18 +18,18 @@ limitations under the License.
 
 package com.vgu.se.jocl.expressions;
 
-public class O2MAssociationClassCallExp extends AssociationClassCallExp {
+public class M2OAssociationClassCallExp extends AssociationClassCallExp {
 
-    public O2MAssociationClassCallExp(Expression source,
+    public M2OAssociationClassCallExp(Expression source,
         String referredAssociationEnd) {
         super(source, referredAssociationEnd);
     }
 
     public boolean isOneEndAssociationCall() {
         String returnType = this.getType().getReferredType();
-        String oppositeType = this.getOppositeAssociationEndType()
+        String endType = this.getReferredAssociationEndType()
             .getReferredType();
-        return returnType.equals(oppositeType);
+        return returnType.equals(endType);
     }
 
 }
