@@ -28,8 +28,6 @@ import org.json.simple.parser.ParseException;
 
 import com.vgu.se.jocl.expressions.NullLiteralExp;
 import com.vgu.se.jocl.expressions.OclExp;
-import com.vgu.se.jocl.parser.interfaces.Parser;
-import com.vgu.se.jocl.parser.simple.SimpleParser;
 
 public class Environment {
     private JSONArray plainUMLContext;

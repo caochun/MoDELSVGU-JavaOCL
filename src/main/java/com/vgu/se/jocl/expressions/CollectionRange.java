@@ -22,6 +22,8 @@ package com.vgu.se.jocl.expressions;
 public class CollectionRange extends CollectionLiteralPart {
 
     
+    @SuppressWarnings("unused")
     private OclExp first;
+    @SuppressWarnings("unused")
     private OclExp last;
 }

@@ -23,6 +23,7 @@ import com.vgu.se.jocl.visit.ParserVisitor;
 
 public class TupleLiteralExp extends LiteralExp {
 
+    @SuppressWarnings("unused")
     private TupleLiteralPart part;
 
     @Override

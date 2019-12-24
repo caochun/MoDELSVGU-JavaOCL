@@ -21,5 +21,6 @@ package com.vgu.se.jocl.expressions;
 
 public class CollectionItem {
 
+    @SuppressWarnings("unused")
     private OclExp item;
 }

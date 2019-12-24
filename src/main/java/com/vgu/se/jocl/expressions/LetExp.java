@@ -23,7 +23,9 @@ import com.vgu.se.jocl.visit.ParserVisitor;
 
 public class LetExp extends OclExp {
 
+    @SuppressWarnings("unused")
     private Variable v;
+    @SuppressWarnings("unused")
     private OclExp in;
 
     @Override

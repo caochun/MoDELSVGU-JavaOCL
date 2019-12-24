@@ -20,29 +20,27 @@ package com.vgu.se.jocl.parser;
 
 import java.io.File;
 import java.io.FileReader;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.vgu.dm2schema.dm.DataModel;
 
 import com.vgu.se.jocl.expressions.Expression;
-import com.vgu.se.jocl.expressions.OclExp;
 import com.vgu.se.jocl.parser.simple.SimpleParser;
-import com.vgu.se.jocl.utils.UMLContextUtils;
 
 public class ParserTest {
 
+    @SuppressWarnings("unused")
     private static JSONArray plainUMLContext;
+    @SuppressWarnings("unused")
     private static String oclExpStr;
 
+    @SuppressWarnings("unused")
     private static Map<Integer, Integer> testInt = new HashMap<>();
 
     static {
@@ -76,6 +74,7 @@ public class ParserTest {
         }
     }
 
+    @SuppressWarnings("unused")
     private static String trim(String input) {
 
         String spacePatt = "^(\\s)*|(\\s)*$";

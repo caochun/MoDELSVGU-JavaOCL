@@ -24,6 +24,7 @@ import com.vgu.se.jocl.visit.ParserVisitor;
 
 public class NullLiteralExp extends LiteralExp {
     
+    @SuppressWarnings("unused")
     private VoidType value;
     
     public NullLiteralExp() {

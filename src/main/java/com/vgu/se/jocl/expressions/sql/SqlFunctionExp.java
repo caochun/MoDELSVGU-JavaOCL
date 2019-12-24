@@ -19,7 +19,6 @@ limitations under the License.
 
 package com.vgu.se.jocl.expressions.sql;
 
-import com.vgu.se.jocl.expressions.Expression;
 import com.vgu.se.jocl.visit.ParserVisitor;
 
 public class SqlFunctionExp extends SqlExp {

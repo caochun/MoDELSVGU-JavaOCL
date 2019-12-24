@@ -23,6 +23,7 @@ import com.vgu.se.jocl.visit.ParserVisitor;
 
 public class CollectionLiteralExp extends LiteralExp {
 
+    @SuppressWarnings("unused")
     private CollectionLiteralPart part;
 
     @Override

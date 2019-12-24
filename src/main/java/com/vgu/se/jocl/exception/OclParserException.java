@@ -19,6 +19,7 @@ limitations under the License.
 
 package com.vgu.se.jocl.exception;
 
+@SuppressWarnings("serial")
 public class OclParserException extends RuntimeException {
     
     public OclParserException() {

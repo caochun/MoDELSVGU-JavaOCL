@@ -21,7 +21,6 @@ package com.vgu.se.jocl.expressions;
 
 import java.math.BigInteger;
 
-import com.vgu.se.jocl.types.UnlimitedNaturalType;
 import com.vgu.se.jocl.visit.ParserVisitor;
 
 public class UnlimitedNaturalLiteralExp extends NumericLiteralExp<BigInteger> {

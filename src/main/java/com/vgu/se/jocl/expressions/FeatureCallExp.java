@@ -23,6 +23,7 @@ public abstract class FeatureCallExp extends CallExp {
     
     // Boolean indicating whether the expression accesses the 
     // precondition-time value of the referred feature.
+    @SuppressWarnings("unused")
     private boolean isPre;
     
 }
