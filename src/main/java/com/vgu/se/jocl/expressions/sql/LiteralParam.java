@@ -31,4 +31,8 @@ public class LiteralParam {
         this.param = param;
     }
 
+    public String getParam() {
+        return param;
+    }
+
 }
