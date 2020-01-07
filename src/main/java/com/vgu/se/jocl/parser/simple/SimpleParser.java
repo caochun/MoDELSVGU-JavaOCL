@@ -200,12 +200,14 @@ public class SimpleParser implements Parser {
         List<LiteralParam> literalParamList = new ArrayList<>();
         // TIMESTAMPDIFF(year, e.date, curedate())
         for (int i = 0; i < params.length; i++) {
+            params[i] = params[i].trim();
             if (Pattern.matches("^\\w+$", params[i])) {
                 literalParamList.add(new LiteralParam(params[i]));
-            } else if (Pattern.matches("^\\w+\\.\\w+$", params[i])) {
-                paramList.add(parseDotCase(
-                        Pattern.compile("^\\w_\\.\\w+$").matcher(params[i]),
-                        params[i], dm));
+            } else if (Pattern.matches("(.*)\\.(.*)", params[i])) {
+                Matcher m = ParserPatterns.DOT_OR_ARROW_OP_PATT.matcher(params[i]);
+                if (m.find()) {
+                    paramList.add(parseDotCase(m, params[i], dm));
+                }
             } else {
                 paramList.add(parseSqlFunctionExp(params[i]));
             }
