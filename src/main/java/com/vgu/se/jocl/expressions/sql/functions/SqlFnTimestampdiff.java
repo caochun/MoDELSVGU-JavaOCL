@@ -17,37 +17,26 @@ limitations under the License.
 ***************************************************************************/
 
 
-package com.vgu.se.jocl.expressions.sql;
+package com.vgu.se.jocl.expressions.sql.functions;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.vgu.se.jocl.expressions.Expression;
+import com.vgu.se.jocl.expressions.sql.SqlFunctionExp;
+import com.vgu.se.jocl.types.Type;
+import com.vgu.se.jocl.visit.ParserVisitable;
+import com.vgu.se.jocl.visit.ParserVisitor;
 
-public abstract class SqlFunctionExp extends SqlExp {
+public class SqlFnTimestampdiff extends SqlFunctionExp implements ParserVisitable {
 
-    protected List<Expression> params;
-    
-    public SqlFunctionExp(String name) {
-        super(name);
-    }
-    
-    public SqlFunctionExp(String name, List<Expression> params) {
-        super(name);
-        this.params = params;
-    }
-
-    public List<Expression> getParams() {
-        return params;
-    }
-    
-    public int getParamCount() {
-        return Optional.of(params).map(List::size).orElse(0);
+    public SqlFnTimestampdiff(String name, List<Expression> params) {
+        super(name, params);
+        super.setType(new Type("Integer"));
     }
 
     @Override
-    public String toString() {
-        return "SqlFunctionExp [name =" + super.getName() + "]";
+    public void accept(ParserVisitor visitor) {
+        visitor.visit(this);
     }
-    
+
 }

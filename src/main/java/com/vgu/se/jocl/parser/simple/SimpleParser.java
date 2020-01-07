@@ -53,6 +53,8 @@ import com.vgu.se.jocl.expressions.VariableExp;
 import com.vgu.se.jocl.expressions.sql.LiteralParamExp;
 import com.vgu.se.jocl.expressions.sql.SqlFunctionExp;
 import com.vgu.se.jocl.expressions.sql.SqlParameter;
+import com.vgu.se.jocl.expressions.sql.functions.SqlFnCurdate;
+import com.vgu.se.jocl.expressions.sql.functions.SqlFnTimestampdiff;
 import com.vgu.se.jocl.parser.interfaces.Parser;
 import com.vgu.se.jocl.types.Type;
 
@@ -184,8 +186,13 @@ public class SimpleParser implements Parser {
         // No parameter
         String fnContent = exp.replaceAll("\\w+\\((.*)\\)", "$1").trim();
         if (fnContent.length() == 0) {
-            // CURDATE()
-            return new SqlFunctionExp(fnName);
+            switch(fnName.toUpperCase()) {
+            case "CURDATE":
+                // CURDATE()
+                return new SqlFnCurdate(fnName);
+            default :
+                return null;
+            }
         }
 
         String[] params = fnContent.split(",");
@@ -203,7 +210,12 @@ public class SimpleParser implements Parser {
             }
         }
         
-        return new SqlFunctionExp(fnName, paramList);
+        switch(fnName.toUpperCase()) {
+        case "TIMESTAMPDIFF":
+            return new SqlFnTimestampdiff(fnName, paramList);
+        default :
+            return null;
+        }
     }
     
     private Expression parseCallExp(Matcher m, String ocl, DataModel dm) {
@@ -390,10 +402,6 @@ public class SimpleParser implements Parser {
         if (IteratorKind.valueOf(kind) == null) {
             throw new OclParserException("Invalid iterator kind!");
         }
-
-//        System.out.println("\n\n" + "\nComplete: " + m.group()
-//                + "\nSource: " + source + "\nbody: " + body + "\nkind: "
-//                + kind + "\n\n");
 
         Expression sourceExp = parseOclExp(source, dm);
 

@@ -20,12 +20,19 @@ limitations under the License.
 package com.vgu.se.jocl.expressions.sql;
 
 import com.vgu.se.jocl.types.Type;
+import com.vgu.se.jocl.visit.ParserVisitable;
+import com.vgu.se.jocl.visit.ParserVisitor;
 
-public class LiteralParamExp extends SqlParameter {
+public class LiteralParamExp extends SqlParameter implements ParserVisitable {
 
     public LiteralParamExp(String name) {
         super(name);
         super.setType(new Type("SqlParam"));
+    }
+
+    @Override
+    public void accept(ParserVisitor visitor) {
+        visitor.visit(this);
     }
 
 }

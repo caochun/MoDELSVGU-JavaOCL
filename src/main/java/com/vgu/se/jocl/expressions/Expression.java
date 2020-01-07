@@ -23,7 +23,7 @@ import com.vgu.se.jocl.types.Type;
 import com.vgu.se.jocl.visit.ParserVisitable;
 import com.vgu.se.jocl.visit.ParserVisitor;
 
-public abstract class Expression implements ParserVisitable {
+public abstract class Expression {
     protected Type type;
     protected String oclStr;
 
@@ -43,11 +43,6 @@ public abstract class Expression implements ParserVisitable {
         this.oclStr = oclStr;
     }
 
-    @Override
-    public void accept(ParserVisitor visitor) {
-        visitor.visit(this);
-    }
-    
     @Override
     public String toString() {
         return "Expression String : " + oclStr + "\n"
