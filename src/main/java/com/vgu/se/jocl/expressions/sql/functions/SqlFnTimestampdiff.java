@@ -22,6 +22,7 @@ package com.vgu.se.jocl.expressions.sql.functions;
 import java.util.List;
 
 import com.vgu.se.jocl.expressions.Expression;
+import com.vgu.se.jocl.expressions.sql.LiteralParam;
 import com.vgu.se.jocl.expressions.sql.SqlFunctionExp;
 import com.vgu.se.jocl.types.Type;
 import com.vgu.se.jocl.visit.ParserVisitable;
@@ -29,8 +30,8 @@ import com.vgu.se.jocl.visit.ParserVisitor;
 
 public class SqlFnTimestampdiff extends SqlFunctionExp implements ParserVisitable {
 
-    public SqlFnTimestampdiff(String name, List<Expression> params) {
-        super(name, params);
+    public SqlFnTimestampdiff(String name, List<Expression> params, List<LiteralParam> literalParams) {
+        super(name, params, literalParams);
         super.setType(new Type("Integer"));
     }
 

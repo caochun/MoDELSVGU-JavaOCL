@@ -50,7 +50,7 @@ import com.vgu.se.jocl.expressions.StringLiteralExp;
 import com.vgu.se.jocl.expressions.TypeExp;
 import com.vgu.se.jocl.expressions.Variable;
 import com.vgu.se.jocl.expressions.VariableExp;
-import com.vgu.se.jocl.expressions.sql.LiteralParamExp;
+import com.vgu.se.jocl.expressions.sql.LiteralParam;
 import com.vgu.se.jocl.expressions.sql.SqlFunctionExp;
 import com.vgu.se.jocl.expressions.sql.SqlParameter;
 import com.vgu.se.jocl.expressions.sql.functions.SqlFnCurdate;
@@ -197,10 +197,11 @@ public class SimpleParser implements Parser {
 
         String[] params = fnContent.split(",");
         List<Expression> paramList = new ArrayList<Expression>();
+        List<LiteralParam> literalParamList = new ArrayList<>();
         // TIMESTAMPDIFF(year, e.date, curedate())
         for (int i = 0; i < params.length; i++) {
             if (Pattern.matches("^\\w+$", params[i])) {
-                paramList.add(new LiteralParamExp(params[i]));
+                literalParamList.add(new LiteralParam(params[i]));
             } else if (Pattern.matches("^\\w+\\.\\w+$", params[i])) {
                 paramList.add(parseDotCase(
                         Pattern.compile("^\\w_\\.\\w+$").matcher(params[i]),
@@ -212,7 +213,7 @@ public class SimpleParser implements Parser {
         
         switch(fnName.toUpperCase()) {
         case "TIMESTAMPDIFF":
-            return new SqlFnTimestampdiff(fnName, paramList);
+            return new SqlFnTimestampdiff(fnName, paramList, literalParamList);
         default :
             return null;
         }
