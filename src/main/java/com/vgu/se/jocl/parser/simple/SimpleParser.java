@@ -178,14 +178,17 @@ public class SimpleParser implements Parser {
     private SqlFunctionExp parseSqlFunctionExp(String exp) {
         exp = decode(exp).trim();
         exp = exp.replaceAll("\\@SQL\\((.*)\\)", "$1");
+        
         String fnName = exp.replaceAll("(\\w+)\\(.*\\)", "$1");
-        String[] params = exp.replaceAll("\\w+\\((.*)\\)", "$1").split(",");
-        
-        if (params.length == 0) {
+
+        // No parameter
+        String fnContent = exp.replaceAll("\\w+\\((.*)\\)", "$1").trim();
+        if (fnContent.length() == 0) {
             // CURDATE()
-            return new SqlFunctionExp(exp);
+            return new SqlFunctionExp(fnName);
         }
-        
+
+        String[] params = fnContent.split(",");
         List<Expression> paramList = new ArrayList<Expression>();
         // TIMESTAMPDIFF(year, e.date, curedate())
         for (int i = 0; i < params.length; i++) {
@@ -195,12 +198,12 @@ public class SimpleParser implements Parser {
                 paramList.add(parseDotCase(
                         Pattern.compile("^\\w_\\.\\w+$").matcher(params[i]),
                         params[i], dm));
-            } else if (false){
-                
+            } else {
+                paramList.add(parseSqlFunctionExp(params[i]));
             }
         }
         
-        return null;
+        return new SqlFunctionExp(fnName, paramList);
     }
     
     private Expression parseCallExp(Matcher m, String ocl, DataModel dm) {
@@ -510,11 +513,8 @@ public class SimpleParser implements Parser {
             return boolLitExp;
 
         } else if (Pattern.matches(SQL_LITERAL_STR, input)) {
-            input = decode(input).trim();
-            input = input.replaceAll("\\@SQL\\((.*)\\)", "$1");
 
-            return new SqlFunctionExp(input);
-            // TODO: return new type of Sql
+            return parseSqlFunctionExp(input);
 
         } else if (input.length() > 0) {
 

@@ -22,7 +22,7 @@ package com.vgu.se.jocl.expressions.sql;
 import com.vgu.se.jocl.expressions.Expression;
 
 public abstract class SqlExp extends Expression {
-    private String name;
+    protected String name;
 
     public SqlExp(String name) {
         this.name = name;

@@ -19,10 +19,13 @@ limitations under the License.
 
 package com.vgu.se.jocl.expressions.sql;
 
+import com.vgu.se.jocl.types.Type;
+
 public class LiteralParamExp extends SqlParameter {
 
     public LiteralParamExp(String name) {
         super(name);
+        super.setType(new Type("SqlParam"));
     }
 
 }
