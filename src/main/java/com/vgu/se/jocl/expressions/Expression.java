@@ -44,11 +44,6 @@ public abstract class Expression implements ParserVisitable {
     }
 
     @Override
-    public void accept(ParserVisitor visitor) {
-        visitor.visit(this);
-    }
-    
-    @Override
     public String toString() {
         return "Expression String : " + oclStr + "\n"
                 + "Type : " + type + "\n";

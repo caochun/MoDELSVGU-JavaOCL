@@ -19,21 +19,46 @@ limitations under the License.
 
 package com.vgu.se.jocl.expressions.sql;
 
-import com.vgu.se.jocl.visit.ParserVisitor;
+import java.util.List;
+import java.util.Optional;
 
-public class SqlFunctionExp extends SqlExp {
+import com.vgu.se.jocl.expressions.Expression;
 
+public abstract class SqlFunctionExp extends SqlExp {
+
+    protected List<Expression> params;
+    protected List<LiteralParam> literalParams;
+    
     public SqlFunctionExp(String name) {
         super(name);
     }
     
-    @Override
-    public void accept(ParserVisitor visitor) {
-        visitor.visit(this);
+    public SqlFunctionExp(String name, List<Expression> params, List<LiteralParam> literalParams) {
+        super(name);
+        this.params = params;
+        this.literalParams = literalParams;
+    }
+
+    public List<Expression> getParams() {
+        return params;
+    }
+
+    public List<LiteralParam> getLiteralParams() {
+        return literalParams;
+    }
+
+    public void setLiteralParams(List<LiteralParam> literalParams) {
+        this.literalParams = literalParams;
     }
     
+    public int getParamCount() {
+        return Optional.of(params).map(List::size).orElse(0)
+            + Optional.of(literalParams).map(List::size).orElse(0);
+    }
+
     @Override
     public String toString() {
-        return super.getName();
+        return "SqlFunctionExp [name =" + super.getName() + "]";
     }
+    
 }

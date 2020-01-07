@@ -19,6 +19,7 @@ limitations under the License.
 package com.vgu.se.jocl.parser.simple;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -49,7 +50,11 @@ import com.vgu.se.jocl.expressions.StringLiteralExp;
 import com.vgu.se.jocl.expressions.TypeExp;
 import com.vgu.se.jocl.expressions.Variable;
 import com.vgu.se.jocl.expressions.VariableExp;
+import com.vgu.se.jocl.expressions.sql.LiteralParam;
 import com.vgu.se.jocl.expressions.sql.SqlFunctionExp;
+import com.vgu.se.jocl.expressions.sql.SqlParameter;
+import com.vgu.se.jocl.expressions.sql.functions.SqlFnCurdate;
+import com.vgu.se.jocl.expressions.sql.functions.SqlFnTimestampdiff;
 import com.vgu.se.jocl.parser.interfaces.Parser;
 import com.vgu.se.jocl.types.Type;
 
@@ -165,14 +170,57 @@ public class SimpleParser implements Parser {
 
     private Expression getExp(String exp) {
         if (isSqlFunction(exp)) {
-            exp = decode(exp).trim();
-            exp = exp.replaceAll("\\@SQL\\((.*)\\)", "$1");
-            return new SqlFunctionExp(exp);
+//            return new SqlFunctionExp(exp);
+            return parseSqlFunctionExp(exp);
         }
 
         return parseOclExp(exp, dm);
     }
+    
+    private SqlFunctionExp parseSqlFunctionExp(String exp) {
+        exp = decode(exp).trim();
+        exp = exp.replaceAll("\\@SQL\\((.*)\\)", "$1");
+        
+        String fnName = exp.replaceAll("(\\w+)\\(.*\\)", "$1");
 
+        // No parameter
+        String fnContent = exp.replaceAll("\\w+\\((.*)\\)", "$1").trim();
+        if (fnContent.length() == 0) {
+            switch(fnName.toUpperCase()) {
+            case "CURDATE":
+                // CURDATE()
+                return new SqlFnCurdate(fnName);
+            default :
+                return null;
+            }
+        }
+
+        String[] params = fnContent.split(",");
+        List<Expression> paramList = new ArrayList<Expression>();
+        List<LiteralParam> literalParamList = new ArrayList<>();
+        // TIMESTAMPDIFF(year, e.date, curedate())
+        for (int i = 0; i < params.length; i++) {
+            params[i] = params[i].trim();
+            if (Pattern.matches("^\\w+$", params[i])) {
+                literalParamList.add(new LiteralParam(params[i]));
+            } else if (Pattern.matches("(.*)\\.(.*)", params[i])) {
+                Matcher m = ParserPatterns.DOT_OR_ARROW_OP_PATT.matcher(params[i]);
+                if (m.find()) {
+                    paramList.add(parseDotCase(m, params[i], dm));
+                }
+            } else {
+                paramList.add(parseSqlFunctionExp(params[i]));
+            }
+        }
+        
+        switch(fnName.toUpperCase()) {
+        case "TIMESTAMPDIFF":
+            return new SqlFnTimestampdiff(fnName, paramList, literalParamList);
+        default :
+            return null;
+        }
+    }
+    
     private Expression parseCallExp(Matcher m, String ocl, DataModel dm) {
 
         String operator = m.group(2);
@@ -358,10 +406,6 @@ public class SimpleParser implements Parser {
             throw new OclParserException("Invalid iterator kind!");
         }
 
-//        System.out.println("\n\n" + "\nComplete: " + m.group()
-//                + "\nSource: " + source + "\nbody: " + body + "\nkind: "
-//                + kind + "\n\n");
-
         Expression sourceExp = parseOclExp(source, dm);
 
         String iterator = "iterator";
@@ -480,10 +524,8 @@ public class SimpleParser implements Parser {
             return boolLitExp;
 
         } else if (Pattern.matches(SQL_LITERAL_STR, input)) {
-            input = decode(input).trim();
-            input = input.replaceAll("\\@SQL\\((.*)\\)", "$1");
 
-            return new SqlFunctionExp(input);
+            return parseSqlFunctionExp(input);
 
         } else if (input.length() > 0) {
 

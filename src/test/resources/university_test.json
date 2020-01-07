@@ -107,6 +107,10 @@
 		{
 		  "name": "name",
 		  "type": "String"
+		},
+		{
+		  "name": "doe",
+		  "type": "Date"
 		}
 	  ],
 	  "ends": [
