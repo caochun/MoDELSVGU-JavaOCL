@@ -22,7 +22,7 @@ package com.vgu.se.jocl.expressions;
 import com.vgu.se.jocl.types.CollectionType;
 import com.vgu.se.jocl.visit.ParserVisitable;
 
-public abstract class OclExp extends Expression implements ParserVisitable {
+public abstract class OclExp extends Expression {
 
     protected Expression appliedElement;
     protected CollectionType<?> result;

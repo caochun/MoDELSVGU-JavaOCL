@@ -22,7 +22,7 @@ package com.vgu.se.jocl.expressions.sql;
 import com.vgu.se.jocl.expressions.Expression;
 import com.vgu.se.jocl.visit.ParserVisitable;
 
-public abstract class SqlExp extends Expression implements ParserVisitable {
+public abstract class SqlExp extends Expression {
     protected String name;
 
     public SqlExp(String name) {
