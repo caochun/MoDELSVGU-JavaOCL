@@ -39,8 +39,6 @@ import com.vgu.se.jocl.expressions.sql.functions.SqlFnTimestampdiff;
 public interface ParserVisitor {
     
     void visit(Expression exp);
-    void visit(OclExp oclExp);
-    void visit(SqlExp sqlExp);
 
     void visit(IteratorExp iteratorExp);
 
