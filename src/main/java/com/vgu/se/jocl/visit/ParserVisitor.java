@@ -33,6 +33,8 @@ import com.vgu.se.jocl.expressions.StringLiteralExp;
 import com.vgu.se.jocl.expressions.VariableExp;
 import com.vgu.se.jocl.expressions.sql.SqlExp;
 import com.vgu.se.jocl.expressions.sql.SqlFunctionExp;
+import com.vgu.se.jocl.expressions.sql.functions.SqlFnCurdate;
+import com.vgu.se.jocl.expressions.sql.functions.SqlFnTimestampdiff;
 
 public interface ParserVisitor {
     
@@ -55,6 +57,8 @@ public interface ParserVisitor {
     
     void visit(AssociationClassCallExp associationClassCallExp);
     void visit(VariableExp variableExp);
-    void visit(SqlFunctionExp variableExp);
+
+    void visit(SqlFnCurdate variableExp);
+    void visit(SqlFnTimestampdiff variableExp);
 
 }
