@@ -17,31 +17,17 @@ limitations under the License.
 ***************************************************************************/
 
 
-package com.vgu.se.jocl.expressions;
+package com.vgu.se.jocl.expressions.sql;
 
-import com.vgu.se.jocl.visit.ParserVisitor;
-
-public class PropertyCallExp extends NavigationCallExp {
-    private String referredProperty;
-
-    public PropertyCallExp(Expression source, String referredAttributeName) {
-        super.navigationSource = source;
-        this.referredProperty = referredAttributeName;
+public abstract class SqlParameter extends SqlExp {
+    
+    public SqlParameter(String name) {
+        super(name);
     }
-
-    public String getReferredProperty() {
-        return referredProperty;
-    }
-
-    @Override
-    public void accept(ParserVisitor parserVisitor) {
-        parserVisitor.visit(this);
-    }
-
+    
     @Override
     public String toString() {
-        return "PropertyCallExp [referredProperty=" + referredProperty
-                + "]";
+        return "SqlParameter [name=" + super.getName() + "]";
     }
-
+    
 }

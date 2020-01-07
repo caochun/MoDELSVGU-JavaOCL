@@ -19,6 +19,7 @@ limitations under the License.
 package com.vgu.se.jocl.parser.simple;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -49,7 +50,9 @@ import com.vgu.se.jocl.expressions.StringLiteralExp;
 import com.vgu.se.jocl.expressions.TypeExp;
 import com.vgu.se.jocl.expressions.Variable;
 import com.vgu.se.jocl.expressions.VariableExp;
+import com.vgu.se.jocl.expressions.sql.LiteralParamExp;
 import com.vgu.se.jocl.expressions.sql.SqlFunctionExp;
+import com.vgu.se.jocl.expressions.sql.SqlParameter;
 import com.vgu.se.jocl.parser.interfaces.Parser;
 import com.vgu.se.jocl.types.Type;
 
@@ -165,14 +168,41 @@ public class SimpleParser implements Parser {
 
     private Expression getExp(String exp) {
         if (isSqlFunction(exp)) {
-            exp = decode(exp).trim();
-            exp = exp.replaceAll("\\@SQL\\((.*)\\)", "$1");
-            return new SqlFunctionExp(exp);
+//            return new SqlFunctionExp(exp);
+            return parseSqlFunctionExp(exp);
         }
 
         return parseOclExp(exp, dm);
     }
-
+    
+    private SqlFunctionExp parseSqlFunctionExp(String exp) {
+        exp = decode(exp).trim();
+        exp = exp.replaceAll("\\@SQL\\((.*)\\)", "$1");
+        String fnName = exp.replaceAll("(\\w+)\\(.*\\)", "$1");
+        String[] params = exp.replaceAll("\\w+\\((.*)\\)", "$1").split(",");
+        
+        if (params.length == 0) {
+            // CURDATE()
+            return new SqlFunctionExp(exp);
+        }
+        
+        List<Expression> paramList = new ArrayList<Expression>();
+        // TIMESTAMPDIFF(year, e.date, curedate())
+        for (int i = 0; i < params.length; i++) {
+            if (Pattern.matches("^\\w+$", params[i])) {
+                paramList.add(new LiteralParamExp(params[i]));
+            } else if (Pattern.matches("^\\w+\\.\\w+$", params[i])) {
+                paramList.add(parseDotCase(
+                        Pattern.compile("^\\w_\\.\\w+$").matcher(params[i]),
+                        params[i], dm));
+            } else if (false){
+                
+            }
+        }
+        
+        return null;
+    }
+    
     private Expression parseCallExp(Matcher m, String ocl, DataModel dm) {
 
         String operator = m.group(2);
@@ -484,6 +514,7 @@ public class SimpleParser implements Parser {
             input = input.replaceAll("\\@SQL\\((.*)\\)", "$1");
 
             return new SqlFunctionExp(input);
+            // TODO: return new type of Sql
 
         } else if (input.length() > 0) {
 

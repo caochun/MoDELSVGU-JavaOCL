@@ -75,7 +75,7 @@ public class ParserPatterns {
     public static final String NOT_OR_NEGATIVE_OP_STR = "(.*)(\\bnot\\b|-(?=\\d++(\\.\\d+)?))\\b(.*)";
     public static final String DOT_OR_ARROW_OP_STR = "(.*)(\\.|\\-\\>)(.*)";
 //    public static final String SQL_FUNCTION = "@SQL_\\w+\\(?\\w+\\)?";
-    public static final String SQL_FUNCTION = "@SQL\\(\\w+\\)";
+    public static final String SQL_FUNCTION = "@SQL\\(.*\\)";
 
     // Pattern from String
     public static final Pattern IMPLIES_OP_PATT = Pattern.compile(IMPLIES_OP_STR);
@@ -89,6 +89,7 @@ public class ParserPatterns {
     public static final Pattern NOT_OP_PATT = Pattern.compile(NOT_OP_STR);
     public static final Pattern NOT_OR_NEGATIVE_OP_PATT = Pattern.compile(NOT_OR_NEGATIVE_OP_STR);
     public static final Pattern DOT_OR_ARROW_OP_PATT = Pattern.compile(DOT_OR_ARROW_OP_STR);
+    public static final Pattern SQL_FUNCTION_PATT = Pattern.compile(SQL_FUNCTION);
     
     // VARIABLE DECLARATION PATTERN
     public static final String VARIABLE_DECL_STR = "(\\w.*)\\|(\\w.*)";

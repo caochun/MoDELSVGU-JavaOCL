@@ -89,7 +89,9 @@ public class ParserTest {
     private static String[] getTestCases() {
         String[] ocls = {
 //                "Student.allInstances()->collect(s|s.enrolls)",
-                "University.allInstances()->collect(u|u.programs)",
+//                "Student.allInstances()->forAll(s| @SQL(timestampdiff(years, student.dob, curdate())) > 18)",
+//                "Student.allInstances()->forAll(s| @SQL(CURDATE()))",
+                "@SQL(CURDATE())",
 
 //             "Car.allInstances()",
 //             "Car.allInstances()->asSet()",
