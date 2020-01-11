@@ -19,14 +19,12 @@ limitations under the License.
 
 package com.vgu.se.jocl.parser.interfaces;
 
-import org.vgu.dm2schema.dm.DataModel;
-
 import com.vgu.se.jocl.expressions.Expression;
 import com.vgu.se.jocl.expressions.Variable;
 
 public interface Parser {
     
-    Expression parse(String ocl, DataModel dm);
+    Expression parse(String ocl, Object dm);
 
     void putAdhocContextualSet(Variable var);
     
