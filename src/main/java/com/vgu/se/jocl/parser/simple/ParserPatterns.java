@@ -71,7 +71,8 @@ public class ParserPatterns {
     public static final String COMPARISON_OP_STR = "(.*)(\\<(?!\\>|\\=)|(?<!\\<|\\-)\\>(?!\\=)|\\<\\=|\\>\\=)(.*)";
     public static final String ADD_OR_SUBTRACT_OP_STR = "(.*)(\\+|\\-(?!\\>))(.*)";
     public static final String MULTIPLY_OR_DIV_OP_STR = "(.*)(\\*|\\/)(.*)";
-    public static final String NOT_OP_STR = "(.*)\\b(not)\\b(\\(?\\w+\\)?.*)";
+//    public static final String NOT_OP_STR = "(.*)\\b(not)\\b(\\(?\\w+\\)?.*)";
+    public static final String NOT_OP_STR = "(.*)\\b(not)\\b(.*)";
     public static final String NOT_OR_NEGATIVE_OP_STR = "(.*)(\\bnot\\b|-(?=\\d++(\\.\\d+)?))\\b(.*)";
     public static final String DOT_OR_ARROW_OP_STR = "(.*)(\\.|\\-\\>)(.*)";
 //    public static final String SQL_FUNCTION = "@SQL_\\w+\\(?\\w+\\)?";

@@ -112,7 +112,9 @@ public class SimpleParser implements Parser {
         }
 
         Expression litExp = parseLiteralExp(ocl, dm);
-        litExp.setOclStr(decode(ocl));
+        if (litExp != null) {
+            litExp.setOclStr(decode(ocl));
+        }
 
         return litExp;
     }
@@ -549,8 +551,9 @@ public class SimpleParser implements Parser {
                 }
             }
         } else {
-            throw new OclParserException(
-                input + "\n======\n" + "Invalid OCL Literal Expression!");
+//            throw new OclParserException(
+//                input + "\n======\n" + "Invalid OCL Literal Expression!");
+            return null;
         }
 
         return new NullLiteralExp();
