@@ -112,9 +112,7 @@ public class SimpleParser implements Parser {
         }
 
         Expression litExp = parseLiteralExp(ocl, dm);
-        if (litExp != null) {
-            litExp.setOclStr(decode(ocl));
-        }
+        litExp.setOclStr(decode(ocl));
 
         return litExp;
     }
@@ -154,7 +152,12 @@ public class SimpleParser implements Parser {
         String operator = trim(m.group(2));
         String body = trim(m.group(3));
 
-        Expression sourceExp = getExp(source);
+        Expression sourceExp = null;
+
+        if (!operator.equals("not")) {
+            sourceExp = getExp(source);
+        }
+
         Expression bodyExp = getExp(body);
 
         Type type = getOperationExpType(operator, sourceExp, bodyExp);
