@@ -273,6 +273,10 @@ public class SimpleParser implements Parser {
             return opCallExp;
 
         } else {
+            if (Pattern.matches("(.*)\\.(.*)$", left)) {
+                checkNavigationSource(left, dm);
+            }
+            
             Expression src = parseOclExp(left, dm);
             String srcType = src.getType().getReferredType();
 
@@ -305,6 +309,22 @@ public class SimpleParser implements Parser {
             }
 
             return dotOpCall;
+        }
+    }
+    
+    private void checkNavigationSource(String ocl, DataModel dm) {
+        Matcher m = Pattern.compile("(.*)(\\.)(.*)").matcher(ocl);
+        
+        while(m.find()) {
+            String collection = m.group(3);
+            
+            Expression src = parseDotCase(m, m.group(1), dm);
+            String srcType = src.getType().getReferredType().replaceAll("Col\\((.*)\\)", "$1");
+
+            if (!DmUtils.isEndMultOne(dm, srcType, collection)) {
+                throw new OclParserException(
+                        "Cannot use dot to navigate on collection.");
+            }
         }
     }
 

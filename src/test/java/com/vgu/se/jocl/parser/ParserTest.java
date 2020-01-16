@@ -93,8 +93,9 @@ public class ParserTest {
 //                "Student.allInstances()->forAll(s| @SQL(CURDATE()))",
 //                "@SQL(CURDATE())",
 //                "Module_Period.allInstances() ->forAll(m|m.ends < m.period.ends and m.starts > m.period.starts)",
+                "University.allInstances()->collect(u|u.programs.modules.module_periods)"
 
-                "Account.allInstances()->forAll(a| not a.student.oclIsUndefined() implies a.lecturer.oclIsUndefined() and a.assistant.oclIsUndefined())",
+//                "Account.allInstances()->forAll(a| not a.student.oclIsUndefined() implies a.lecturer.oclIsUndefined() and a.assistant.oclIsUndefined())",
 //                "Account.allInstances() ->forAll(a| not a.lecturer.oclIsUndefined()  implies a.student.oclIsUndefined() and a.assistant.oclIsUndefined())",
 //                "Account.allInstances() ->forAll(a| not a.assistant.oclIsUndefined()  implies a.lecturer.oclIsUndefined() and a.student.oclIsUndefined())",
 //                "Enrollment.allInstances() ->forAll(e|e.ends.oclIsUndefined() or e.ends > e.starts)",
