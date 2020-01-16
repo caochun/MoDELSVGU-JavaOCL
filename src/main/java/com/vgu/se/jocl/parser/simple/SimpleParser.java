@@ -318,7 +318,7 @@ public class SimpleParser implements Parser {
         while(m.find()) {
             String collection = m.group(3);
             
-            Expression src = parseLiteralExp(m.group(1), dm);
+            Expression src = parseOclExp(m.group(1), dm);
             String srcType = src.getType().getReferredType();
 
             if (!DmUtils.isEndMultOne(dm, srcType, collection)) {
