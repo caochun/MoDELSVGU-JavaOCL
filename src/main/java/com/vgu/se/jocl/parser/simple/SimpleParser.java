@@ -318,8 +318,8 @@ public class SimpleParser implements Parser {
         while(m.find()) {
             String collection = m.group(3);
             
-            Expression src = parseDotCase(m, m.group(1), dm);
-            String srcType = src.getType().getReferredType().replaceAll("Col\\((.*)\\)", "$1");
+            Expression src = parseLiteralExp(m.group(1), dm);
+            String srcType = src.getType().getReferredType();
 
             if (!DmUtils.isEndMultOne(dm, srcType, collection)) {
                 throw new OclParserException(
