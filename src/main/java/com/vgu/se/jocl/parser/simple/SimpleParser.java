@@ -38,8 +38,8 @@ import com.vgu.se.jocl.expressions.IntegerLiteralExp;
 import com.vgu.se.jocl.expressions.IteratorExp;
 import com.vgu.se.jocl.expressions.IteratorKind;
 import com.vgu.se.jocl.expressions.M2MAssociationClassCallExp;
-import com.vgu.se.jocl.expressions.NullLiteralExp;
 import com.vgu.se.jocl.expressions.M2OAssociationClassCallExp;
+import com.vgu.se.jocl.expressions.NullLiteralExp;
 import com.vgu.se.jocl.expressions.O2OAssociationClassCallExp;
 import com.vgu.se.jocl.expressions.OclExp;
 import com.vgu.se.jocl.expressions.Operation;
@@ -52,7 +52,6 @@ import com.vgu.se.jocl.expressions.Variable;
 import com.vgu.se.jocl.expressions.VariableExp;
 import com.vgu.se.jocl.expressions.sql.LiteralParam;
 import com.vgu.se.jocl.expressions.sql.SqlFunctionExp;
-import com.vgu.se.jocl.expressions.sql.SqlParameter;
 import com.vgu.se.jocl.expressions.sql.functions.SqlFnCurdate;
 import com.vgu.se.jocl.expressions.sql.functions.SqlFnTimestampdiff;
 import com.vgu.se.jocl.parser.interfaces.Parser;
@@ -163,7 +162,7 @@ public class SimpleParser implements Parser {
         Type type = getOperationExpType(operator, sourceExp, bodyExp);
 
         OperationCallExp opCallExp = new OperationCallExp(sourceExp,
-            new Operation(operator), bodyExp);
+            new Operation(operator), Arrays.asList(bodyExp));
         opCallExp.setType(type);
 
         return opCallExp;
@@ -267,7 +266,7 @@ public class SimpleParser implements Parser {
             type = getOperationExpType(operation, leftExp, argumentExps);
 
             OperationCallExp opCallExp = new OperationCallExp(leftExp,
-                new Operation(operation), argumentExps);
+                new Operation(operation), Arrays.asList(argumentExps));
             opCallExp.setType(type);
 
             return opCallExp;
