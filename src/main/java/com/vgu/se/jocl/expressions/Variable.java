@@ -66,7 +66,7 @@ public class Variable {
         return source;
     }
 
-    public void setSource(OclExp source) {
+    public void setSource(Expression source) {
         this.source = source;
     }
 
