@@ -42,6 +42,13 @@ public class OperationCallExp extends FeatureCallExp {
         this.arguments = Arrays.asList(arguments);
     }
 
+    public OperationCallExp(Expression source, Operation referredOperation,
+        List<Expression> arguments) {
+        super.source = source;
+        this.referredOperation = referredOperation;
+        this.arguments = arguments;
+    }
+
     public List<Expression> getArguments() {
         return arguments;
     }

@@ -37,6 +37,12 @@ public class Variable {
         this.name = name;
         this.type = type;
     }
+    
+    public Variable(String name, Expression source) {
+        this.name = name;
+        this.source = source;
+        this.type = source.getType().getElementType();
+    }
 
     public Expression getInitExp() {
         return initExp;

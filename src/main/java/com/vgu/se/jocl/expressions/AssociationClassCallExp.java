@@ -89,5 +89,17 @@ public class AssociationClassCallExp extends NavigationCallExp {
     public void setAssociation(String association) {
         this.association = association;
     }
+
+    public void parseAssociationName() {
+        String leftType = referredAssociationEndType.getReferredType();
+        String rightType = oppositeAssociationEndType.getReferredType();
+        if(leftType.compareTo(rightType) > 0) {
+            association = String.format("%1$s_%2$s_%3$s_%4$s", rightType,
+                oppositeAssociationEnd, referredAssociationEnd, leftType);
+        } else {
+            association = String.format("%1$s_%2$s_%3$s_%4$s", leftType,
+                referredAssociationEnd, oppositeAssociationEnd, rightType);
+        }
+    }
     
 }
