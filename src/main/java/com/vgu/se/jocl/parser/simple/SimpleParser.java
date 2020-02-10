@@ -478,7 +478,7 @@ public class SimpleParser implements Parser {
     private Expression parseLiteralExp(String input, DataModel dm) {
         /**
          * Any character between two single quote '' E.g.: "'Lorem ipsum
-         * άλφα 123|, !@#$%^&*('"
+         *  123|, !@#$%^&*('"
          * 
          */
         final String STRING_LITERAL_STR = "\\s*\\w*\\{(\\d+)*\\}";

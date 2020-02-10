@@ -19,6 +19,9 @@ limitations under the License.
 
 package com.vgu.se.jocl.types;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class Type {
 
     private String referredType;
@@ -38,5 +41,14 @@ public class Type {
     @Override
     public String toString() {
         return this.referredType;
+    }
+
+    public Type getElementType() {
+        String patternStr = "^Col\\((*)\\)$";
+        Pattern pattern = Pattern.compile(patternStr);
+        Matcher matcher = pattern.matcher(referredType);
+        if(matcher.matches()) {
+            return new Type(referredType.substring(4, referredType.length()-1));
+        } else return new Type();
     }
 }
