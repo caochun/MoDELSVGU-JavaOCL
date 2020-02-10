@@ -87,7 +87,6 @@ public class SimpleParser implements Parser {
      * @param oclExpStr
      * @return OclExp
      */
-    @Override
     public Expression parse(String ocl, DataModel dm) {
         houseCleanup();
         this.dm = dm;
@@ -805,5 +804,11 @@ public class SimpleParser implements Parser {
         default:
             return type;
         }
+    }
+
+    @Override
+    public Expression parse(String ocl, Object dm) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

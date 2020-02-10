@@ -44,13 +44,6 @@ public class OperationCallExp extends FeatureCallExp {
         super.setType(getOperationExpType());
     }
 
-    public OperationCallExp(Expression source, Operation referredOperation,
-        List<Expression> arguments) {
-        super.source = source;
-        this.referredOperation = referredOperation;
-        this.arguments = arguments;
-    }
-
     public List<Expression> getArguments() {
         return arguments;
     }
