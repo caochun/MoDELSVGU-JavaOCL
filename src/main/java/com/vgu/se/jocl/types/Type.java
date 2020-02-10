@@ -39,4 +39,10 @@ public class Type {
     public String toString() {
         return this.referredType;
     }
+
+    public Type getElementType() {
+        if(referredType.startsWith("Col(")) {
+            return new Type(referredType.substring(4, referredType.length()-1));
+        } else return new Type();
+    }
 }
