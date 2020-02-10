@@ -44,7 +44,7 @@ public class Type {
     }
 
     public Type getElementType() {
-        String patternStr = "^Col\\((*)\\)$";
+        String patternStr = "^Col\\(*\\)$";
         Pattern pattern = Pattern.compile(patternStr);
         Matcher matcher = pattern.matcher(referredType);
         if(matcher.matches()) {
