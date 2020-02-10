@@ -19,6 +19,7 @@ limitations under the License.
 
 package com.vgu.se.jocl.expressions;
 
+import com.vgu.se.jocl.types.Type;
 import com.vgu.se.jocl.visit.ParserVisitor;
 
 // Look at Predefiend Iterateor Expression 11.7, OCL 2.4
@@ -31,6 +32,7 @@ public class IteratorExp extends LoopExp {
         super.iterator = iterator;
         super.body = body;
         this.kind = kind;
+        super.setType(getIteratorExpType());
     }
 
     public Expression getSource() {
@@ -54,5 +56,51 @@ public class IteratorExp extends LoopExp {
         parserVisitor.visit(this);
     }
 
+    private Type getIteratorExpType() {
+        Type type = new Type("Invalid");
 
+        switch (IteratorKind.valueOf(kind)) {
+        case any:
+        case at:
+        case first:
+        case last:
+        case sum:
+            return new Type(source.getType().getReferredType()
+                .replaceFirst("^Col\\((\\w+)\\)$", "$1"));
+
+        case asBag:
+        case asOrderedSet:
+        case asSequence:
+        case asSet:
+        case excluding:
+        case flatten:
+        case including:
+        case reject:
+        case select:
+        case sortedBy:
+        case union:
+            return new Type(source.getType().getReferredType());
+
+        case excludes:
+        case excludesAll:
+        case exists:
+        case forAll:
+        case includes:
+        case includesAll:
+        case isEmpty:
+        case isUnique:
+        case notEmpty:
+            return new Type("Boolean");
+
+        case count:
+        case indexOf:
+        case one:
+        case size:
+            return new Type("Integer");
+        case collect:
+            return new Type("Col(" + body.getType().getReferredType() + ")");
+        default:
+            return type;
+        }
+    }
 }

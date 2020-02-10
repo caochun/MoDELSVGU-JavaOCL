@@ -28,6 +28,7 @@ public class VariableExp extends OclExp {
 
     public VariableExp(Variable variable) {
         this.variable = variable;
+        super.setType(variable.getType());
     }
 
     public Variable getVariable() {

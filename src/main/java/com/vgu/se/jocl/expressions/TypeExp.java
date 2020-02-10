@@ -28,6 +28,7 @@ public class TypeExp extends OclExp {
 
     public TypeExp(String referredType) {
         this.referredType = new Type(referredType);
+        super.setType(new Type(referredType));
     }
     
     public TypeExp(Type type) {

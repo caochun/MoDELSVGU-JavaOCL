@@ -39,8 +39,8 @@ public class Variable {
     }
     
     public Variable(String name, Expression source) {
-        this.name = name;
         this.source = source;
+        this.name = name;
         this.type = source.getType().getElementType();
     }
 
@@ -72,7 +72,7 @@ public class Variable {
         return source;
     }
 
-    public void setSource(OclExp source) {
+    public void setSource(Expression source) {
         this.source = source;
     }
 

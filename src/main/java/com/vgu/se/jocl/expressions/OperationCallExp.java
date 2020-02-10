@@ -18,9 +18,10 @@ limitations under the License.
 
 package com.vgu.se.jocl.expressions;
 
-import java.util.Arrays;
 import java.util.List;
 
+import com.vgu.se.jocl.exception.OclParserException;
+import com.vgu.se.jocl.types.Type;
 import com.vgu.se.jocl.visit.ParserVisitor;
 
 public class OperationCallExp extends FeatureCallExp {
@@ -36,10 +37,11 @@ public class OperationCallExp extends FeatureCallExp {
 //    }
 
     public OperationCallExp(Expression source, Operation referredOperation, 
-            Expression... arguments) {
+            List<Expression> arguments) {
         super.source = source;
         this.referredOperation = referredOperation;
-        this.arguments = Arrays.asList(arguments);
+        this.arguments = arguments;
+        super.setType(getOperationExpType());
     }
 
     public OperationCallExp(Expression source, Operation referredOperation,
@@ -73,6 +75,50 @@ public class OperationCallExp extends FeatureCallExp {
                 + "type : " + super.getType() + "\n" 
                 + "source : " + super.source + "\n" 
                 + "arguments : " + this.arguments + "\n";
+    }
+    
+    private Type getOperationExpType() {
+        Type opType = new Type();
+        switch (referredOperation.getName()) {
+        case "allInstances":
+            String leftExpType = source.getType().getReferredType();
+            opType = new Type("Col(" + leftExpType + ")");
+            return opType;
+        case "flatten":
+            return source.getType();
+        case "size":
+            opType = new Type("Integer");
+            return opType;
+        case "isEmpty":
+        case "notEmpty":
+        case "isUnique":
+        case "not":
+        case "=":
+        case "<>":
+        case "<":
+        case ">":
+        case ">=":
+        case "<=":
+        case "and":
+        case "or":
+        case "oclIsUndefined":
+        case "oclIsKindOf":
+        case "oclIsTypeOf":
+            opType = new Type("Boolean");
+            return opType;
+//        case "oclAsType":
+//            String argType = exps[0].getType().getReferredType();
+//            if (!UMLContextUtils.isSuperClassOf(this.dm, leftExpType,
+//                    argType)) {
+//                throw new OclParserException("\n======\n"
+//                        + "Cannot perform casting!");
+//            }
+//            opType = new Type(argType);
+//            return opType;
+        default:
+            throw new OclParserException(
+                "\n======\n" + referredOperation.getName() + " not supported!");
+        }
     }
 
 }
