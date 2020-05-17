@@ -16,7 +16,6 @@ limitations under the License.
 @author: thian
 ***************************************************************************/
 
-
 package com.vgu.se.jocl.visit;
 
 import com.vgu.se.jocl.expressions.AssociationClassCallExp;
@@ -25,19 +24,13 @@ import com.vgu.se.jocl.expressions.Expression;
 import com.vgu.se.jocl.expressions.IntegerLiteralExp;
 import com.vgu.se.jocl.expressions.IteratorExp;
 import com.vgu.se.jocl.expressions.LiteralExp;
-import com.vgu.se.jocl.expressions.OclExp;
 import com.vgu.se.jocl.expressions.OperationCallExp;
 import com.vgu.se.jocl.expressions.PropertyCallExp;
-import com.vgu.se.jocl.expressions.RealLiteralExp;
 import com.vgu.se.jocl.expressions.StringLiteralExp;
 import com.vgu.se.jocl.expressions.VariableExp;
-import com.vgu.se.jocl.expressions.sql.SqlExp;
-import com.vgu.se.jocl.expressions.sql.SqlFunctionExp;
-import com.vgu.se.jocl.expressions.sql.functions.SqlFnCurdate;
-import com.vgu.se.jocl.expressions.sql.functions.SqlFnTimestampdiff;
 
 public interface ParserVisitor {
-    
+
     void visit(Expression exp);
 
     void visit(IteratorExp iteratorExp);
@@ -47,16 +40,19 @@ public interface ParserVisitor {
     void visit(LiteralExp literalExp);
 
     void visit(StringLiteralExp stringLiteralExp);
+
     void visit(BooleanLiteralExp booleanLiteralExp);
+
     void visit(IntegerLiteralExp integerLiteralExp);
-    void visit(RealLiteralExp realLiteralExp);
-    
+
     void visit(PropertyCallExp propertyCallExp);
-    
+
     void visit(AssociationClassCallExp associationClassCallExp);
+
     void visit(VariableExp variableExp);
 
-    void visit(SqlFnCurdate variableExp);
-    void visit(SqlFnTimestampdiff variableExp);
+//        void visit(RealLiteralExp realLiteralExp);
+//        void visit(SqlFnCurdate variableExp);
+//        void visit(SqlFnTimestampdiff variableExp);
 
 }

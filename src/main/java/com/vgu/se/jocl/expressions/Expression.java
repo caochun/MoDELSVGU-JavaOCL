@@ -21,7 +21,6 @@ package com.vgu.se.jocl.expressions;
 
 import com.vgu.se.jocl.types.Type;
 import com.vgu.se.jocl.visit.ParserVisitable;
-import com.vgu.se.jocl.visit.ParserVisitor;
 
 public abstract class Expression implements ParserVisitable {
     protected Type type;

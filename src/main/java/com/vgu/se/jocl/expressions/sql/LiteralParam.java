@@ -19,10 +19,6 @@ limitations under the License.
 
 package com.vgu.se.jocl.expressions.sql;
 
-import com.vgu.se.jocl.types.Type;
-import com.vgu.se.jocl.visit.ParserVisitable;
-import com.vgu.se.jocl.visit.ParserVisitor;
-
 public class LiteralParam {
     
     private String param;

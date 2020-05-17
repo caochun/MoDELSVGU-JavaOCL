@@ -19,9 +19,6 @@ limitations under the License.
 
 package com.vgu.se.jocl.types;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public class Type {
 
     private String referredType;
