@@ -19,11 +19,7 @@ limitations under the License.
 package com.vgu.se.jocl.utils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
-import org.vgu.ocl2psql.sql.statement.select.PlainSelect;
-import org.vgu.ocl2psql.sql.statement.select.VarSelectExpression;
 
 import com.vgu.se.jocl.expressions.AssociationClassCallExp;
 import com.vgu.se.jocl.expressions.IteratorExp;
@@ -32,9 +28,6 @@ import com.vgu.se.jocl.expressions.PropertyCallExp;
 import com.vgu.se.jocl.expressions.Variable;
 import com.vgu.se.jocl.expressions.VariableExp;
 import com.vgu.se.jocl.expressions.sql.functions.SqlFnTimestampdiff;
-
-import net.sf.jsqlparser.expression.Expression;
-import net.sf.jsqlparser.schema.Column;
 
 public class VariableUtils {
 
@@ -178,35 +171,5 @@ public class VariableUtils {
         res.removeAll(A);
 
         return res;
-    }
-
-    public static void addVar(List<Variable> vList,
-            PlainSelect plainSelect, String tableAlias) {
-
-        for (Variable v : vList) {
-            VarSelectExpression varExp = new VarSelectExpression(
-                    v.getName());
-
-            Column refCol = new Column(Arrays.asList(tableAlias,
-                    varExp.getRef().getAlias().getName()));
-
-            varExp.setRefExpression(refCol);
-            plainSelect.addVar(varExp);
-        }
-
-    }
-
-    public static void addVarToList(List<Variable> vList,
-            List<Expression> expressions, String tableAlias) {
-
-        for (Variable v : vList) {
-            VarSelectExpression varExp = new VarSelectExpression(
-                    v.getName());
-
-            Expression refCol = new Column(Arrays.asList(tableAlias,
-                    varExp.getRef().getAlias().getName()));
-
-            expressions.add(refCol);
-        }
     }
 }
