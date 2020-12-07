@@ -561,6 +561,8 @@ public class SimpleParser implements Parser {
             } else if (input.equals("Integer")) {
                 TypeExp type = new TypeExp(input);
                 type.setType(new Type(input));
+                
+                return type;
             }
             else {
                 for (int i = 0; i < this.variableStack.size(); i++) {
