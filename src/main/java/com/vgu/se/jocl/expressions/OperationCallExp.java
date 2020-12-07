@@ -94,6 +94,7 @@ public class OperationCallExp extends FeatureCallExp {
         case "<=":
         case "and":
         case "or":
+        case "implies":
         case "oclIsUndefined":
         case "oclIsKindOf":
         case "oclIsTypeOf":
