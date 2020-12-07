@@ -97,6 +97,7 @@ public class OperationCallExp extends FeatureCallExp {
         case "oclIsUndefined":
         case "oclIsKindOf":
         case "oclIsTypeOf":
+        case "oclIsInvalid":
             opType = new Type("Boolean");
             return opType;
 //        case "oclAsType":

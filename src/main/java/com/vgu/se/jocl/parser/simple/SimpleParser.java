@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-@author: thian
+@author: npbhoang
 ***************************************************************************/
 
 package com.vgu.se.jocl.parser.simple;
@@ -558,7 +558,11 @@ public class SimpleParser implements Parser {
                 type.setType(new Type(input));
 
                 return type;
-            } else {
+            } else if (input.equals("Integer")) {
+                TypeExp type = new TypeExp(input);
+                type.setType(new Type(input));
+            }
+            else {
                 for (int i = 0; i < this.variableStack.size(); i++) {
                     if (this.variableStack.get(i).getName().equals(input)) {
                         return new VariableExp(this.variableStack.get(i));
@@ -570,7 +574,7 @@ public class SimpleParser implements Parser {
                         return new VariableExp(v);
                     }
                 }
-            }
+            } 
         } else {
 //            throw new OclParserException(
 //                input + "\n======\n" + "Invalid OCL Literal Expression!");
