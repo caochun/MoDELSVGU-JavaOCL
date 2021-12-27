@@ -25,22 +25,6 @@ import java.math.BigInteger;
 
 import org.junit.Test;
 
-import com.vgu.se.jocl.types.AnyType;
-import com.vgu.se.jocl.types.BagType;
-import com.vgu.se.jocl.types.Class;
-import com.vgu.se.jocl.types.IntegerType;
-import com.vgu.se.jocl.types.InvalidType;
-import com.vgu.se.jocl.types.MessageType;
-import com.vgu.se.jocl.types.OrderedSetType;
-import com.vgu.se.jocl.types.RealType;
-import com.vgu.se.jocl.types.SequenceType;
-import com.vgu.se.jocl.types.SetType;
-import com.vgu.se.jocl.types.StringType;
-import com.vgu.se.jocl.types.TemplateParameterType;
-import com.vgu.se.jocl.types.TupleType;
-import com.vgu.se.jocl.types.UnlimitedNaturalType;
-import com.vgu.se.jocl.types.VoidType;
-
 public class ConformanceTest {
 
     @Test
@@ -56,7 +40,7 @@ public class ConformanceTest {
         Class clazz = new Class();
         assertTrue(clazz.conformsTo(target));
 
-        IntegerType integer = new IntegerType(new Integer(1));
+        IntegerType integer = new IntegerType(1);
         assertTrue(integer.conformsTo(target));
 
         InvalidType invalid = InvalidType.getSoleInstance();
@@ -68,7 +52,7 @@ public class ConformanceTest {
         OrderedSetType orderedSet = new OrderedSetType(new Class());
         assertTrue(orderedSet.conformsTo(target));
 
-        RealType real = new RealType(new Double(1.0));
+        RealType real = new RealType(1.0);
         assertTrue(real.conformsTo(target));
 
         SequenceType sequence = new SequenceType(new Class());
@@ -106,7 +90,7 @@ public class ConformanceTest {
         Class clazz = new Class();
         assertFalse(target.conformsTo(clazz));
 
-        IntegerType integer = new IntegerType(new Integer(1));
+        IntegerType integer = new IntegerType(1);
         assertFalse(target.conformsTo(integer));
 
         InvalidType invalid = InvalidType.getSoleInstance();
@@ -118,7 +102,7 @@ public class ConformanceTest {
         OrderedSetType orderedSet = new OrderedSetType(new Class());
         assertFalse(target.conformsTo(orderedSet));
 
-        RealType real = new RealType(new Double(1.0));
+        RealType real = new RealType(1.0);
         assertFalse(target.conformsTo(real));
 
         SequenceType sequence = new SequenceType(new Class());
@@ -152,7 +136,7 @@ public class ConformanceTest {
         Class clazz = new Class();
         assertFalse(clazz.conformsTo(target));
 
-        IntegerType integer = new IntegerType(new Integer(1));
+        IntegerType integer = new IntegerType(1);
         assertFalse(integer.conformsTo(target));
 
         InvalidType invalid = InvalidType.getSoleInstance();
@@ -161,7 +145,7 @@ public class ConformanceTest {
         MessageType message = new MessageType();
         assertFalse(message.conformsTo(target));
 
-        RealType real = new RealType(new Double(1.0));
+        RealType real = new RealType(1.0);
         assertFalse(real.conformsTo(target));
 
         StringType string = new StringType(new String("1.0"));
@@ -190,7 +174,7 @@ public class ConformanceTest {
         Class clazz = new Class();
         assertFalse(target.conformsTo(clazz));
 
-        IntegerType integer = new IntegerType(new Integer(1));
+        IntegerType integer = new IntegerType(1);
         assertFalse(target.conformsTo(integer));
 
         InvalidType invalid = InvalidType.getSoleInstance();
@@ -199,7 +183,7 @@ public class ConformanceTest {
         MessageType message = new MessageType();
         assertFalse(target.conformsTo(message));
 
-        RealType real = new RealType(new Double(1.0));
+        RealType real = new RealType(1.0);
         assertFalse(target.conformsTo(real));
 
         StringType string = new StringType(new String("1.0"));
@@ -258,16 +242,16 @@ public class ConformanceTest {
         SetType setUnlimitedNatural = new SetType(new UnlimitedNaturalType(new BigInteger("1")));
         assertFalse(setUnlimitedNatural.conformsTo(target));
 
-        BagType bagReal = new BagType(new RealType(new Double(1.0)));
+        BagType bagReal = new BagType(new RealType(1.0));
         assertFalse(bagReal.conformsTo(target));
 
-        OrderedSetType orderedSetReal = new OrderedSetType(new RealType(new Double(1.0)));
+        OrderedSetType orderedSetReal = new OrderedSetType(new RealType(1.0));
         assertFalse(orderedSetReal.conformsTo(target));
 
-        SequenceType sequenceReal = new SequenceType(new RealType(new Double(1.0)));
+        SequenceType sequenceReal = new SequenceType(new RealType(1.0));
         assertFalse(sequenceReal.conformsTo(target));
 
-        SetType setReal = new SetType(new RealType(new Double(1.0)));
+        SetType setReal = new SetType(new RealType(1.0));
         assertFalse(setReal.conformsTo(target));
     }
 
@@ -311,16 +295,16 @@ public class ConformanceTest {
         SetType setUnlimitedNatural = new SetType(new UnlimitedNaturalType(new BigInteger("1")));
         assertFalse(target.conformsTo(setUnlimitedNatural));
 
-        BagType bagReal = new BagType(new RealType(new Double(1.0)));
+        BagType bagReal = new BagType(new RealType(1.0));
         assertTrue(target.conformsTo(bagReal));
 
-        OrderedSetType orderedSetReal = new OrderedSetType(new RealType(new Double(1.0)));
+        OrderedSetType orderedSetReal = new OrderedSetType(new RealType(1.0));
         assertFalse(target.conformsTo(orderedSetReal));
 
-        SequenceType sequenceReal = new SequenceType(new RealType(new Double(1.0)));
+        SequenceType sequenceReal = new SequenceType(new RealType(1.0));
         assertFalse(target.conformsTo(sequenceReal));
 
-        SetType setReal = new SetType(new RealType(new Double(1.0)));
+        SetType setReal = new SetType(new RealType(1.0));
         assertFalse(target.conformsTo(setReal));
     }
 
@@ -334,7 +318,7 @@ public class ConformanceTest {
         Class clazz = new Class();
         assertFalse(clazz.conformsTo(target));
 
-        IntegerType integer = new IntegerType(new Integer(1));
+        IntegerType integer = new IntegerType(1);
         assertFalse(integer.conformsTo(target));
 
         InvalidType invalid = InvalidType.getSoleInstance();
@@ -343,7 +327,7 @@ public class ConformanceTest {
         MessageType message = new MessageType();
         assertFalse(message.conformsTo(target));
 
-        RealType real = new RealType(new Double(1.0));
+        RealType real = new RealType(1.0);
         assertFalse(real.conformsTo(target));
 
         StringType string = new StringType(new String("1.0"));
@@ -372,7 +356,7 @@ public class ConformanceTest {
         Class clazz = new Class();
         assertFalse(target.conformsTo(clazz));
 
-        IntegerType integer = new IntegerType(new Integer(1));
+        IntegerType integer = new IntegerType(1);
         assertFalse(target.conformsTo(integer));
 
         InvalidType invalid = InvalidType.getSoleInstance();
@@ -381,7 +365,7 @@ public class ConformanceTest {
         MessageType message = new MessageType();
         assertFalse(target.conformsTo(message));
 
-        RealType real = new RealType(new Double(1.0));
+        RealType real = new RealType(1.0);
         assertFalse(target.conformsTo(real));
 
         StringType string = new StringType(new String("1.0"));
@@ -440,16 +424,16 @@ public class ConformanceTest {
         SetType setUnlimitedNatural = new SetType(new UnlimitedNaturalType(new BigInteger("1")));
         assertFalse(setUnlimitedNatural.conformsTo(target));
 
-        BagType bagReal = new BagType(new RealType(new Double(1.0)));
+        BagType bagReal = new BagType(new RealType(1.0));
         assertFalse(bagReal.conformsTo(target));
 
-        OrderedSetType orderedSetReal = new OrderedSetType(new RealType(new Double(1.0)));
+        OrderedSetType orderedSetReal = new OrderedSetType(new RealType(1.0));
         assertFalse(orderedSetReal.conformsTo(target));
 
-        SequenceType sequenceReal = new SequenceType(new RealType(new Double(1.0)));
+        SequenceType sequenceReal = new SequenceType(new RealType(1.0));
         assertFalse(sequenceReal.conformsTo(target));
 
-        SetType setReal = new SetType(new RealType(new Double(1.0)));
+        SetType setReal = new SetType(new RealType(1.0));
         assertFalse(setReal.conformsTo(target));
     }
 
@@ -493,16 +477,16 @@ public class ConformanceTest {
         SetType setUnlimitedNatural = new SetType(new UnlimitedNaturalType(new BigInteger("1")));
         assertFalse(target.conformsTo(setUnlimitedNatural));
 
-        BagType bagReal = new BagType(new RealType(new Double(1.0)));
+        BagType bagReal = new BagType(new RealType(1.0));
         assertFalse(target.conformsTo(bagReal));
 
-        OrderedSetType orderedSetReal = new OrderedSetType(new RealType(new Double(1.0)));
+        OrderedSetType orderedSetReal = new OrderedSetType(new RealType(1.0));
         assertTrue(target.conformsTo(orderedSetReal));
 
-        SequenceType sequenceReal = new SequenceType(new RealType(new Double(1.0)));
+        SequenceType sequenceReal = new SequenceType(new RealType(1.0));
         assertFalse(target.conformsTo(sequenceReal));
 
-        SetType setReal = new SetType(new RealType(new Double(1.0)));
+        SetType setReal = new SetType(new RealType(1.0));
         assertFalse(target.conformsTo(setReal));
     }
 
@@ -516,7 +500,7 @@ public class ConformanceTest {
         Class clazz = new Class();
         assertFalse(clazz.conformsTo(target));
 
-        IntegerType integer = new IntegerType(new Integer(1));
+        IntegerType integer = new IntegerType(1);
         assertFalse(integer.conformsTo(target));
 
         InvalidType invalid = InvalidType.getSoleInstance();
@@ -525,7 +509,7 @@ public class ConformanceTest {
         MessageType message = new MessageType();
         assertFalse(message.conformsTo(target));
 
-        RealType real = new RealType(new Double(1.0));
+        RealType real = new RealType(1.0);
         assertFalse(real.conformsTo(target));
 
         StringType string = new StringType(new String("1.0"));
@@ -554,7 +538,7 @@ public class ConformanceTest {
         Class clazz = new Class();
         assertFalse(target.conformsTo(clazz));
 
-        IntegerType integer = new IntegerType(new Integer(1));
+        IntegerType integer = new IntegerType(1);
         assertFalse(target.conformsTo(integer));
 
         InvalidType invalid = InvalidType.getSoleInstance();
@@ -563,7 +547,7 @@ public class ConformanceTest {
         MessageType message = new MessageType();
         assertFalse(target.conformsTo(message));
 
-        RealType real = new RealType(new Double(1.0));
+        RealType real = new RealType(1.0);
         assertFalse(target.conformsTo(real));
 
         StringType string = new StringType(new String("1.0"));
@@ -622,16 +606,16 @@ public class ConformanceTest {
         SetType setUnlimitedNatural = new SetType(new UnlimitedNaturalType(new BigInteger("1")));
         assertFalse(setUnlimitedNatural.conformsTo(target));
 
-        BagType bagReal = new BagType(new RealType(new Double(1.0)));
+        BagType bagReal = new BagType(new RealType(1.0));
         assertFalse(bagReal.conformsTo(target));
 
-        OrderedSetType orderedSetReal = new OrderedSetType(new RealType(new Double(1.0)));
+        OrderedSetType orderedSetReal = new OrderedSetType(new RealType(1.0));
         assertFalse(orderedSetReal.conformsTo(target));
 
-        SequenceType sequenceReal = new SequenceType(new RealType(new Double(1.0)));
+        SequenceType sequenceReal = new SequenceType(new RealType(1.0));
         assertFalse(sequenceReal.conformsTo(target));
 
-        SetType setReal = new SetType(new RealType(new Double(1.0)));
+        SetType setReal = new SetType(new RealType(1.0));
         assertFalse(setReal.conformsTo(target));
     }
 
@@ -675,16 +659,16 @@ public class ConformanceTest {
         SetType setUnlimitedNatural = new SetType(new UnlimitedNaturalType(new BigInteger("1")));
         assertFalse(target.conformsTo(setUnlimitedNatural));
 
-        BagType bagReal = new BagType(new RealType(new Double(1.0)));
+        BagType bagReal = new BagType(new RealType(1.0));
         assertFalse(target.conformsTo(bagReal));
 
-        OrderedSetType orderedSetReal = new OrderedSetType(new RealType(new Double(1.0)));
+        OrderedSetType orderedSetReal = new OrderedSetType(new RealType(1.0));
         assertFalse(target.conformsTo(orderedSetReal));
 
-        SequenceType sequenceReal = new SequenceType(new RealType(new Double(1.0)));
+        SequenceType sequenceReal = new SequenceType(new RealType(1.0));
         assertTrue(target.conformsTo(sequenceReal));
 
-        SetType setReal = new SetType(new RealType(new Double(1.0)));
+        SetType setReal = new SetType(new RealType(1.0));
         assertFalse(target.conformsTo(setReal));
     }
 
@@ -698,7 +682,7 @@ public class ConformanceTest {
         Class clazz = new Class();
         assertFalse(clazz.conformsTo(target));
 
-        IntegerType integer = new IntegerType(new Integer(1));
+        IntegerType integer = new IntegerType(1);
         assertFalse(integer.conformsTo(target));
 
         InvalidType invalid = InvalidType.getSoleInstance();
@@ -707,7 +691,7 @@ public class ConformanceTest {
         MessageType message = new MessageType();
         assertFalse(message.conformsTo(target));
 
-        RealType real = new RealType(new Double(1.0));
+        RealType real = new RealType(1.0);
         assertFalse(real.conformsTo(target));
 
         StringType string = new StringType(new String("1.0"));
@@ -736,7 +720,7 @@ public class ConformanceTest {
         Class clazz = new Class();
         assertFalse(target.conformsTo(clazz));
 
-        IntegerType integer = new IntegerType(new Integer(1));
+        IntegerType integer = new IntegerType(1);
         assertFalse(target.conformsTo(integer));
 
         InvalidType invalid = InvalidType.getSoleInstance();
@@ -745,7 +729,7 @@ public class ConformanceTest {
         MessageType message = new MessageType();
         assertFalse(target.conformsTo(message));
 
-        RealType real = new RealType(new Double(1.0));
+        RealType real = new RealType(1.0);
         assertFalse(target.conformsTo(real));
 
         StringType string = new StringType(new String("1.0"));
@@ -804,16 +788,16 @@ public class ConformanceTest {
         SetType setUnlimitedNatural = new SetType(new UnlimitedNaturalType(new BigInteger("1")));
         assertTrue(setUnlimitedNatural.conformsTo(target));
 
-        BagType bagReal = new BagType(new RealType(new Double(1.0)));
+        BagType bagReal = new BagType(new RealType(1.0));
         assertFalse(bagReal.conformsTo(target));
 
-        OrderedSetType orderedSetReal = new OrderedSetType(new RealType(new Double(1.0)));
+        OrderedSetType orderedSetReal = new OrderedSetType(new RealType(1.0));
         assertFalse(orderedSetReal.conformsTo(target));
 
-        SequenceType sequenceReal = new SequenceType(new RealType(new Double(1.0)));
+        SequenceType sequenceReal = new SequenceType(new RealType(1.0));
         assertFalse(sequenceReal.conformsTo(target));
 
-        SetType setReal = new SetType(new RealType(new Double(1.0)));
+        SetType setReal = new SetType(new RealType(1.0));
         assertFalse(setReal.conformsTo(target));
     }
 
@@ -857,16 +841,16 @@ public class ConformanceTest {
         SetType setUnlimitedNatural = new SetType(new UnlimitedNaturalType(new BigInteger("1")));
         assertFalse(target.conformsTo(setUnlimitedNatural));
 
-        BagType bagReal = new BagType(new RealType(new Double(1.0)));
+        BagType bagReal = new BagType(new RealType(1.0));
         assertFalse(target.conformsTo(bagReal));
 
-        OrderedSetType orderedSetReal = new OrderedSetType(new RealType(new Double(1.0)));
+        OrderedSetType orderedSetReal = new OrderedSetType(new RealType(1.0));
         assertFalse(target.conformsTo(orderedSetReal));
 
-        SequenceType sequenceReal = new SequenceType(new RealType(new Double(1.0)));
+        SequenceType sequenceReal = new SequenceType(new RealType(1.0));
         assertFalse(target.conformsTo(sequenceReal));
 
-        SetType setReal = new SetType(new RealType(new Double(1.0)));
+        SetType setReal = new SetType(new RealType(1.0));
         assertTrue(target.conformsTo(setReal));
     }
 
@@ -883,7 +867,7 @@ public class ConformanceTest {
         Class clazz = new Class();
         assertTrue(clazz.conformsTo(target));
 
-        IntegerType integer = new IntegerType(new Integer(1));
+        IntegerType integer = new IntegerType(1);
         assertFalse(integer.conformsTo(target));
 
         InvalidType invalid = InvalidType.getSoleInstance();
@@ -895,7 +879,7 @@ public class ConformanceTest {
         OrderedSetType orderedSet = new OrderedSetType(new Class());
         assertFalse(orderedSet.conformsTo(target));
 
-        RealType real = new RealType(new Double(1.0));
+        RealType real = new RealType(1.0);
         assertFalse(real.conformsTo(target));
 
         SequenceType sequence = new SequenceType(new Class());
@@ -933,7 +917,7 @@ public class ConformanceTest {
         Class clazz = new Class();
         assertTrue(target.conformsTo(clazz));
 
-        IntegerType integer = new IntegerType(new Integer(1));
+        IntegerType integer = new IntegerType(1);
         assertFalse(target.conformsTo(integer));
 
         InvalidType invalid = InvalidType.getSoleInstance();
@@ -945,7 +929,7 @@ public class ConformanceTest {
         OrderedSetType orderedSet = new OrderedSetType(new Class());
         assertFalse(target.conformsTo(orderedSet));
 
-        RealType real = new RealType(new Double(1.0));
+        RealType real = new RealType(1.0);
         assertFalse(target.conformsTo(real));
 
         SequenceType sequence = new SequenceType(new Class());
@@ -972,7 +956,7 @@ public class ConformanceTest {
 
     @Test
     public void test_conforms_to_IntegerType() {
-        IntegerType target = new IntegerType(new Integer(1));
+        IntegerType target = new IntegerType(1);
 
         AnyType any = new AnyType();
         assertFalse(any.conformsTo(target));
@@ -983,7 +967,7 @@ public class ConformanceTest {
         Class clazz = new Class();
         assertFalse(clazz.conformsTo(target));
 
-        IntegerType integer = new IntegerType(new Integer(1));
+        IntegerType integer = new IntegerType(1);
         assertTrue(integer.conformsTo(target));
 
         InvalidType invalid = InvalidType.getSoleInstance();
@@ -995,7 +979,7 @@ public class ConformanceTest {
         OrderedSetType orderedSet = new OrderedSetType(new Class());
         assertFalse(orderedSet.conformsTo(target));
 
-        RealType real = new RealType(new Double(1.0));
+        RealType real = new RealType(1.0);
         assertFalse(real.conformsTo(target));
 
         SequenceType sequence = new SequenceType(new Class());
@@ -1022,7 +1006,7 @@ public class ConformanceTest {
 
     @Test
     public void IntegerType_conforms_to_test() {
-        IntegerType target = new IntegerType(new Integer(1));
+        IntegerType target = new IntegerType(1);
 
         AnyType any = new AnyType();
         assertTrue(target.conformsTo(any));
@@ -1033,7 +1017,7 @@ public class ConformanceTest {
         Class clazz = new Class();
         assertFalse(target.conformsTo(clazz));
 
-        IntegerType integer = new IntegerType(new Integer(1));
+        IntegerType integer = new IntegerType(1);
         assertTrue(target.conformsTo(integer));
 
         InvalidType invalid = InvalidType.getSoleInstance();
@@ -1045,7 +1029,7 @@ public class ConformanceTest {
         OrderedSetType orderedSet = new OrderedSetType(new Class());
         assertFalse(target.conformsTo(orderedSet));
 
-        RealType real = new RealType(new Double(1.0));
+        RealType real = new RealType(1.0);
         assertTrue(target.conformsTo(real));
 
         SequenceType sequence = new SequenceType(new Class());
@@ -1083,7 +1067,7 @@ public class ConformanceTest {
         Class clazz = new Class();
         assertFalse(clazz.conformsTo(target));
 
-        IntegerType integer = new IntegerType(new Integer(1));
+        IntegerType integer = new IntegerType(1);
         assertFalse(integer.conformsTo(target));
 
         InvalidType invalid = InvalidType.getSoleInstance();
@@ -1095,7 +1079,7 @@ public class ConformanceTest {
         OrderedSetType orderedSet = new OrderedSetType(new Class());
         assertFalse(orderedSet.conformsTo(target));
 
-        RealType real = new RealType(new Double(1.0));
+        RealType real = new RealType(1.0);
         assertFalse(real.conformsTo(target));
 
         SequenceType sequence = new SequenceType(new Class());
@@ -1133,7 +1117,7 @@ public class ConformanceTest {
         Class clazz = new Class();
         assertTrue(target.conformsTo(clazz));
 
-        IntegerType integer = new IntegerType(new Integer(1));
+        IntegerType integer = new IntegerType(1);
         assertTrue(target.conformsTo(integer));
 
         InvalidType invalid = InvalidType.getSoleInstance();
@@ -1145,7 +1129,7 @@ public class ConformanceTest {
         OrderedSetType orderedSet = new OrderedSetType(new Class());
         assertTrue(target.conformsTo(orderedSet));
 
-        RealType real = new RealType(new Double(1.0));
+        RealType real = new RealType(1.0);
         assertTrue(target.conformsTo(real));
 
         SequenceType sequence = new SequenceType(new Class());

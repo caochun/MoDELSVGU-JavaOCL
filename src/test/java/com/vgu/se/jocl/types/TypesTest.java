@@ -46,7 +46,7 @@ public class TypesTest {
 
     @Test
     public void integerType() {
-        IntegerType integerType = new IntegerType(new Integer(1));
+        IntegerType integerType = new IntegerType(1);
         assertEquals(integerType.TYPE.getType(), "Integer");
     }
 
@@ -70,7 +70,7 @@ public class TypesTest {
 
     @Test
     public void realType() {
-        RealType realType = new RealType(new Double(1.0));
+        RealType realType = new RealType(1.0);
         assertEquals(realType.TYPE.getType(), "Real");
     }
 
